@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+'''
+Install anNote and import mailman.
+'''
+import mailman
+import os
+
+att_dir = os.environ.get('HOME') + '.anNote'
+if not os.path.isdir(att_dir):
+  print 'installing anNote...'
+  print '  making ~/.anNote'
+  os.mkdir(att_dir)

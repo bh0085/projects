@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+'''
+Check mail and process scanned pdfs into full color and blue channel pngs.
+'''
+import attachments
+import os
+att_dir = os.environ.get("HOME")
+
+def run():
+  attachments.check_att(att_dir)
+  
+
+
+if __name__ == '__main__':
+  run()
