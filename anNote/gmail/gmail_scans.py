@@ -7,11 +7,6 @@ from scipy import signal as ss
 from numpy import *
 from compbio.utils.idl import dist
 
-att_dir = os.environ('HOME') + '.anNote'
-if not os.path.isdir(att_dir):
-  print 'installing anNote...'
-  print '  making ~/.anNote'
-  os.mkdir(att_dir)
 def get_all():
   attachments.check_att(att_dir )
   
