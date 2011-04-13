@@ -1,0 +1,19 @@
+anNote seeks to become a vertical solution for dealing with scanned notes.
+
+Its functionality includes:
+
+1) Downloading attachements from all email addresses reaching a certain gmail address as pdfs.
+
+2) Shepherding pdfs into png files and extracting an outline layer. (Blue ink in the current implementation)
+
+3) Breaking the outline into blocks of text for transcription. Blocks of text may have tags such as:
+   	TIT, PP, TAG, RS, Q
+
+4) Queueing transcription blocks for a given so that the user may tag them at her leisure. Then mapping transcribed blocks back onto the original image.
+
+5) Integrating everything with keepnote. Extracting, TIT for e.g as note titles, PP as paper crossreferences, RS as research cross references.
+
+
+1,2 are done in 'attachments.py' and 'mailman.py'. 
+3,4 have bugs (text is upside down and block bounds are apparently not computed correctly although clustering works fine) and are partially implemented in 'mailman.py'.
+5 is not yet begun. For a note on how to build new keepnote extensions though, see the extension that I build... "addnote"?    

@@ -1,0 +1,7 @@
+This project is just a stub for the mechanical turk library that I hope to build.
+
+At this point, I have an account and have downloaded mechanical turk.
+
+Inside of 'all_tests.py' resides line to run the doctests from the boto source. Insides of 'tests.py' resides a bunch of scripts to test the mechanical turk API from AWS. Right now, it is configured in the code to use the developer sandbox so that everything is free.
+
+The script, make_hit doesn't work just yet. Some problem with XML syntax that may be caused by my omission of a urlencoding or the unneeded addition of a urlencoding somewhere. I think that the 'QUESTION' parameter is currently not urlencoded whereas some other params may be?
