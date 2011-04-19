@@ -6,8 +6,7 @@ def make_tests():
     eyeball = bsub.eyeball(inspect.stack()[0][1], 
                            ['test_bsubfun'], 
                            [{} for i in range(5)])
-    print eyeball.statii
-                           
+    print eyeball.statii()                           
 
 def test_bsubfun():
     sub = spc.Popen('find', shell =True, stdout = spc.PIPE).\
