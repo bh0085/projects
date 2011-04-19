@@ -9,12 +9,12 @@ def make_tests():
     eyeball = bsub.eyeball(os.path.abspath(inspect.stack()[0][1]), 
                            ['test_bsubfun'], 
                            [{} for i in range(5)])
-    print eyeball.statii()                           
-
+    return eyeball
 def test_bsubfun(input_dict, run_id):
     sub = spc.Popen('find', shell =True, stdout = spc.PIPE).\
         communicate()[0]
     out_dict = dict(output = sub)
+    
     return out_dict
 
 def usage():
