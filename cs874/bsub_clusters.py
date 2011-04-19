@@ -3,18 +3,45 @@
 import subprocess as spc
 import compbio.utils.bsub as bsub
 import inspect
-import os, sys
+import os, sys, inspect
+import scipy.io as sio
+from numpy import *
 
 def make_tests():
+    mirnaf = os.path.join(os.path.dirname(inspect.stack()[0][1]), 'miRNA.mat')
+    mirna = sio.loadmat(mirnaf)
+    expr = mirna['expression']
+
+    e_norms = sum(expr**2,1)
+
+    cluster_dists = e_norms[:,newaxis] + e_norms[newaxis,:] \
+        - 2 * dot(expr, expr.T)
+    sims = - cluster_dists
+
+
+    inp_dicts = []
+    percentiles = [.01,1.,5.,10.,20.,25.,50.,75.]
+    for p in percentiles:
+        inp_dicts.append(dict(similarities = sims,
+                              self_similarity = percentile(sims.flatten(),p)))
+        
     eyeball = bsub.eyeball(os.path.abspath(inspect.stack()[0][1]), 
                            ['test_bsubfun'], 
                            [{} for i in range(5)])
     return eyeball
 def test_bsubfun(input_dict, run_id):
-    sub = spc.Popen('find', shell =True, stdout = spc.PIPE).\
-        communicate()[0]
-    out_dict = dict(output = sub)
+    #sub = spc.Popen('find', shell =True, stdout = spc.PIPE).\
+    #   communicate()[0]
+    #out_dict = dict(output = sub)
     
+    
+
+    tmpnames = bsub.tmp_fnames(run_id,2)
+    sio.savemat(tmpnames[0], inp_dict)
+    sub = spc.Popen('mlab -r ap_frompy({0}, {1})'.\
+                        format(tmpnames[0],tmpnames[1])).\
+                        communicate()[0]
+    out_dict = sio.loadmat(tmpnames[1])['out_struct']
     return out_dict
 
 def usage():
