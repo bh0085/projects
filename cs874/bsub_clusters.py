@@ -27,7 +27,7 @@ data/batch/inputs/{run_id}.inp in pickle serial.
   exit(1)
 
 if __name__ == '__main__':
-    if len(sys.arv < 3): usage()
+    if len(sys.argv < 3): usage()
     run_id = sys.argv[2]
     run_func = globals()[sys.argv[1]]
     input_dict = bsub.load_inp(run_id)
