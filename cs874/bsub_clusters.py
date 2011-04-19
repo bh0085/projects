@@ -1,9 +1,10 @@
 import subprocess as spc
 import compbio.utils.bsub as bsub
 import inspect
+import os
 
 def make_tests():
-    eyeball = bsub.eyeball(inspect.stack()[0][1], 
+    eyeball = bsub.eyeball(os.path.abspath(inspect.stack()[0][1]), 
                            ['test_bsubfun'], 
                            [{} for i in range(5)])
     print eyeball.statii()                           
