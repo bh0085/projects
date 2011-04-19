@@ -3,7 +3,7 @@
 import subprocess as spc
 import compbio.utils.bsub as bsub
 import inspect
-import os
+import os, sys
 
 def make_tests():
     eyeball = bsub.eyeball(os.path.abspath(inspect.stack()[0][1]), 
