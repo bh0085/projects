@@ -11,7 +11,7 @@ def make_tests():
                            [{} for i in range(5)])
     print eyeball.statii()                           
 
-def test_bsubfun():
+def test_bsubfun(input_dict, run_id):
     sub = spc.Popen('find', shell =True, stdout = spc.PIPE).\
         communicate()[0]
     out_dict = dict(output = sub)
