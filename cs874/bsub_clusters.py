@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import subprocess as spc
 import compbio.utils.bsub as bsub
 import inspect
