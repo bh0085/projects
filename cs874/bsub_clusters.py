@@ -27,7 +27,7 @@ def make_tests():
         
     eyeball = bsub.eyeball(os.path.abspath(inspect.stack()[0][1]), 
                            ['test_bsubfun'], 
-                           [{} for i in range(5)])
+                           inp_dicts)
     return eyeball
 def test_bsubfun(input_dict, run_id):
     #sub = spc.Popen('find', shell =True, stdout = spc.PIPE).\
