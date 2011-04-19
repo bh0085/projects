@@ -43,7 +43,7 @@ def test_bsubfun(input_dict, run_id):
                         format(tmpnames[0],tmpnames[1])
 
 
-    raise Exception()
+    #raise Exception()
     sub = spc.Popen(cstr,shell = True, stdout = spc.PIPE).\
         communicate()[0]
     out_dict = sio.loadmat(tmpnames[1])['out_struct']
