@@ -39,7 +39,7 @@ def test_bsubfun(input_dict, run_id):
     tmpnames = bsub.tmp_fnames(run_id,2)
     sio.savemat(tmpnames[0], input_dict, appendmat = False)
     
-    cstr = '''mlab -r "ap_frompy('{0}', '{1}')"'''.\
+    cstr = '''matlab -nodesktop -r "ap_frompy('{0}', '{1}')"'''.\
                         format(tmpnames[0],tmpnames[1])
 
 
