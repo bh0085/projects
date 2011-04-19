@@ -36,7 +36,7 @@ def test_bsubfun(input_dict, run_id):
     
     
 
-    tmpnames = bsub.tmp_fnames(run_id,2)
+    tmpnames = bsub.mat_tmp_fnames(run_id,2)
     sio.savemat(tmpnames[0], input_dict, appendmat = False)
     
     cstr = '''matlab -nodesktop -r "ap_frompy('{0}', '{1}')"'''.\
