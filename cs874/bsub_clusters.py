@@ -24,7 +24,7 @@ data/batch/inputs/{run_id}.inp in pickle serial.
 '''
   exit(1)
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     if len(sys.arv < 3): usage()
     run_id = sys.argv[2]
     run_func = globals()[sys.argv[1]]
