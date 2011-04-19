@@ -38,9 +38,14 @@ def test_bsubfun(input_dict, run_id):
 
     tmpnames = bsub.tmp_fnames(run_id,2)
     sio.savemat(tmpnames[0], inp_dict)
-    sub = spc.Popen('mlab -r ap_frompy({0}, {1})'.\
-                        format(tmpnames[0],tmpnames[1])).\
-                        communicate()[0]
+    
+    cstr = 'mlab -r ap_frompy({0}, {1})'.\
+                        format(tmpnames[0],tmpnames[1])
+
+
+    raise Exception()
+    sub = spc.Popen(cstr,shell = True, stdout = spc.PIPE).\
+        communicate()[0]
     out_dict = sio.loadmat(tmpnames[1])['out_struct']
     return out_dict
 
