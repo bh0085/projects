@@ -2,7 +2,7 @@
 
 import subprocess as spc
 import compbio.utils.bsub as bsub
-import compbio.utils.bsub_macros as bsm
+import compbio.utils.bs_macros as bsm
 import inspect
 import os, sys, inspect
 import scipy.io as sio
