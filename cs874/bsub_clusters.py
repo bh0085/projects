@@ -19,7 +19,6 @@ def make_tests():
         - 2 * dot(expr, expr.T)
     sims = - cluster_dists
 
-
     inp_dicts = []
     percentiles = [.01,1.,5.,10.,20.,25.,50.,75.]
     for p in percentiles:
