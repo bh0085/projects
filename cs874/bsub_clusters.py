@@ -48,20 +48,29 @@ outputs:
 '''
     return bsm.runmat('ap_frompy', input_dict, run_id)
 
+
 #Local launchpoint for the batch scripts
 def local_launch():
-    bs_cmd = pipes.quote( bsub.cmd(os.path.relpath(inspect.stack()[0][1],config.root),
-                       'remote_make_tests',
-                       run_id =bsub.get_run_id(0)))
-    
-    cmd = '''
-ssh tin '{0}'
-'''.format(bs_cmd)
-    return cmd
-  
-    
+    scr = pipes.quote('''
+echo `python -c '
+import compbio.config as config
+import os, inspect
+
+print config.progPath('{0}', absolute = True)
+'`
+'''.format(config.progPath(inspect.stack()[0][1])))
+    return scr
+
 #Remote launchpoint for bsub.
-def remote_make_tests():
+def remote_make_tests(input_dict, run_id):
+    '''
+the idea is that this function will queue up the batch jobs
+and submit them with bsub. Using eyeball, it will then wait
+until all jobs are done and when they are, export output back to
+gliese.
+
+inputs
+'''
     mirnaf = os.path.join(os.path.dirname(inspect.stack()[0][1]), 'miRNA.mat')
     mirna = sio.loadmat(mirnaf)
     expr = mirna['expression']
@@ -77,9 +86,7 @@ def remote_make_tests():
     eyeball = bsub.eyeball(os.path.abspath(inspect.stack()[0][1]), 
                            ['test_bsubfun'], 
                            inp_dicts)
-    return eyeball
-
-
+    eyeball.awaitAndExport()
 
 def usage():
   print '''
