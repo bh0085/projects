@@ -2,6 +2,7 @@
 
 import subprocess as spc
 import compbio.utils.bsub as bsub
+import compbio.utils.bsub_macros as bsm
 import inspect
 import os, sys, inspect
 import scipy.io as sio
@@ -29,25 +30,27 @@ def make_tests():
                            ['test_bsubfun'], 
                            inp_dicts)
     return eyeball
+
+def bic_clustering(input_dict, run_id):
+    return bsm.runmat('ap_max_bic', input_dict, run_id)
+
 def test_bsubfun(input_dict, run_id):
-    #sub = spc.Popen('find', shell =True, stdout = spc.PIPE).\
-    #   communicate()[0]
-    #out_dict = dict(output = sub)
-    
-    
+    '''
+A sample function to demonstrate the calling of a matlab script (here, 
+ap_frompy) from within python. Taking an input dictionary and a run_id,
+this script is designed to be called using the 'eyeball' class from 
+utils/bsub.py.
 
-    tmpnames = bsub.mat_tmp_fnames(run_id,2)
-    sio.savemat(tmpnames[0], input_dict, appendmat = False)
-    
-    cstr = '''matlab -nodesktop -r "ap_frompy('{0}', '{1}')"'''.\
-                        format(tmpnames[0],tmpnames[1])
+inputs:
+  input_dict: {similarities: a similarity matrix for the input points,
+               self_similarity: a single value for the self similarity
+                                of datapoints. Control cluster size.
 
+outputs:
+  outpt_dict: {indexes: cluster exemplar indices.}
 
-    #raise Exception()
-    sub = spc.Popen(cstr,shell = True, stdout = spc.PIPE).\
-        communicate()[0]
-    out_dict = sio.loadmat(tmpnames[1])['out_struct']
-    return out_dict
+'''
+    return bsm.runmat('ap_frompy', input_dict, run_id)
 
 def usage():
   print '''
