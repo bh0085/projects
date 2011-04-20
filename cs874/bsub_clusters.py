@@ -20,7 +20,7 @@ def make_tests():
     sims = - cluster_dists
 
     inp_dicts = []
-    percentiles = [.01,1.,10.,50.,75.]
+    percentiles = [.01]#[.01,1.,10.,50.,75.]
     for p in percentiles:
         inp_dicts.append(dict(similarities = sims,
                               self_similarity = percentile(sims.flatten(),p)))
