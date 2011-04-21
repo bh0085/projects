@@ -52,11 +52,16 @@ outputs:
 
 
 #Local launchpoint for the batch scripts
-def launch():
+def launcher():
     scriptfile = os.path.abspath(inspect.stack()[0][1])
     scriptroot = 'prog'
     func = 'remote_make_tests'
     run_id = 'bcl_launch0'
+    launcher = bsub.local_launcher(scriptfile,
+                                   scriptroot,
+                                   func = func,
+                                   run_id = run_id)
+    return launcher
     
 
                                  
@@ -82,9 +87,9 @@ inputs
     for p in percentiles:
         inp_dicts.append(dict(similarities = sims,
                               self_similarity = percentile(sims.flatten(),p)))
-    eyeball = bsub.eyeball(os.path.abspath(inspect.stack()[0][1]), 
-                           func = 'test_bsubfun', 
-                           inp_dicts)
+    eyeball = bsub.eyeball(os.path.abspath(inspect.stack()[0][1]), inp_dicts,
+                           func = 'test_bsubfun')
+                           
     eyeball.awaitAndExport()
 
 def usage():
