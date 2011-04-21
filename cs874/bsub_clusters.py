@@ -108,10 +108,9 @@ output:
                            func = 'test_bsubfun')
                            
     eyeball.launch()
+    eyeball.await()
+    eyeball.package()
 
-    return eyeball
-
-    eyeball.awaitAndExport()
     return {'datapath':eyeball.datapath}
 
 def usage():
