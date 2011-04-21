@@ -6,3 +6,4 @@ inds = ap(sims, ss)
 out_struct = struct()
 out_struct.inds = ap(sims, ss)
 save(mat_out, 'out_struct')
+exit
