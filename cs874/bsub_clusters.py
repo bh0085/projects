@@ -100,7 +100,7 @@ output:
         - 2 * dot(expr, expr.T)
     sims = - cluster_dists
     inp_dicts = []
-    percentiles = logspace(-2,1.99,50)
+    percentiles = logspace(-2,1.99,2)
     for p in percentiles:
         inp_dicts.append(dict(similarities = sims,
                               self_similarity = percentile(sims.flatten(),p)))
@@ -108,6 +108,9 @@ output:
                            func = 'test_bsubfun')
                            
     eyeball.launch()
+
+    return eyeball
+
     eyeball.awaitAndExport()
     return {'datapath':eyeball.datapath}
 
