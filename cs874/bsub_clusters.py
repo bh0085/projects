@@ -11,7 +11,7 @@ from numpy import *
 
 
 #A few batch processes.
-def bic_clustering(input_dict, run_id):
+def bic_clustering(run_id):
     '''
 A matlab/bsub process to compute the BIC maximal clustering for an
 input dictionary containing a similarity matrix.
@@ -28,9 +28,10 @@ outputs:
                 bic_[#]: (...)
                 }
 '''
+    input_dict = bsub.load_inp(run_id)
     return bsm.runmat('ap_max_bic', input_dict, run_id)
 
-def test_bsubfun(input_dict, run_id):
+def test_bsubfun(run_id):
     '''
 A sample function to demonstrate the calling of a matlab script (here, 
 ap_frompy) from within python. Taking an input dictionary and a run_id,
@@ -46,23 +47,21 @@ outputs:
   outpt_dict: {indexes: cluster exemplar indices.}
 
 '''
+    input_dict = bsub.load_inp(run_id)
     return bsm.runmat('ap_frompy', input_dict, run_id)
 
 
 #Local launchpoint for the batch scripts
-def local_launch():
-    scr = pipes.quote('''
-echo `python -c '
-import compbio.config as config
-import os, inspect
+def launch():
+    scriptfile = os.path.abspath(inspect.stack()[0][1])
+    scriptroot = 'prog'
+    func = 'remote_make_tests'
+    run_id = 'bcl_launch0'
+    
 
-print config.progPath('{0}', absolute = True)
-'`
-'''.format(config.progPath(inspect.stack()[0][1])))
-    return scr
-
+                                 
 #Remote launchpoint for bsub.
-def remote_make_tests(input_dict, run_id):
+def remote_make_tests(run_id):
     '''
 the idea is that this function will queue up the batch jobs
 and submit them with bsub. Using eyeball, it will then wait
@@ -84,23 +83,21 @@ inputs
         inp_dicts.append(dict(similarities = sims,
                               self_similarity = percentile(sims.flatten(),p)))
     eyeball = bsub.eyeball(os.path.abspath(inspect.stack()[0][1]), 
-                           ['test_bsubfun'], 
+                           func = 'test_bsubfun', 
                            inp_dicts)
     eyeball.awaitAndExport()
 
 def usage():
   print '''
-usage: btol.py run_id
-1
-Run a batch process on BTOL with inputs stored in 
-data/batch/inputs/{run_id}.inp in pickle serial.
+usage: bsub_clusters function run_id
+
+Run function with run_id. Designed to be called from bsub.cmd().
 '''
   exit(1)
 
 if __name__ == '__main__':
-    run_id = sys.argv[2] if len(sys.argv) > 2 else 0
+    run_id = sys.argv[2]
     run_func = globals()[sys.argv[1]]
-    input_dict = bsub.load_inp(run_id)
-    output_dict = run_func(input_dict, run_id)
+    output_dict = run_func(run_id)
     bsub.save_out( output_dict, run_id)
     
