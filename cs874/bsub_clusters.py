@@ -2,8 +2,10 @@
 
 import subprocess as spc
 import compbio.utils.bsub as bsub
+import compbio.utils.bsub_utils as butils
 import compbio.config as config
 import compbio.utils.bs_macros as bsm
+
 
 import os, sys, inspect, pipes
 import scipy.io as sio
@@ -62,8 +64,6 @@ def launcher():
                                    func = func,
                                    run_id = run_id)
     return launcher
-    
-
                                  
 #Remote launchpoint for bsub.
 def remote_make_tests(run_id):
