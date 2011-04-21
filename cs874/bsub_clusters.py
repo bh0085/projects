@@ -42,7 +42,7 @@ outputs:
                 bic_[#]: (...)
                 }
 '''
-    input_dict = bsub.load_inp(run_id)
+    input_dict = butils.load_inp(run_id)
     return bsm.runmat('ap_max_bic', input_dict, run_id)
 
 def test_bsubfun(run_id):
@@ -61,7 +61,7 @@ outputs:
   outpt_dict: {indexes: cluster exemplar indices.}
 
 '''
-    input_dict = bsub.load_inp(run_id)
+    input_dict = butils.load_inp(run_id)
     return bsm.runmat('ap_frompy', input_dict, run_id)
 
 
@@ -123,5 +123,5 @@ if __name__ == '__main__':
     run_id = sys.argv[2]
     run_func = globals()[sys.argv[1]]
     output_dict = run_func(run_id)
-    bsub.save_out( output_dict, run_id)
+    butils.save_out( output_dict, run_id)
     
