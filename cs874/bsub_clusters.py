@@ -1,5 +1,17 @@
 #!/usr/bin/env python
+'''
+bsub_clusters.py
 
+So far, mostly testing routines for my python-matlab interface over bsub.
+
+local...  Spawns a single bsub process from a local machine
+          Returns a launcher whose outputs and statuses can be queried.
+
+remote... Is called by local_ remotely. Spawns a bunch of threads and
+          exports the output to the local machine. Returns a dictionary
+          containing the filepath of the exported data once subprocesses 
+          have all run to completion.
+'''
 import subprocess as spc
 import compbio.utils.bsub as bsub
 import compbio.utils.bsub_utils as butils
@@ -73,7 +85,12 @@ and submit them with bsub. Using eyeball, it will then wait
 until all jobs are done and when they are, export output back to
 gliese.
 
-inputs
+inputs:
+  run_id
+
+output:
+  the datapath (same for local and remote) of data output from 
+  threads.
 '''
     mirnaf = os.path.join(os.path.dirname(inspect.stack()[0][1]), 'miRNA.mat')
     mirna = sio.loadmat(mirnaf)
@@ -92,12 +109,13 @@ inputs
                            
     eyeball.launch()
     eyeball.awaitAndExport()
+    return {'datapath':eyeball.datapath}
 
 def usage():
   print '''
 usage: bsub_clusters function run_id
 
-Run function with run_id. Designed to be called from bsub.cmd().
+Call function with run_id.
 '''
   exit(1)
 
