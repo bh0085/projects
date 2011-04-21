@@ -90,6 +90,7 @@ inputs
     eyeball = bsub.eyeball(os.path.abspath(inspect.stack()[0][1]), inp_dicts,
                            func = 'test_bsubfun')
                            
+    eyeball.launch()
     eyeball.awaitAndExport()
 
 def usage():
