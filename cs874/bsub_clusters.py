@@ -42,7 +42,7 @@ outputs:
                 bic_[#]: (...)
                 }
 '''
-    input_dict = butils.load_inp(run_id)
+    input_dict = butils.load_data(run_id, 'input')
     return bsm.runmat('ap_max_bic', input_dict, run_id)
 
 def test_bsubfun(run_id):
@@ -61,7 +61,7 @@ outputs:
   outpt_dict: {indexes: cluster exemplar indices.}
 
 '''
-    input_dict = butils.load_inp(run_id)
+    input_dict = butils.load_data(run_id,'input')
     return bsm.runmat('ap_frompy', input_dict, run_id)
 
 
@@ -104,14 +104,16 @@ output:
     for p in percentiles:
         inp_dicts.append(dict(similarities = sims,
                               self_similarity = percentile(sims.flatten(),p)))
-    eyeball = bsub.eyeball(os.path.abspath(inspect.stack()[0][1]), inp_dicts,
+    eyeball = bsub.eyeball(run_id,
+                           os.path.abspath(inspect.stack()[0][1]), inp_dicts,
                            func = 'test_bsubfun')
-                           
+                          
+  
     eyeball.launch()
     eyeball.await()
     eyeball.package()
 
-    return {'datapath':eyeball.datapath}
+    return {'outfile':eyeball.datapath}
 
 def usage():
   print '''
@@ -125,5 +127,5 @@ if __name__ == '__main__':
     run_id = sys.argv[2]
     run_func = globals()[sys.argv[1]]
     output_dict = run_func(run_id)
-    butils.save_out( output_dict, run_id)
+    butils.save_data( output_dict, run_id, 'output')
     
