@@ -100,7 +100,7 @@ output:
         - 2 * dot(expr, expr.T)
     sims = - cluster_dists
     inp_dicts = []
-    percentiles = logspace(-2,1.99,10)
+    percentiles = logspace(-2,1.99,3)
     for p in percentiles:
         inp_dicts.append(dict(similarities = sims,
                               self_similarity = percentile(sims.flatten(),p)))
