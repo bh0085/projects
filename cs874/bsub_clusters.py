@@ -66,7 +66,7 @@ outputs:
 
 
 #Local launchpoint for the batch scripts
-def launcher():
+def launcher(input_dicts):
     scriptfile = os.path.abspath(inspect.stack()[0][1])
     scriptroot = 'prog'
     func = 'remote_make_tests'
@@ -74,6 +74,7 @@ def launcher():
     launcher = bsub.local_launcher(scriptfile,
                                    scriptroot,
                                    func = func,
+                                   input_dicts = input_dicts,
                                    run_id = run_id)
     return launcher
                                  
@@ -92,18 +93,22 @@ output:
   the datapath (same for local and remote) of data output from 
   threads.
 '''
-    mirnaf = os.path.join(os.path.dirname(inspect.stack()[0][1]), 'miRNA.mat')
-    mirna = sio.loadmat(mirnaf)
-    expr = mirna['expression']
-    e_norms = sum(expr**2,1)
-    cluster_dists = e_norms[:,newaxis] + e_norms[newaxis,:] \
-        - 2 * dot(expr, expr.T)
-    sims = - cluster_dists
-    inp_dicts = []
-    percentiles = logspace(-2,1.99,3)
-    for p in percentiles:
-        inp_dicts.append(dict(similarities = sims,
-                              self_similarity = percentile(sims.flatten(),p)))
+    if test:
+        mirnaf = os.path.join(os.path.dirname(inspect.stack()[0][1]), 'miRNA.mat')
+        mirna = sio.loadmat(mirnaf)
+        expr = mirna['expression']
+        e_norms = sum(expr**2,1)
+        cluster_dists = e_norms[:,newaxis] + e_norms[newaxis,:] \
+            - 2 * dot(expr, expr.T)
+        sims = - cluster_dists
+        inp_dicts = []
+        percentiles = logspace(-2,1.99,3)
+        for p in percentiles:
+            inp_dicts.append(dict(similarities = sims,
+                                  self_similarity = percentile(sims.flatten(),p)))
+    else:
+        inp_dicts = butils.load_data(run_id, 'input')
+    
     eyeball = bsub.eyeball(run_id,
                            os.path.abspath(inspect.stack()[0][1]), inp_dicts,
                            func = 'test_bsubfun')
