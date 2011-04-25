@@ -127,7 +127,7 @@ if __name__ == '__main__':
     run_id = sys.argv[2]
     run_func = globals()[sys.argv[1]]
     output_dict = run_func(run_id)
-    if not output_dict == None:
+    if output_dict == None:
         output_dict = {'blank':'Nothing output in call to {0}'}.\
             format(sys.argv[1])
     butils.save_data( output_dict, run_id, 'output')
