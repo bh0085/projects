@@ -93,6 +93,7 @@ output:
   the datapath (same for local and remote) of data output from 
   threads.
 '''
+    test = False
     if test:
         mirnaf = os.path.join(os.path.dirname(inspect.stack()[0][1]), 'miRNA.mat')
         mirna = sio.loadmat(mirnaf)
