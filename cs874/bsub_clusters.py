@@ -66,7 +66,7 @@ outputs:
 
 
 #Local launchpoint for the batch scripts
-def launcher(input_dicts):
+def launcher(input_dicts, host = None):
     scriptfile = os.path.abspath(inspect.stack()[0][1])
     scriptroot = 'prog'
     func = 'remote_make_tests'
@@ -75,7 +75,8 @@ def launcher(input_dicts):
                                    scriptroot,
                                    func = func,
                                    input_dicts = input_dicts,
-                                   run_id = run_id)
+                                   run_id = run_id,
+                                   host = host)
     return launcher
                                  
 #Remote launchpoint for bsub.
