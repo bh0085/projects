@@ -66,11 +66,14 @@ outputs:
 
 
 #Local launchpoint for the batch scripts
-def launcher(input_dicts, host = None):
+def launcher(input_dicts, host = None, name = None):
     scriptfile = os.path.abspath(inspect.stack()[0][1])
     scriptroot = 'prog'
     func = 'remote_make_tests'
-    run_id = 'bcl_launch0'
+    if name == None:
+        run_id = 'bcl_launch0'
+    else:
+        run_id = name
     launcher = bsub.local_launcher(scriptfile,
                                    scriptroot,
                                    func = func,
@@ -113,7 +116,8 @@ output:
     
     eyeball = bsub.eyeball(run_id,
                            os.path.abspath(inspect.stack()[0][1]), inp_dicts,
-                           func = 'test_bsubfun')
+                           func = 'test_bsubfun',
+                           name = run_id+'_test_')
                           
   
     eyeball.launch()
