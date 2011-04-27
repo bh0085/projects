@@ -118,7 +118,7 @@ output:
                            os.path.abspath(inspect.stack()[0][1]), inp_dicts,
                            func = 'test_bsubfun',
                            name = run_id+'_test_', 
-                           mem = 3)
+                           mem = 2)
                           
   
     eyeball.launch()
