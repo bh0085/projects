@@ -117,7 +117,8 @@ output:
     eyeball = bsub.eyeball(run_id,
                            os.path.abspath(inspect.stack()[0][1]), inp_dicts,
                            func = 'test_bsubfun',
-                           name = run_id+'_test_')
+                           name = run_id+'_test_', 
+                           mem = 3)
                           
   
     eyeball.launch()
