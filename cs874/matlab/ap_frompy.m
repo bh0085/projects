@@ -5,7 +5,6 @@ sims = data.similarities
 ss   = data.self_similarity
 inds = ap(sims, ss)
 
-
 out_struct = struct()
 out_struct.inds = inds
 out_struct.ss = ss
