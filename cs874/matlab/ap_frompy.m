@@ -12,4 +12,3 @@ out_struct.metric = data.metric;
 
 result = 'success'
 save(mat_out, 'out_struct');
-exit;
