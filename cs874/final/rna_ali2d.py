@@ -933,18 +933,18 @@ def runmany(run_id):
 	inp_dicts = [dict([('ofs',r)]) for r in range(0,1493)]
 	eyeball = bsub.eyeball(run_id, 
 			       os.path.abspath(inspect.stack()[0][1]),
-			       inp_dicts)
+			       inp_dicts,
+			       run_id = run_id,
+			       func = 'run',
+			       name = 'ra2_runs_',
+			       mem = 3)
 	eyeball.launch()
 	return 'sxs'
 def run(run_id):
 	data = bsu.load_data(run_id, 'input')
 	ofs = data['ofs']
 	outputs = get_consenus(ofs, 
-			       reset = True,
-			       run_id = run_id,
-			       func = 'run',
-			       name = 'ra2_runs_',
-			       mem = 3)
+			       reset = True)
 	return(outputs)
 
 def usage():
