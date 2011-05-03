@@ -57,6 +57,7 @@ def plot_clusters(inds,
             emb_sig = embedding[:,0:3]
             cluster_vars = [ var(emb_sig[nonzero(equal(inds, j))[0]])  for j in exemplars]
             indexed_vars = [ cluster_vars[exemplars.index(j)] for j in inds ]
+	    indexed_vars(equal(index_vars,0)) = 1
 
             sizes = 10 *( exp( -1 * ( np.sum((emb_sig - emb_sig[inds,:])**2,1)/indexed_vars)))
             if plot3d:
@@ -109,11 +110,15 @@ def parse_stk_struct(filename):
             
     
     
-def get_fam(ofs = 0):
+def get_fam(ofs = 0, rfid = None):
+
     fopen = open(cfg.dataPath('rfam/Rfam.seed'))
     #fopen.readline()
     #fopen.readline()
     alis = aio.parse(fopen,'stockholm')
+
+    if rfid != None:
+	    
     for i in range(ofs):
         null = alis.next()
     
@@ -217,8 +222,10 @@ def compute_embedding(spairs,
         elif aff_type == 'pairs':
             #PAIR INTERSECTION COMPARISON
 	    ssm = -.1 if ss_multiplier == None else ss_multiplier
+	    nrm = sqrt((len(spairs[i])*len(spairs[j])))
+	    nrm[equal(nrm,0)] = 1
             affinities = array([[float(len(spairs[i].intersection(spairs[j])))\
-                                     /sqrt((len(spairs[i])*len(spairs[j])))
+                                     / nrm
                                  for i in range(len(spairs))]
                                 for j in range(len(spairs))])
             da = np.max(affinities) - np.min(affinities)
@@ -262,7 +269,6 @@ def setAffinities(tree = None, refseq_method = None, refseq = None,
             nrm =  sqrt( sum(pair_vecs**2,1)[:,newaxis] )
             if sum(equal(nrm,0)) > 0: raise Exception()
             nrm[equal(nrm,0)] == 1
-            
             pair_vecs /= nrm
             affinities = sum(pair_vecs[:,newaxis,:] * pair_vecs[newaxis,:,:],2)
             da = np.max(affinities) - np.min(affinities)
@@ -298,8 +304,6 @@ def setAffinities(tree = None, refseq_method = None, refseq = None,
 def get_consensus(ofs = 0,     
                   mweight = .5, 
                   refseq_method = 'root',
-                  nstructs = 10,
-                  struct_method = 'alifold',
                   sp_method = 'sample',
                   aff_type = 'pairs',
                   reset = False,
@@ -342,7 +346,7 @@ def get_consensus(ofs = 0,
                                                         big_refseq.seq.alphabet)
                                             ,rfid + '_ref', name = big_refnode.name)
 
-    title = '{0}_subopts_for_{1}_emb_{2}'.format(sp_method,rfid,aff_type)
+    title = 'RID_{3}_{0}_subopts_for_{1}_emb_{2}'.format(sp_method,rfid,aff_type,run_id)
     spairs, inds, pca_vecs, mve_vecs = mem.getOrSet(setAffinities,**mem.rc({},reset = reset,
 									   tree = tree,
 									   aff_type = aff_type,
@@ -440,7 +444,8 @@ def get_consensus(ofs = 0,
         #frequencies over all suboptimal structures.
         nwob, ncomp, nucom, nreco, nbbad  =[  sum([sum(m[k]) for m in all_muts]) 
                                               for k in ['wob','comp','ucom','reco','bbad']]
-        comp_bonus = min([10.,max([2.,nwob/ncomp])])
+	nrm = ncomp if ncomp != 0 else 1
+        comp_bonus = min([10.,max([2.,nwob/nrm])])
         
         for i, struct in enumerate(exemplar_structs):          
           #Compute the vector leaving mweight at its default value
@@ -801,7 +806,9 @@ outputs:
    return muts, times
 
 
-def show_output(outputs):
+def show_output(outputs, 
+		show = 'conservation',
+		save = True):
 	mvecs = outputs['all_vecs']['all_time']
 	tvecs = outputs['all_vecs']['all_mut']
 	fvecs = outputs['all_vecs']['fiftyfifty']
@@ -824,7 +831,6 @@ def show_output(outputs):
 			       for i, col in enumerate(mycolors.getct(len(exemplar_inds)))]
                               )
 
-	show = 'conservation'
 
 	if show == 'embeddings':
 
@@ -845,7 +851,7 @@ def show_output(outputs):
 	   			     'pairs':pair_embedding[0]}, 
 			  plot3d = show_3d,
 			  title = 'projection ({0}) '.format(run_id),
-			  save = True,
+			  save = save,
 			  colors = struct_colors)
 
 	elif show == 'conservation':
@@ -862,7 +868,10 @@ def show_output(outputs):
 		clade_colors = mycolors.getct(len(igood))
 		mvg, tvg, fvg = [ [vecs[i] for i in igood] for vecs in [mvecs,tvecs,fvecs]]
 		cons_types = array([ mvg, tvg, tvg])
+		
 		for c in cons_types:
+			nrm = sum(c.flatten())
+			if nrm == 0: nrm = 1
 			c /= sum(c.flatten())
 		
 		mtype_sums = np.sum(np.sum(cons_types,3),0)	
@@ -893,10 +902,8 @@ def show_output(outputs):
 			     [.5,0],xycoords = 'axes fraction', ha = 'center', va = 'top',
 			     size = 'x-large')
 
-		raise Exception()
-		
-				 
-		
+		if save: fig.savefig(cfg.dataPath('cs874/figs/cons_profiles/{0}.ps'.format(title)))
+	       				 	
 
 
 
@@ -913,3 +920,9 @@ def showseq(tree, elts):
     phy.draw_graphviz(tree, lambda x:''.join([ x.m['seq'].seq[e] for e in elts]))
 
 bps = ['GC','AU','GU','CG','UA','UG']
+
+
+def run_all(ofs):
+	run_id = 'ra2_{0:05}'.format(ofs)
+	outputs = get_consenus(ofs, reset = True)
+	
