@@ -110,7 +110,7 @@ def parse_stk_struct(filename):
     
     
 def get_fam(ofs = 0):
-    fopen = open('Rfam.seed')
+    fopen = open(cfg.dataPath('rfam/Rfam.seed'))
     #fopen.readline()
     #fopen.readline()
     alis = aio.parse(fopen,'stockholm')
@@ -133,9 +133,9 @@ def get_fam(ofs = 0):
 
     ali = alis.next()
     rfname = infos['AC'].strip()
-    fname = 'Rfam.seed_tree/{0}.seed_tree'.format(rfname)
+    fname = cfg.dataPath('rfam/Rfam.seed_tree/{0}.seed_tree'.format(rfname))
 
-    tree = nio.parse(open('Rfam.seed_tree/{0}.seed_tree'.format(rfname))).next()
+    tree = nio.parse(open(cfg.dataPath('rfam/Rfam.seed_tree/{0}.seed_tree'.format(rfname)))).next()
     return ali, tree, info, rfname
 
 def infernal_alignment(alis, profile,rfid):
