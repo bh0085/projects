@@ -14,14 +14,16 @@ import subprocess as spc, sys, re
 import compbio.utils.memo as mem
 import compbio.utils.bs_macros as bsm
 import compbio.config as cfg
-import compbio.utils.colors as mycolors
-import compbio.utils.seismic as seismic
-import compbio.utils.plots as myplots
+
+if __name__ != '__main__':
+	import compbio.utils.colors as mycolors
+	import compbio.utils.seismic as seismic
+	import compbio.utils.plots as myplots
+	import matplotlib.pyplot as plt
 
 from numpy import *
 import numpy as np
 import itertools as it
-import matplotlib.pyplot as plt
 
 from compbio.projects.seqtree import muscle, phyml, paml
 
@@ -358,7 +360,7 @@ def get_consensus(ofs = 0,
 									   register = title,
 									   ))
 
-    if do_plot: plot_clusters(inds,{'pca embedding':pca_vecs},title = title,plot3d = True)
+    if do_plot : plot_clusters(inds,{'pca embedding':pca_vecs},title = title,plot3d = True)
     exemplar_structs = [spairs[e] for e in set(inds)]
     struct_profiles = infernal_profiles(ungapped_ref,exemplar_structs)
 
