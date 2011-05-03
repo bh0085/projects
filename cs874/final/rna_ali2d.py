@@ -962,5 +962,5 @@ if __name__ == '__main__':
     if output_dict == None:
         output_dict = {'blank':'Nothing output in call to {0}'.\
                            format(sys.argv[1])}
-    butils.save_data( output_dict, run_id, 'output')
+    bsu.save_data( output_dict, run_id, 'output')
     
