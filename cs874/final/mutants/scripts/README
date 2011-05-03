@@ -1,0 +1,46 @@
+These python programs were written by P. Clote to create an
+image of the mutation profile discussed in the paper, 
+"RNAmutants: A web server to explore the mutational landscape
+of RNA secondary structures", by J. Waldispuhl, S. Devadas, B.Berger
+and P. Clote, PLoS Comput Biol. 2008 Aug 8;4(8):e1000124.
+They are provided as is, with no guarantees whatsoever.
+
+To properly generate the mutational profile, as displayed in this
+article, you must download RNAmutants source code, and then
+execute the command:
+
+  RNAmutants --library libraryPath --input-string $1 --mutation $2 \
+             --sample-command sampleCommands.txt
+
+Here "libraryPath" is the full path to the library files of MFOLD
+free energy parameters from M. Zuker's software. The "input-string"
+is a user-given RNA sequence, "mutation" is the maximum number of
+mutations allowed, and the file with name "sampleCommands.txt"
+contains information on how many sequence-structures should be sampled
+for each mutation k, where k is bounded by the user-specified maximum
+number of mutations allowed. 
+
+For instance, in order to produce the mutational profile in the paper,
+my file "sampleCommands.txt" contained the following:
+1       100
+2       100
+3       100
+4       100
+5       100
+6       100
+7       100
+8       100
+9       100
+10      100
+11      100
+12      100
+13      100
+14      100
+15      100
+
+The output consisted of 100 sequence-structures sampled for each fixed
+number of mutations k, for 1<=k<=15.
+
+The python programs in this directory then were used to process the output
+to create the mutational profile.
+

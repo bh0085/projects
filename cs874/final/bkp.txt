@@ -1,0 +1,14 @@
+    ali_ids = [a.name for a in ali]
+    for i, n in enumerate(tree.get_terminals()):
+        term_id = re.compile('_([^\.]*\.\d*)').search(n.name).group(1) 
+        this_seq = ali[ali_ids.index(term_id)]
+        n.m = {'seq':this_seq,
+               'probs':[1 for j in range(len(this_seq))]}
+        lilid =  'N{0}'.format(i)
+        n.name = lilid
+        this_seq.id = lilid
+        
+
+    big_refnode, big_refseq = \
+        subtree_refseq(tree, method = refseq_method)
+    structs = spc.Popen('RNAfold')

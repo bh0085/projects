@@ -1,0 +1,239 @@
+
+                         MODELLER 9v3, 2008/02/01, r5971
+
+     PROTEIN STRUCTURE MODELLING BY SATISFACTION OF SPATIAL RESTRAINTS
+
+
+                     Copyright(c) 1989-2008 Andrej Sali
+                            All Rights Reserved
+
+                             Written by A. Sali
+                               with help from
+           B. Webb, M.S. Madhusudhan, M-Y. Shen, M.A. Marti-Renom,
+                N. Eswar, F. Alber, M. Topf, B. Oliva, A. Fiser,
+                    R. Sanchez, B. Yerkovich, A. Badretdinov,
+                      F. Melo, J.P. Overington, E. Feyfant
+                 University of California, San Francisco, USA
+                    Rockefeller University, New York, USA
+                      Harvard University, Cambridge, USA
+                   Imperial Cancer Research Fund, London, UK
+              Birkbeck College, University of London, London, UK
+
+
+Kind, OS, HostName, Kernel, Processor: 4, Linux synth.ucsf.edu 2.6.24.3-34.fc8 i686
+Date and time of compilation         : 2008/02/01 20:41:25
+MODELLER executable type             : i386-intel8
+Job starting time (YY/MM/DD HH:MM:SS): 2008/03/25 13:01:05
+
+openf___224_> Open           $(LIB)/restyp.lib
+openf5__224_> Open       11  OLD  SEQUENTIAL  ${MODINSTALL9v3}/modlib/resgrp.lib
+rdresgr_266_> Number of residue groups:        2
+openf___224_> Open           ${MODINSTALL9v3}/modlib/sstruc.lib
+
+Dynamically allocated memory at   amaxlibraries [B,KiB,MiB]:      3234070    3158.271     3.084
+
+Dynamically allocated memory at   amaxlibraries [B,KiB,MiB]:      3234598    3158.787     3.085
+openf___224_> Open           ${MODINSTALL9v3}/modlib/resdih.lib
+
+Dynamically allocated memory at   amaxlibraries [B,KiB,MiB]:      3283198    3206.248     3.131
+rdrdih__263_> Number of dihedral angle types         :        9
+              Maximal number of dihedral angle optima:        3
+              Dihedral angle names                   :  Alph Phi Psi Omeg chi1 chi2 chi3 chi4 chi5
+openf___224_> Open           ${MODINSTALL9v3}/modlib/radii.lib
+
+Dynamically allocated memory at   amaxlibraries [B,KiB,MiB]:      3292174    3215.014     3.140
+openf___224_> Open           ${MODINSTALL9v3}/modlib/radii14.lib
+openf5__224_> Open       11  OLD  SEQUENTIAL  ${MODINSTALL9v3}/modlib/af_mnchdef.lib
+rdwilmo_274_> Mainchain residue conformation classes:  APBLE
+openf___224_> Open           ${MODINSTALL9v3}/modlib/mnch.lib
+rdclass_257_> Number of classes:        5
+openf___224_> Open           ${MODINSTALL9v3}/modlib/mnch1.lib
+openf___224_> Open           ${MODINSTALL9v3}/modlib/mnch2.lib
+openf___224_> Open           ${MODINSTALL9v3}/modlib/mnch3.lib
+openf___224_> Open           ${MODINSTALL9v3}/modlib/xs4.mat
+rdrrwgh_268_> Number of residue types:       21
+openf___224_> Open           $(LIB)/top_heav.lib
+read_to_681_> topology.submodel read from topology file:        3
+openf___224_> Open           ${MODINSTALL9v3}/modlib/models.lib
+openf___224_> Open           $(LIB)/par.lib
+
+Dynamically allocated memory at  amaxparameters [B,KiB,MiB]:      4241130    4141.729     4.045
+openf___224_> Open           $(LIB)/par.lib
+read_pa_232_> parameters    BONDS   ANGLS  DIHEDS IMPROPS    MODE
+                              227     561     661     112       0
+openf___224_> Open           1bdm.pdb
+
+Dynamically allocated memory at       amaxmodel [B,KiB,MiB]:      4532972    4426.730     4.323
+openf___224_> Open           1bdm.pdb
+read_mo_297_> Segments, residues, atoms:        1      318     2406
+read_mo_298_> Segment:        1     0 A   332 A     2406
+
+Dynamically allocated memory at   amaxalignment [B,KiB,MiB]:      4542718    4436.248     4.332
+
+Dynamically allocated memory at   amaxstructure [B,KiB,MiB]:      4719252    4608.645     4.501
+
+Dynamically allocated memory at   amaxalignment [B,KiB,MiB]:      4722278    4611.600     4.504
+
+Dynamically allocated memory at   amaxstructure [B,KiB,MiB]:      4898812    4783.996     4.672
+
+Dynamically allocated memory at       amaxmodel [B,KiB,MiB]:      4934212    4818.566     4.706
+
+getf_______W> RTF restraint not found in the atoms list:
+              residue type, indices:     8   318
+              atom names           : C     +N
+              atom indices         :  2414     0
+
+getf_______W> RTF restraint not found in the atoms list:
+              residue type, indices:     8   318
+              atom names           : C     CA    +N    O
+              atom indices         :  2414  2409     0  2415
+
+mkilst______> segment topology constructed from sequence and RTF:
+              segments residues atoms bonds angles dihedrals impropers:
+                     1      318  2415  2459      0         0       983
+
+Dynamically allocated memory at       amaxmodel [B,KiB,MiB]:      5036796    4918.746     4.803
+
+patch_______> segment topology patched using RTF:     1  ;  MET  ;  NTER
+              segments residues atoms bonds angles dihedrals impropers:
+                     1      318  2415  2459   3335      3912       983
+
+
+Dynamically allocated memory at       amaxmodel [B,KiB,MiB]:      5147292    5026.652     4.909
+patch_______> segment topology patched using RTF:   318  ;  ILE  ;  CTER
+              segments residues atoms bonds angles dihedrals impropers:
+                     1      318  2416  2460   3337      3914       984
+
+genseg______> segment topology constructed from sequence and RTF:
+              segments residues atoms bonds angles dihedrals impropers:
+                     1      318  2416  2460   3337      3914       984
+transfe_506_> MODEL is an average of all templates.
+transfe_511_> Number of templates for coordinate transfer:        1
+              After transferring coordinates of the equivalent template atoms,
+              there are defined, undefined atoms in MODEL:     2406       10
+openf___224_> Open           ${LIB}/atmcls-mf.lib
+
+Dynamically allocated memory at amaxgroup_restr [B,KiB,MiB]:      4899272    4784.445     4.672
+openf___224_> Open           ${LIB}/atmcls-mf.lib
+openf___224_> Open           ${LIB}/dist-mf.lib
+
+Dynamically allocated memory at amaxgroup_restr [B,KiB,MiB]:      8717792    8513.469     8.314
+openf___224_> Open           ${LIB}/dist-mf.lib
+read_pa_232_> parameters    BONDS   ANGLS  DIHEDS IMPROPS    MODE
+                                0       0       0       0   12561
+>> Model assessment by DOPE potential
+iatmcls_286W> MODEL atom not classified:  ILE:OXT  ILE
+preppdf_453W> No fixed restraints selected; there may be some dynamic ones.
+preppdf_454W> Restraints file was probably not read; use restraints.append().
+
+Dynamically allocated memory at amaxhash_contac [B,KiB,MiB]:      9413720    9193.086     8.978
+
+Dynamically allocated memory at  amaxrestraints [B,KiB,MiB]:      9613740    9388.418     9.168
+
+Dynamically allocated memory at  amaxrestraints [B,KiB,MiB]:      9671724    9445.043     9.224
+
+Dynamically allocated memory at  amaxrestraints [B,KiB,MiB]:      9787692    9558.293     9.334
+
+Dynamically allocated memory at  amaxrestraints [B,KiB,MiB]:     10019628    9784.793     9.555
+
+Dynamically allocated memory at  amaxrestraints [B,KiB,MiB]:     10483500   10237.793     9.998
+
+Dynamically allocated memory at  amaxrestraints [B,KiB,MiB]:     11411244   11143.793    10.883
+
+Dynamically allocated memory at  amaxrestraints [B,KiB,MiB]:     13266732   12955.793    12.652
+
+Dynamically allocated memory at  amaxrestraints [B,KiB,MiB]:     16977708   16579.793    16.191
+
+
+>> ENERGY; Differences between the model's features and restraints:
+Number of all residues in MODEL                   :      318
+Number of all, selected real atoms                :     2416    2416
+Number of all, selected pseudo atoms              :        0       0
+Number of all static, selected restraints         :        0       0
+COVALENT_CYS                                      :        F
+NONBONDED_SEL_ATOMS                               :        1
+Number of non-bonded pairs (excluding 1-2,1-3,1-4):   482578
+Dynamic pairs routine                             : 1, NATM x NATM double loop
+Atomic shift for contacts update (UPDATE_DYNAMIC) :    0.390
+LENNARD_JONES_SWITCH                              :    6.500   7.500
+COULOMB_JONES_SWITCH                              :    6.500   7.500
+RESIDUE_SPAN_RANGE                                :        1    9999
+NLOGN_USE                                         :       15
+CONTACT_SHELL                                     :   15.000
+DYNAMIC_PAIRS,_SPHERE,_COULOMB,_LENNARD,_MODELLER :        T       F       F       F       T
+SPHERE_STDV                                       :    0.050
+RADII_FACTOR                                      :    0.820
+Current energy                                    :      -39206.2422
+
+
+
+
+
+Summary of the restraint violations: 
+
+   NUM     ... number of restraints.
+   NUMVI   ... number of restraints with RVIOL > VIOL_REPORT_CUT[i].
+   RVIOL   ... relative difference from the best value.
+   NUMVP   ... number of restraints with -Ln(pdf) > VIOL_REPORT_CUT2[i].
+   RMS_1   ... RMS(feature, minimally_violated_basis_restraint, NUMB).
+   RMS_2   ... RMS(feature, best_value, NUMB).
+   MOL.PDF ... scaled contribution to -Ln(Molecular pdf).
+
+ #                     RESTRAINT_GROUP      NUM   NUMVI  NUMVP   RMS_1   RMS_2         MOL.PDF     S_i
+------------------------------------------------------------------------------------------------------
+ 1 Bond length potential              :       0       0      0   0.000   0.000      0.0000       0.000
+ 2 Bond angle potential               :       0       0      0   0.000   0.000      0.0000       0.000
+ 3 Stereochemical cosine torsion poten:       0       0      0   0.000   0.000      0.0000       0.000
+ 4 Stereochemical improper torsion pot:       0       0      0   0.000   0.000      0.0000       0.000
+ 5 Soft-sphere overlap restraints     :       0       0      0   0.000   0.000      0.0000       0.000
+ 6 Lennard-Jones 6-12 potential       :       0       0      0   0.000   0.000      0.0000       0.000
+ 7 Coulomb point-point electrostatic p:       0       0      0   0.000   0.000      0.0000       0.000
+ 8 H-bonding potential                :       0       0      0   0.000   0.000      0.0000       0.000
+ 9 Distance restraints 1 (CA-CA)      :       0       0      0   0.000   0.000      0.0000       0.000
+10 Distance restraints 2 (N-O)        :       0       0      0   0.000   0.000      0.0000       0.000
+11 Mainchain Phi dihedral restraints  :       0       0      0   0.000   0.000      0.0000       0.000
+12 Mainchain Psi dihedral restraints  :       0       0      0   0.000   0.000      0.0000       0.000
+13 Mainchain Omega dihedral restraints:       0       0      0   0.000   0.000      0.0000       0.000
+14 Sidechain Chi_1 dihedral restraints:       0       0      0   0.000   0.000      0.0000       0.000
+15 Sidechain Chi_2 dihedral restraints:       0       0      0   0.000   0.000      0.0000       0.000
+16 Sidechain Chi_3 dihedral restraints:       0       0      0   0.000   0.000      0.0000       0.000
+17 Sidechain Chi_4 dihedral restraints:       0       0      0   0.000   0.000      0.0000       0.000
+18 Disulfide distance restraints      :       0       0      0   0.000   0.000      0.0000       0.000
+19 Disulfide angle restraints         :       0       0      0   0.000   0.000      0.0000       0.000
+20 Disulfide dihedral angle restraints:       0       0      0   0.000   0.000      0.0000       0.000
+21 Lower bound distance restraints    :       0       0      0   0.000   0.000      0.0000       0.000
+22 Upper bound distance restraints    :       0       0      0   0.000   0.000      0.0000       0.000
+23 Distance restraints 3 (SDCH-MNCH)  :       0       0      0   0.000   0.000      0.0000       0.000
+24 Sidechain Chi_5 dihedral restraints:       0       0      0   0.000   0.000      0.0000       0.000
+25 Phi/Psi pair of dihedral restraints:       0       0      0   0.000   0.000      0.0000       0.000
+26 Distance restraints 4 (SDCH-SDCH)  :       0       0      0   0.000   0.000      0.0000       0.000
+27 Distance restraints 5 (X-Y)        :       0       0      0   0.000   0.000      0.0000       0.000
+28 NMR distance restraints 6 (X-Y)    :       0       0      0   0.000   0.000      0.0000       0.000
+29 NMR distance restraints 7 (X-Y)    :       0       0      0   0.000   0.000      0.0000       0.000
+30 Minimal distance restraints        :       0       0      0   0.000   0.000      0.0000       0.000
+31 Non-bonded restraints              :  482291       0    264   6.882   6.882     -39206.       1.000
+32 Atomic accessibility restraints    :       0       0      0   0.000   0.000      0.0000       0.000
+33 Atomic density restraints          :       0       0      0   0.000   0.000      0.0000       0.000
+34 Absolute position restraints       :       0       0      0   0.000   0.000      0.0000       0.000
+35 Dihedral angle difference restraint:       0       0      0   0.000   0.000      0.0000       0.000
+36 GBSA implicit solvent potential    :       0       0      0   0.000   0.000      0.0000       0.000
+37 EM density fitting potential       :       0       0      0   0.000   0.000      0.0000       0.000
+38 SAXS restraints                    :       0       0      0   0.000   0.000      0.0000       0.000
+39 Symmetry restraints                :       0       0      0   0.000   0.000      0.0000       0.000
+do_prof_492W> Are you sure you want to calculate a normalized energy profile!
+
+
+
+openf5__224_> Open       17  UNKNOWN  SEQUENTIAL  1bdmA.profile
+# Energy of each residue is written to: 1bdmA.profile
+# The profile IS normalized by the number of restraints.
+# The profiles are smoothed over a window of residues:   13
+# The sum of all numbers in the file:     -12.9369
+
+<< end of ENERGY.
+DOPE score               : -39206.242188
+
+Dynamically allocated memory at          finish [B,KiB,MiB]:     16835508   16440.926    16.056
+Starting time                                            : 2008/03/25 13:01:05
+Closing time                                             : 2008/03/25 13:01:19
+Total CPU time [seconds]                                 :      13.89
