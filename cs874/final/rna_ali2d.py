@@ -937,6 +937,7 @@ def runmany(run_id):
 			       func = 'run',
 			       name = 'ra2_runs_',
 			       mem = 3)
+	raise Exception()
 	eyeball.launch()
 	return 'sxs'
 def run(run_id):
