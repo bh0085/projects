@@ -925,5 +925,14 @@ bps = ['GC','AU','GU','CG','UA','UG']
 
 def run_all(ofs):
 	run_id = 'ra2_{0:05}'.format(ofs)
-	outputs = get_consenus(ofs, reset = True)
+	outputs = get_consenus(ofs, 
+			       reset = True,
+			       run_id = run_id)
+	show_output(outputs, 
+		    save = True, 
+		    show = 'embeddings')
+	
+	show_output(outputs, 
+		    save = True, 
+		    show = 'conservation')
 	
