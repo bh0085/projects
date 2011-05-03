@@ -45,6 +45,8 @@ def plot_clusters(inds,
 		cluster_colors = dict([(exemplars[i], col) 
                               for i, col in enumerate(mycolors.getct(len(exemplars)))]
                               )
+	else:
+		cluster_colors = colors
 
         cols = [cluster_colors[e] for e in inds]
         try: 
@@ -57,9 +59,9 @@ def plot_clusters(inds,
 
 	    #if i == 1: raise Exception()
             emb_sig = embedding[:,0:3]
-            cluster_vars = [ var(emb_sig[nonzero(equal(inds, j))[0]])  for j in exemplars]
-            indexed_vars = [ cluster_vars[exemplars.index(j)] for j in inds ]
-	    indexed_vars[equal(index_vars,0)] = 1
+            cluster_vars = array([ var(emb_sig[nonzero(equal(inds, j))[0]])  for j in exemplars])
+            indexed_vars = array([ cluster_vars[exemplars.index(j)] for j in inds ])
+	    indexed_vars[equal(indexed_vars,0)] = 1
 
             sizes = 10 *( exp( -1 * ( np.sum((emb_sig - emb_sig[inds,:])**2,1)/indexed_vars)))
             if plot3d:
