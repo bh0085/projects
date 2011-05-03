@@ -903,7 +903,7 @@ def show_output(outputs,
 			     [.5,0],xycoords = 'axes fraction', ha = 'center', va = 'top',
 			     size = 'x-large')
 
-		if save: fig.savefig(cfg.dataPath('cs874/figs/cons_profiles/{0}.ps'.format(title)))
+		if save: fig.savefig(cfg.dataPath('cs874/figs/cons_profiles/{0}.ps'.format(run_title)))
 	       				 	
 
 
