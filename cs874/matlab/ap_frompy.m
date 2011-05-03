@@ -6,9 +6,8 @@ ss   = data.self_similarity;
 inds = ap(sims, ss);
 
 out_struct = struct();
-out_struct.inds = inds
+out_struct.inds = inds -1;
 out_struct.ss = ss;
-out_struct.metric = data.metric;
 
 result = 'success'
 save(mat_out, 'out_struct');
