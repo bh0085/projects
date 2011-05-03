@@ -15,7 +15,7 @@ import compbio.utils.memo as mem
 import compbio.utils.bs_macros as bsm
 import compbio.config as cfg
 
-if __name__ != '__main__':
+if __name__ != '__main__' and False:
 	import compbio.utils.colors as mycolors
 	import compbio.utils.seismic as seismic
 	import compbio.utils.plots as myplots
