@@ -319,7 +319,7 @@ def get_consensus(ofs = 0,
     
     #SPLIT THE FAMILY INTO SUBTREES
     minterms = 10
-    csize = 20                        #appx clade size for alifold
+    csize = 15                        #appx clade size for alifold
     tsize = len(tree.get_terminals()) #Tree size
     tweight=tree.total_branch_length()
     cweight=tweight*csize/tsize
@@ -372,7 +372,7 @@ def get_consensus(ofs = 0,
 			     for j in range(len(clades)) ],
 		'fiftyfifty':[ [ [] for i in range(len(struct_profiles))] 
 			     for j in range(len(clades)) ]}
-    aamuts, aatimes = [], []
+    aamuts, aatimes, aairr, aagaps = [], [], [], []
     for idx_clade, c in enumerate(clades):
         if len(c.get_terminals()) < 3:
 		print 'SKIPPPING CUZ SUBTREE TOO SMALL'
@@ -382,8 +382,7 @@ def get_consensus(ofs = 0,
 		print 'SKIPPING CUZ THERE ARE TWO COPIES OF SOME FUCKING SEQUENCE IN TREE'
 		continue
            
-        all_muts = []
-	all_times = []  
+        all_muts, all_times , all_gaps, all_irr = [], [], [], []
 	print
 	print 'Clade: {0}'.format(idx_clade)
         for idx_struct, struct_info in enumerate( zip( struct_profiles, exemplar_structs)):
@@ -413,6 +412,7 @@ def get_consensus(ofs = 0,
               ct.name = lilid
               ct.m['str_seq'] = c_new_ali[i2]
               ct.m['str_seq'].id = lilid
+	      ct.m['probs'] = ones(len(c_new_ali[i2]))
           
           #Create a tree from the current clade and run aligner.
 	  #DOES THIS ALL WORK FINE WITH 'STR_SEQ'
@@ -427,6 +427,7 @@ def get_consensus(ofs = 0,
           for term in anc_tree.get_terminals():
               #Terminals have old (rfam) alis and new (infernal) alis
               term.m = filter( lambda x: x.name == term.name, cterms)[0].m
+              #term.m = filter( lambda x: x.name == term.name, cterms)[0].m
           for node in anc_tree.get_nonterminals():
               #Internals only have new alis. m['seq'] = m['str_seq']
               node.m['str_seq'] = node.m['seq']
@@ -437,32 +438,21 @@ def get_consensus(ofs = 0,
           #Evaluate all of the structs on the first pass
           #to have access to mean frequencies of different
           #mutational types in the final score computation
-          
+	  
           refnode, refseq = subtree_refseq(subtree, method = refseq_method)
-          muts, times = subtree_count_struct(subtree, pairs)
+          muts, times, gaps, irresolvables = subtree_count_struct(subtree, pairs)
           all_muts.append(muts)
           all_times.append(times)
+	  all_gaps.append(gaps)
+	  all_irr.append(irresolvables)
         
-        #Compute a muliplier for comp/wobble muts from their relative
-        #frequencies over all suboptimal structures.
-        nwob, ncomp, nucom, nreco, nbbad  =[  sum([sum(m[k]) for m in all_muts]) 
-                                              for k in ['wob','comp','ucom','reco','bbad']]
-	nrm = ncomp if ncomp != 0 else 1
-        comp_bonus = min([10.,max([2.,nwob/nrm])])
-        
-        for i, struct in enumerate(exemplar_structs):          
-          #Compute the vector leaving mweight at its default value
-		
-          vecs = [subtree_rate_struct_V0(struct,ungapped_ref,
-                                         all_muts[i], all_times[i],
-                                         comp_bonus = comp_bonus,
-                                         mweight =mw) for mw in [0.,1.,.5]]
-          for k,v in zip(['all_time','all_mut','fiftyfifty'],vecs): 
-		  all_vecs[k][idx_clade][i] = v
-	  
-
+	all_vecs = compute_signatures(exemplar_structs,ungapped_ref,
+				      all_muts,all_times)
+				      
 	aamuts.append(all_muts)
 	aatimes.append(all_times)
+	aairr.append(all_irr)
+	aagaps.append(all_gaps)
     outputs = {
 	    'all_vecs':all_vecs,
 	    'all_muts':aamuts,
@@ -481,6 +471,26 @@ def get_consensus(ofs = 0,
     import pickle
     pickle.dump(outputs, open(cfg.dataPath('cs874/runs/{0}.pickle'.format(run_id)),'w'))
     return(outputs)
+
+def compute_signatures(all_muts, all_times, structs, reference):
+        #Compute a muliplier for comp/wobble muts from their relative
+        #frequencies over all suboptimal structures.
+        nwob, ncomp, nucom, nreco, nbbad  =[  sum([sum(m[k]) for m in all_muts]) 
+                                              for k in ['wob','comp','ucom','reco','bbad']]
+	nrm = ncomp if ncomp != 0 else 1
+        comp_bonus = min([10.,max([2.,nwob/nrm])])
+        
+        for i, struct in enumerate(structs):          
+          #Compute the vector leaving mweight at its default value
+		
+          vecs = [subtree_rate_struct_V0(struct,reference,
+                                         all_muts[i], all_times[i],
+                                         comp_bonus = comp_bonus,
+                                         mweight =mw) for mw in [0.,1.,.5]]
+          for k,v in zip(['all_time','all_mut','fiftyfifty'],vecs): 
+		  all_vecs[k][idx_clade][i] = v
+
+	return all_vecs
 
 def stk_pairs(struct):
     #FETCH PAIRS IN STRUCT
@@ -620,10 +630,14 @@ outputs:
    #DATA MATRICES COMPUTING PAIRING OVER TIME
    t_up, t_p, t_tots = \
        [zeros(len(pairs)) for  i in range(3)]
+   
+   gaps = zeros(len(pairs))
+   irresolvables = [[] for i in range(len(pairs))]
    muts = dict(wob = m_wob, ucom = m_ucom, comp = m_comp, 
                reco = m_reco, bbad = m_bbad)
    times= dict(unpaired = t_up, paired = t_p,
-               total = t_tots)
+               total = t_tots, total_incl_unresolved = subtree.total_branch_length() -\
+		       subtree.root.branch_length)
 
    gap_count = 0
    for idx,p in enumerate(pairs):
@@ -632,10 +646,9 @@ outputs:
                                       t.m['str_seq'].seq[p[1]])
                                  for t in subtree.get_terminals()])):
 	   gap_count += 1
-
+	   gaps[idx] = 1
            continue
-
-       irresolvables = []
+       
        curterms= set(subtree.get_terminals())
        curints = set(subtree.get_nonterminals())
        loops = 0
@@ -795,9 +808,9 @@ outputs:
                              t_tots[idx] += sum(lens)
                              m_bbad[idx] +=1
                else:   
-                   irresolvables.append(terms)
+                   irresolvables[i].append(terms)
                    do_giveup(curterms,curints,terms,pp)
-       
+
        #CLOSES SEARCH LOOP FOR P
    if len(muts.values()[0]) != len(pairs) :
 	   raise Exception()
@@ -805,8 +818,8 @@ outputs:
    restart_line()
    sys.stdout.write('gap count: {0:03}'.format(gap_count))
    sys.stdout.flush()
-   #CLOSES SEARCH LOOP FOR ALL PAIRS                   
-   return muts, times
+   #CLOSES SEARCH LOOP FOR ALL PAIRS               
+   return muts, times, gaps, irresolvables
 
 
 def show_output(outputs, 
@@ -908,7 +921,7 @@ def show_output(outputs,
 		if save: fig.savefig(cfg.dataPath('cs874/figs/cons_profiles/{0}.ps'.format(run_title)))
 	       				 	
 
-
+	
 
 	else: raise Exception('show type not implemented: {0}'.format(show))
 	
