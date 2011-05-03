@@ -118,6 +118,7 @@ def get_fam(ofs = 0, rfid = None):
     alis = aio.parse(fopen,'stockholm')
 
     if rfid != None:
+	    ofs = int(re.compile('\d+').search(outputs['title']).group()) -1
 	    
     for i in range(ofs):
         null = alis.next()
