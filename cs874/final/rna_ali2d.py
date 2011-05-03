@@ -9,7 +9,7 @@ import Bio.Align as ba
 import Bio.Phylo.NewickIO as nio
 import Bio.Phylo as phy
 import Bio
-import subprocess as spc, sys, re, os
+import subprocess as spc, sys, re, os,inspect
 
 import compbio.utils.memo as mem
 import compbio.utils.bs_macros as bsm
