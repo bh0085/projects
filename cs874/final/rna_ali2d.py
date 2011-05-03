@@ -923,16 +923,42 @@ def showseq(tree, elts):
 bps = ['GC','AU','GU','CG','UA','UG']
 
 
-def run_all(ofs):
-	run_id = 'ra2_{0:05}'.format(ofs)
+import compbio.utils.bsub as bsub
+import compbio.utils.bsub_utils as bsu
+
+def runmany():
+	print 'TESTING WITH A LIMITED RANGE OF FAMILIES'
+	inp_dicts = [dict('ofs',r) for r in range(0,10)]
+	eyeball = bsub.eyeball('ra2_runmany', 
+			       os.path.abspath(inspect.stack()[0][1]),
+			       inp_dicts)
+	eyeball.launch()
+	return 'sxs'
+def run(run_id):
+	data = bsu.load_data(run_id, 'input')
+	ofs = data['ofs']
 	outputs = get_consenus(ofs, 
 			       reset = True,
-			       run_id = run_id)
-	show_output(outputs, 
-		    save = True, 
-		    show = 'embeddings')
-	
-	show_output(outputs, 
-		    save = True, 
-		    show = 'conservation')
-	
+			       run_id = run_id,
+			       func = 'run',
+			       name = 'ra2_runs_',
+			       mem = 3)
+	return(outputs)
+
+def usage():
+  print '''
+usage: rna_ali2d function run_id
+
+Call function with run_id.
+'''
+  exit(1)
+
+if __name__ == '__main__':
+    run_id = sys.argv[2]
+    run_func = globals()[sys.argv[1]]
+    output_dict = run_func(run_id)
+    if output_dict == None:
+        output_dict = {'blank':'Nothing output in call to {0}'.\
+                           format(sys.argv[1])}
+    butils.save_data( output_dict, run_id, 'output')
+    
