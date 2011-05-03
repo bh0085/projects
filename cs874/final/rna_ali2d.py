@@ -930,7 +930,7 @@ import compbio.utils.bsub_utils as bsu
 
 def runmany(run_id):
 	print 'TESTING WITH A LIMITED RANGE OF FAMILIES'
-	inp_dicts = [dict([('ofs',r)]) for r in range(0,10)]
+	inp_dicts = [dict([('ofs',r)]) for r in range(0,1493)]
 	eyeball = bsub.eyeball(run_id, 
 			       os.path.abspath(inspect.stack()[0][1]),
 			       inp_dicts)
