@@ -943,7 +943,7 @@ def runmany(run_id):
 def run(run_id):
 	data = bsu.load_data(run_id, 'input')
 	ofs = data['ofs']
-	outputs = get_consenus(ofs, 
+	outputs = get_consensus(ofs, 
 			       run_id = run_id,
 			       reset = True)
 	return(outputs)
