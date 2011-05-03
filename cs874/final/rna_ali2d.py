@@ -57,7 +57,7 @@ def plot_clusters(inds,
             emb_sig = embedding[:,0:3]
             cluster_vars = [ var(emb_sig[nonzero(equal(inds, j))[0]])  for j in exemplars]
             indexed_vars = [ cluster_vars[exemplars.index(j)] for j in inds ]
-	    indexed_vars(equal(index_vars,0)) = 1
+	    indexed_vars[equal(index_vars,0)] = 1
 
             sizes = 10 *( exp( -1 * ( np.sum((emb_sig - emb_sig[inds,:])**2,1)/indexed_vars)))
             if plot3d:
