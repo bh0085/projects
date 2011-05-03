@@ -938,7 +938,7 @@ def runmany(run_id):
 			       name = 'ra2_runs_',
 			       mem = 3)
 	eyeball.launch()
-	return dict('cmds'=eyeball.cmds)
+	return dict(cmds=eyeball.cmds)
 def run(run_id):
 	data = bsu.load_data(run_id, 'input')
 	ofs = data['ofs']
