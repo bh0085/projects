@@ -934,7 +934,6 @@ def runmany(run_id):
 	eyeball = bsub.eyeball(run_id, 
 			       os.path.abspath(inspect.stack()[0][1]),
 			       inp_dicts,
-			       run_id = run_id,
 			       func = 'run',
 			       name = 'ra2_runs_',
 			       mem = 3)
@@ -944,6 +943,7 @@ def run(run_id):
 	data = bsu.load_data(run_id, 'input')
 	ofs = data['ofs']
 	outputs = get_consenus(ofs, 
+			       run_id = run_id,
 			       reset = True)
 	return(outputs)
 
