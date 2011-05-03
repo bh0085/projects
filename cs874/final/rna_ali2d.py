@@ -200,15 +200,28 @@ def compute_embedding(spairs,
 		      do_mve = False,
 		      ss_multiplier = None):
 
+	affinities, ss = affinity_matrix(spairs, aff_type = aff_type,
+					 ss_multiplier = ss_multiplier)
+	mve_dict = dict(k = 4,
+			similarities = affinities,
+                        do_mve = False if aff_type == 'easy' else False)
+        embedding=  bsm.runmat('mve_frompy', mve_dict, 'subopt_mve')
+        mve_vecs = embedding['Y'].T
+        pca_vecs = embedding['YPCA'].T
+
+	return pca_vecs, mve_vecs
+
+def affinity_matrix(pairs, aff_type = 'pairs', ss_multiplier = None):
+
 	#Artificial sequence length from the maximum paired element
-	seq_len = np.max(list(it.chain(*spairs))) + 1
+	seq_len = np.max(list(it.chain(*pairs))) + 1
 
 	#AFFINITY TYPE
 	if aff_type == 'easy':
             #SHAPE COMPARISON
             ssm = .01 if ss_multiplier == None else ss_multiplier
-            pair_vecs = zeros((len(spairs),seq_len))
-            for i, spair in enumerate(spairs):
+            pair_vecs = zeros((len(pairs),seq_len))
+            for i, spair in enumerate(pairs):
                 for p_elt in spair:
                     pair_vecs[i][p_elt[0]] = 1 
                     pair_vecs[i][p_elt[1]] = -1
@@ -225,26 +238,16 @@ def compute_embedding(spairs,
         elif aff_type == 'pairs':
             #PAIR INTERSECTION COMPARISON
 	    ssm = -.1 if ss_multiplier == None else ss_multiplier
-	    nrm = sqrt((len(spairs[i])*len(spairs[j])))
-	    nrm[equal(nrm,0)] = 1
-            affinities = array([[float(len(spairs[i].intersection(spairs[j])))\
-                                     / nrm
-                                 for i in range(len(spairs))]
-                                for j in range(len(spairs))])
+            affinities = array([[float(len(pairs[i].intersection(pairs[j])))\
+					 /  sqrt((len(pairs[i])*len(pairs[j])))
+                                 for i in range(len(pairs))]
+                                for j in range(len(pairs))])
             da = np.max(affinities) - np.min(affinities)
             ss = np.min(affinities) + da *ssm
-	mve_dict = dict(k = 4,
-			similarities = affinities,
-                        do_mve = False if aff_type == 'easy' else False)
-        embedding=  bsm.runmat('mve_frompy', mve_dict, 'subopt_mve')
-        mve_vecs = embedding['Y'].T
-        pca_vecs = embedding['YPCA'].T
-
-	return pca_vecs, mve_vecs
-
+	return affinities, ss
 		       
 def setAffinities(tree = None, refseq_method = None, refseq = None,
-                      sp_method = 'sample',aff_type = 'pairs',
+                      sp_method = 'sample',aff_type = 'pairs', ss_multiplier = None,
                       **kwargs):
 
 
@@ -261,32 +264,8 @@ def setAffinities(tree = None, refseq_method = None, refseq = None,
         spairs = [set(stk_pairs(p))
                   for p in out[3:]][::]
 
-	
-        if aff_type == 'easy':
-            pair_vecs = zeros((len(spairs),len(out[-1])))
-            for i, spair in enumerate(spairs):
-                for p_elt in spair:
-                    pair_vecs[i][p_elt[0]] = 1 
-                    pair_vecs[i][p_elt[1]] = -1
-
-            nrm =  sqrt( sum(pair_vecs**2,1)[:,newaxis] )
-            if sum(equal(nrm,0)) > 0: raise Exception()
-            nrm[equal(nrm,0)] == 1
-            pair_vecs /= nrm
-            affinities = sum(pair_vecs[:,newaxis,:] * pair_vecs[newaxis,:,:],2)
-            da = np.max(affinities) - np.min(affinities)
-            ss = np.min(affinities)  + da/100
-        
-        elif aff_type == 'pairs':
-            affinities = array([[float(len(spairs[i].intersection(spairs[j])))\
-                                     /sqrt((len(spairs[i])*len(spairs[j])))
-                                 for i in range(len(spairs))]
-                                for j in range(len(spairs))])
-            da = np.max(affinities) - np.min(affinities)
-            ss = np.min(affinities) - da/10
-        
-
-
+	affinities, ss = affinity_matrix(spairs, aff_type = aff_type,
+					 ss_multiplier = ss_multiplier)
         cluster_dict = dict(similarities=affinities,
                            self_similarity = ss)
         clusters =  bsm.runmat('ap_frompy', cluster_dict, 'subopt_clusters')
