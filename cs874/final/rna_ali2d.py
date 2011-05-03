@@ -446,7 +446,9 @@ def get_consensus(ofs = 0,
 	  all_gaps.append(gaps)
 	  all_irr.append(irresolvables)
         
-	all_vecs = compute_signatures(all_vecs,all_muts,all_times,exemplar_structs,ungapped_ref )
+	compute_signatures(all_vecs,idx_clade,
+			   all_muts,all_times,
+			   exemplar_structs,ungapped_ref )
 				      
 	aamuts.append(all_muts)
 	aatimes.append(all_times)
@@ -471,7 +473,7 @@ def get_consensus(ofs = 0,
     pickle.dump(outputs, open(cfg.dataPath('cs874/runs/{0}.pickle'.format(run_id)),'w'))
     return(outputs)
 
-def compute_signatures(all_vecs,all_muts, all_times, structs, reference):
+def compute_signatures(all_vecs,idx_clade,all_muts, all_times, structs, reference):
         #Compute a muliplier for comp/wobble muts from their relative
         #frequencies over all suboptimal structures.
         nwob, ncomp, nucom, nreco, nbbad  =[  sum([sum(m[k]) for m in all_muts]) 
