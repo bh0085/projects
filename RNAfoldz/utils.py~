@@ -1,0 +1,102 @@
+import subprocess as spc, sys, re, os,inspect
+import Bio.AlignIO as aio
+import Bio
+import compbio.utils.colors as mycolors
+import compbio.utils.seismic as seismic
+import compbio.utils.plots as myplots
+import matplotlib.pyplot as plt
+from numpy import *
+
+def switch_dicts():
+    switch_families = '''RF00050	FMN	Cis-reg; riboswitch
+RF00059	TPP	Cis-reg; riboswitch
+RF00162	SAM	Cis-reg; riboswitch
+RF00167	Purine	Cis-reg; riboswitch
+RF00168	Lysine	Cis-reg; riboswitch
+RF00174	Cobalamin	Cis-reg; riboswitch
+RF00234	glmS	Cis-reg; riboswitch
+RF00504	Glycine	Cis-reg; riboswitch
+RF00521	SAM_alpha	Cis-reg; riboswitch
+RF00522	PreQ1	Cis-reg; riboswitch
+RF00634	SAM-IV	Cis-reg; riboswitch
+RF01054	preQ1-II	Cis-reg; riboswitch
+RF01055	MOCO_RNA_motif	Cis-reg; riboswitch
+RF01056	Mg_sensor	Cis-reg; riboswitch
+RF01057	SAH_riboswitch	Cis-reg; riboswitch
+RF01480	rli52	Cis-reg; riboswitch
+RF01481	rli53	Cis-reg; riboswitch
+RF01482	rli55	Cis-reg; riboswitch
+RF01483	rli56	Cis-reg; riboswitch
+RF01485	rli61	Cis-reg; riboswitch
+RF01486	rli62	Cis-reg; riboswitch
+RF01491	rli54	Cis-reg; riboswitch'''.split('\n')
+
+    switch_dicts = dict([(fam.split('\t')[1],int(fam.split('\t')[0][2:]))
+		     for fam in switch_families])
+    return switch_dicts
+    
+
+
+
+
+def project_lstruct(pstruct, l):
+	out = zeros(l)
+	for p in pstruct:
+		out[p[0]] = -1.
+		out[p[1]] = 1.
+	return out
+
+def ungapped_seq(seq, seq_id, name = 'unspecified name' ):
+    ungapped_ref =  Bio.SeqRecord.SeqRecord( \
+        Bio.Seq.Seq(''.join(\
+                [let for let in str(seq.seq) 
+                 if let.upper() in 'AUCGT']),
+                    seq.seq.alphabet)
+        ,seq_id, name = name)
+    return ungapped_ref
+    
+def pairs_stk(struct, l):
+    stk = ['.'] * l
+    for p in s: stk[p[0]] ,stk[p[1]] = '(',')'
+    stk = ''.join(stk)
+    return stk
+
+def stk_pairs(struct):
+    #FETCH PAIRS IN STRUCT
+   pairs = []
+   pqueue = []
+   for i, cstr in enumerate(struct):
+       if cstr in '[<({':
+           pqueue.append(i)
+       elif cstr in ']>)}':
+           pairs.append((pqueue.pop(),i))    
+   assert not pqueue   
+   return pairs
+
+
+def stk_parse(fopen):
+    ali = aio.parse(fopen, 'stockholm').next()
+    fopen.seek(0)
+    str_re = re.compile('^#=GC SS_cons\s*(.*)$')
+    ref_re = re.compile('^#=GC RF\s*(.*)$')
+
+    struct, ref = '', ''
+    for l in fopen.xreadlines():
+        match = str_re.search(l)
+        if match: 
+            struct += match.group(1)
+
+        match = ref_re.match(l)
+        if match: 
+            ref += match.group(1)
+    
+    return ali, ref, struct
+            
+def stk_format(seq, struct):
+
+    return '''# STOCKHOLM 1.0
+
+{0:20} {2}
+{1:20} {3}
+//
+'''.format(seq.id,'#=GC SS_cons', seq.seq, struct)

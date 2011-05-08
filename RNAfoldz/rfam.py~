@@ -1,0 +1,63 @@
+import compbio.config as cfg
+import Bio.AlignIO as aio
+import Bio.Phylo.NewickIO as nio
+import os, pickle
+
+def get_fam(rfid):
+    '''Get a family including tree and sequence information
+from an Rfam data dump stored in data/rfam
+
+inputs: 
+  rfid:   rfam family id.
+
+outputs:
+  ali:    a biopython alignment
+  tree:   a biopython tree from a newick file.
+  info:   information parsed from the original stockholm file.
+
+'''
+
+    fmeta = open( cfg.dataPath('rfam/family_metas/{0}.pickle'.format(rfid)))
+    fali  = open( cfg.dataPath('rfam/family_alis/{0}.fa'.format(rfid)))
+    
+    ali = aio.parse(fali,'fasta').next()
+    info= pickle.load(fmeta)
+
+    fname = cfg.dataPath('rfam/Rfam.seed_tree/{0}.seed_tree'.format(rfid))
+    tree = nio.parse(open(cfg.dataPath('rfam/Rfam.seed_tree/{0}.seed_tree'.format(rfid)))).next()
+    return ali, tree, info
+
+def split_family_seqs():
+    alis_dir = cfg.dataPath('rfam/family_alis/')
+    meta_dir = cfg.dataPath('rfam/family_metas/')
+
+    fopen = open(cfg.dataPath('rfam/Rfam.seed'))
+    alis = aio.parse(fopen,'stockholm')
+    while 1:
+        infos = {}
+        start = fopen.tell()
+        while 1:
+            l = fopen.readline()       
+            if l == '': break
+            if l[0] == '#':
+                ukey = str(l[5:7])
+                infos.update( [(ukey, infos.get(ukey,'') + l[8:])])
+            
+            else:
+                if l.strip() != '': break
+        
+        
+        fopen.seek(start)
+        ali = alis.next()
+        if not ali:
+            break
+        rfname = infos['AC'].strip()
+        alifile = open(os.path.join(alis_dir, rfname+'.fa'),'w')
+        metafile = open(os.path.join(meta_dir, rfname+'.pickle'),'w')
+
+        aio.write(ali, alifile, 'fasta')
+        pickle.dump(infos, metafile)
+
+        alifile.close()
+        metafile.close()
+        

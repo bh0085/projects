@@ -1,0 +1,50 @@
+This is BibTeX, Version 0.99c (TeX Live/MacPorts 2009_6)
+The top-level auxiliary file: writeup.aux
+The style file: nature.bst
+Database file #1: proposal.bib
+Warning--empty title in RefWorks:17
+Warning--empty title in RefWorks:24
+Warning--empty title in RefWorks:21
+Warning--empty title in RefWorks:22
+You've used 4 entries,
+            1856 wiz_defined-function locations,
+            483 strings with 4111 characters,
+and the built_in function-call counts, 820 in all, are:
+= -- 67
+> -- 27
+< -- 0
++ -- 11
+- -- 7
+* -- 88
+:= -- 139
+add.period$ -- 8
+call.type$ -- 4
+change.case$ -- 0
+chr.to.int$ -- 0
+cite$ -- 8
+duplicate$ -- 36
+empty$ -- 85
+format.name$ -- 7
+if$ -- 173
+int.to.chr$ -- 0
+int.to.str$ -- 4
+missing$ -- 4
+newline$ -- 19
+num.names$ -- 4
+pop$ -- 8
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 13
+stack$ -- 0
+substring$ -- 48
+swap$ -- 4
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 4
+while$ -- 8
+width$ -- 5
+write$ -- 38
+(There were 4 warnings)

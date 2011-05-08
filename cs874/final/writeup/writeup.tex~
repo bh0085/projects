@@ -1,0 +1,61 @@
+%%% writeup.tex --- 
+
+%% Author: bh0085@Ben13.local
+%% Version: $Id: proposal.tex,v 0.0 2010/11/21 05:40:38 bh0085 Exp$
+
+
+\documentclass[12pt,draft,a4paper]{article}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}
+\usepackage{natbib}
+\usepackage{times}
+%%\usepackage[debugshow,final]{graphics}
+
+%%\revision$Header: /Users/bh0085/Documents/Fellowship/NSF/proposal/proposal.tex,v 0.0 2010/11/21 05:40:38 bh0085 Exp$
+
+
+\begin{document}
+
+\setlength{\bibsep}{0.0pt}
+\setlength{\parindent}{1ex} 
+\setlength{\parskip}{0ex}
+
+\noindent\textbf{Probing evolution's action on the thermodynamic ensemble of RNA foldings.} 
+
+\noindent\textbf{Keywords:} fRNA; Evolutionary RNA Structure Prediction; Alternate Foldings; miRNA
+\setlength{\parskip}{0ex}
+
+\vspace{.5ex}
+\noindent This project leverages my background in biophysics and RNA crystallography. In an ongoing collaboration with teacher in Boston Public Schools, I developed educational software for visualizing RNA evolution and folding. During the course of this work, I observed conservation patterns suggesting the hypotheses of this proposal. 
+
+\vspace{.25ex}\noindent\textbf{Hypothesis:}  Multiple RNA sequences can fold to a single two dimensional structure. I suppose that for RNAs having a single biologically active folding, evolution will have chosen sequences allowing relatively few stable alternate structures. In cases where natural selection has instead preserved alternates, homology may suggest switching dynamics or novel function.
+
+\vspace{.25ex}\noindent\textbf{Background:}
+As transcriptomics have yielded new roles for functional RNAs (fRNAs), structural biologists have worked to associate form with function. Here, techniques from protein structure determination such as x-ray crystallography (XRC) and NMR have been applied with mixed success. The former provides fine structure resolution but necessitates growth of RNA crystals that are difficult to obtain for many fRNAs. The latter is carried out in vitro but gives lower resolution structures and works only for small fRNAs.
+
+Meanwhile, computational methods to efficiently identify stable RNA foldings have been around for decades. Because a large fraction of the energy change of RNA folding is accounted for in 2D secondary structure, efficient algorithms can compute thermodynamically optimal and suboptimal \cite{RefWorks:17} foldings. Modern thermodynamic techniques such as RNAfold \cite{RefWorks:24} compute foldings using a number of experimentally derived parameters while another set of techniques such as EvoFold \cite{RefWorks:21} implement stochastic context free grammars (SCFGs) to predict foldings from evolutionary signatures.
+
+For some fRNAs, thermodynamic and SCFG methods enjoy strong agreement with physical methods and one another. In others, thermodynamic methods suggest that fRNAs can fold to a number of suboptimal shapes whereas our understanding of their function may be based on a single structure obtained by NMR or XRC. While previous works \cite{RefWorks:22} have designed prediction methods incorporating thermodynamic and evolutionary models, the two approaches often fail for the same structures. Meanhwile, specific description of the action of evolution in setting the thermodynamic stability of alternate or mis-foldings has not yet been attempted.
+
+\vspace{.25ex}\noindent\textbf{Experiments:} I will first establish the fact of evolution's action upon the landscape of thermodynamically stable foldings. To do so, I will examine RNA structures for which a single folding pattern is presumed to be functional and misfoldings are physiolgically ineffective.
+
+For strands folded in equilibrium, the probabilty of correct folding, $P_f$ is related to the difference between gibbs free energy of folding (FEF) and misfolding: $\Delta\Delta G$. For a larger ensemble of competing structures in equilibrium, this likelihood of correct folding must be computed via a partition function over suboptimal foldings. I will compute $P_f$ by computing a partition function over RNAfold suboptima. In order to ask whether evolution has selected strand RNAs with high $P_f$, I will compare realized $P_f$ to values for randomly mutated alternate sequences folding to the same structure with similar FEF.
+
+I will first analyze B. subtilis trp-tRNA because \textit{(1)} proper ``cloverleaf'' folding is crucial to tRNA function in translation, \textit{(2)} thermodynamic suboptimals are known to exist \cite{RefWorks:18}, and \textit{(3)} because B. subtilis trp-tRNA binds a riboswitch to sterically regulate transcription antitermination\cite{RefWorks:20}. If evolution has chosen a high $P_f$ sequence for trp-tRNA, I will test signal robustness by asking whether it has done the same for the rest of B. subtilis tRNAs. I will test folding consistency by comparison with XRC tRNA structures. 
+
+Moving beyond bacteria, I will ask whether evolution has favored optimal folding in human miRNA mir-1  where a substantial fraction of the primary sequence is known to have been preserved for reasons other than folding. Asking whether evolution has maximized $P_f$ over the portion of the sequence for which mir-1 has been allowed to vary, I will characterize evolution under constraint. As above, I will test robustness by repeating my analysis over similiar miRNAs and folding consistency compared to XRC.
+
+Next, I will search for evolutionary signatures indicating that alternate structures have been conserved by selection. Using RNAfold I will generate a list of candidates for functional alternate foldings; for each candidate I will evaluate the likelihood that evolution has preserved a folding using a SCFG algorithm similar to EvoFold \cite{RefWorks:21} and corroborating predictions  with a hybrid thermodynamic/evolutionary method\cite{RefWorks:16}.
+
+I will look first at the tBox riboswitch mentioned in tRNA mediated antitermination above. Knowing that the transcribed RNA switches between two foldings in its regulatory role, I will show that evolutionary has preserved base pairing and stacking both in terminator and antiterminator states. I will perform similar analysis on the ``hammerhead ribozyme''\cite{RefWorks:18} for which NMR methods have unveiled microsecond scale dynamics and identify evolutionary signatures for its reacting states. Next, I will turn to a medically interesting case: examining the 335 nt conserved 5' utr leader region of HIV-1, I will ask whether I can establish evolutionary signatures corroborating recent oligonucleotide evidence\cite{RefWorks:19} that HIV mRNA folds alternately into a branched hairpin and long distance interaction structure in order sequester a start codon and regulate the onset of translation.
+Finally, I will lay the groundwork for a large scale database search for natural selection of alternate foldings. Automating the methodology above, I intend to probe sequenced RNAs for unexpected function. By structure homology, I will interpret results as dynamic conformations such as ribozymes and riboswitches when possible and suggest that novel mechanisms may be at work when selected alternate foldings are exotic.
+
+\vspace{.25ex}\noindent\textbf{Anticipated Results:} By first demonstrating that evolution creates sequences for which misfolding probability is minimized, I intend to prove that selection does in fact act upon this ensemble and that we can compute its signature. By establishing the tendency of evolution to favor particular alternate foldings when a single optimal folding has not been clearly selected, I will confirm biochemical functions suggested by other avenues of exploration and by searching for novel function in RNA databases, I intend to identify a number of new functional foldings for known RNAs. 
+
+I expect to identify evolutionary connections between classes of fRNAs serving different primary functions via alternate foldings. Elucidating RNA mechanisms in systems such as viral recombination and RNA interference could facilitate treatment of disease. 
+
+\vspace{.25ex}\noindent\textbf{Broader Impact:} During the course of my project I will create  models for RNA folding and evolution that I plan to integrate into open source educational software. I will incorporate them when I teach biology and share them with my colleages teaching primary and secondary school. All of  my algorithms will be available as open source projects and the results of my large scale project will annotate public sequence databases.
+
+\renewcommand{\bibfont}{\small} 
+\bibliographystyle{nature}
+{\def\section*#1{}\bibliography{proposal}}
+\end{document}

@@ -1,0 +1,49 @@
+
+def alignment(seqs, profile,rfid):
+    seqs = [Bio.SeqRecord.SeqRecord(Bio.Seq.Seq(''.join([let for let in str(ali.seq)  if let in 'AUTGC' ]),
+                                                Bio.Seq.Alphabet.RNAAlphabet),
+                                    'S{0:03}'.format(idx))
+            for idx, ali in enumerate(seqs)]
+    infile = cfg.dataPath('infernal/temp/{0}_{1:03}_unaligned.fa'.format(rfid,idx))
+    outfile= cfg.dataPath('infernal/temp/{0}_{1:03}_aligned.stk'.format(rfid,idx))
+    Bio.SeqIO.write(seqs, infile, 'fasta')
+    
+    cstr = 'cmalign -o {0} {1} {2}'.format(outfile, profile, infile)
+    ispc = spc.Popen(cstr, shell = True,
+                            stdout = spc.PIPE)
+    out = ispc.communicate()[0]
+    seqs, stk, struct = rutils.parse_stk_struct(outfile)
+    ali = ba.MultipleSeqAlignment(seqs)
+
+    for a in ali:
+	    a.seq = a.seq.upper()
+    return ali, stk, struct
+    
+def profiles(ungapped_ref, exemplar_structs):
+    exemplar_stks = []
+    for i, s in enumerate(exemplar_structs):
+        stk = ['.'] * len(ungapped_ref)
+        for p in s: stk[p[0]] ,stk[p[1]] = '(',')'
+        stk = ''.join(stk)
+        exemplar_stks.append('''# STOCKHOLM 1.0
+
+{0:20} {2}
+{1:20} {3}
+//
+'''.format(ungapped_ref.id,'#=GC SS_cons', ungapped_ref.seq, stk))
+
+    profiles = []
+    for idx, stktext in enumerate(exemplar_stks):
+        stkfile = cfg.dataPath('infernal/temp/{0}_{1:03}.stk'.format(ungapped_ref.id, idx))
+        cmfile = cfg.dataPath('infernal/temp/{0}_{1:03}.cm'.format(ungapped_ref.id, idx))
+        fopen = open(stkfile,'w')
+        fopen.write(stktext)
+        fopen.close()
+        cstr = 'cmbuild -F --rsearch {0} {1} {2}'.format(cfg.dataPath('infernal/matrices/RIBOSUM85-60.mat'),cmfile,stkfile)
+        ispc = spc.Popen(cstr, shell = True, stdout = spc.PIPE)
+        out = ispc.communicate()[0]
+        profiles.append(cmfile)
+    
+    return profiles
+        
+

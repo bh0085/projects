@@ -1,0 +1,10 @@
+import parser
+def parse(fname):
+    xml = parser.parse( open(fname).read())
+    return xml
+
+def get_elt_by_type(data, dtype):
+    return  parser.svg_elt(data,dtype)
+
+def get_polys(data):
+    elts = get_elt_by_type(data,polyline)

@@ -1,209 +1,50 @@
-#!/usr/bin/env python
 '''
 Given an rfam family, its alignment and the tree given, compute ancestral nodes
 and mutations along the edges.
 
 '''
+import rfam
+import utils as rutils
+import infernal
 import Bio.AlignIO as aio
 import Bio.Align as ba
 import Bio.Phylo.NewickIO as nio
 import Bio.Phylo as phy
 import Bio
-import subprocess as spc, sys, re, os,inspect
-
+import subprocess as spc, sys, re, os,inspect,pickle
+import pickle
+import compbio.utils.bsub as bsub
+import compbio.utils.bsub_utils as bsu
 import compbio.utils.memo as mem
 import compbio.utils.bs_macros as bsm
 import compbio.config as cfg
+import matplotlib.mlab as mlab
 
-if __name__ != '__main__' and False:
-	import compbio.utils.colors as mycolors
-	import compbio.utils.seismic as seismic
-	import compbio.utils.plots as myplots
-	import matplotlib.pyplot as plt
+if __name__ != '__main__' and True:
+        import plots as rplots
 
 from numpy import *
 import numpy as np
 import itertools as it
-
 from compbio.projects.seqtree import muscle, phyml, paml
-
 import sys
-def restart_line():
-    sys.stdout.write('\r')
-    sys.stdout.flush()
 
+bps = ['GC','AU','GU','CG','UA','UG']
 
-def plot_clusters(inds,
-                  embeddings,
-                  plot3d = False,
-                  title = '',
-		  ax_in =None,
-		  save = False,
-		  colors = None):
-        exemplars = list(set(inds))
-        if colors == None:
-		cluster_colors = dict([(exemplars[i], col) 
-                              for i, col in enumerate(mycolors.getct(len(exemplars)))]
-                              )
-	else:
-		cluster_colors = colors
+ 
+   
+def compute_clusters(affinities, ss):
+        cluster_dict = dict(similarities=affinities,
+                           self_similarity = ss)
+        clusters =  bsm.runmat('ap_frompy', cluster_dict, 'subopt_clusters')
+        return squeeze(clusters['inds'])
 
-        cols = [cluster_colors[e] for e in inds]
-        try: 
-		if ax == None: plt.clf()
-        except Exception, e: pass
-        if ax_in == None: f = plt.gcf()
-
-        for i, k in enumerate(embeddings.keys()):
-            embedding = embeddings[k]
-
-	    #if i == 1: raise Exception()
-            emb_sig = embedding[:,0:3]
-            cluster_vars = array([ var(emb_sig[nonzero(equal(inds, j))[0]])  for j in exemplars])
-            indexed_vars = array([ cluster_vars[exemplars.index(j)] for j in inds ])
-	    indexed_vars[equal(indexed_vars,0)] = 1
-
-            sizes = 10 *( exp( -1 * ( np.sum((emb_sig - emb_sig[inds,:])**2,1)/indexed_vars)))
-            if plot3d:
-                if ax_in == None: 
-			ax = f.add_subplot('{1}1{0}'.format(i+1, len(embeddings)),projection = '3d')
-		else: ax = ax_in
-                ax.scatter(array(embedding[:,0],float)
-                           ,array(embedding[:,1],float)
-                           ,array(embedding[:,2],float), 
-                           s = sizes,
-                           color = cols)
-                ax.set_xticks([])
-                ax.set_yticks([])
-                for tl in list(it.chain( ax.w_xaxis.get_ticklabels(),
-                                    ax.w_yaxis.get_ticklabels(),
-                                    ax.w_zaxis.get_ticklabels())): # re-create what autofmt_xdate but with w_xaxis
-                    tl.set_visible(False)
-                    tl.set_rotation(30)    
-            else:
-                if ax_in == None: ax = f.add_subplot('{1}1{0}'.format(i+1, len(embeddings)))
-		else: ax = ax_in
-                ax.scatter(array(embedding[:,0],float)
-                           ,array(embedding[:,1],float),
-                           s = sizes,
-                           color = cols)
-            ax.set_title('{0} for subopts in {1}'.format(k, title))
-        
-        if save: 
-		f.savefig(cfg.dataPath('cs874/figs/subopt_embeddings/{0}.ps').format(title))
-
-
-def parse_stk_struct(filename):
-    fopen = open(filename)
-    ali = aio.parse(fopen, 'stockholm').next()
-    fopen.seek(0)
-    str_re = re.compile('^#=GC SS_cons\s*(.*)$')
-    ref_re = re.compile('^#=GC RF\s*(.*)$')
-
-    struct, ref = '', ''
-    for l in fopen.xreadlines():
-        match = str_re.search(l)
-        if match: 
-            struct += match.group(1)
-
-        match = ref_re.match(l)
-        if match: 
-            ref += match.group(1)
-    
-    return ali, ref, struct
-            
-    
-    
-def get_fam(ofs = 0, rfid = None):
-
-    fopen = open(cfg.dataPath('rfam/Rfam.seed'))
-    #fopen.readline()
-    #fopen.readline()
-    alis = aio.parse(fopen,'stockholm')
-
-    if rfid != None:
-	    ofs = int(re.compile('\d+').search(outputs['title']).group()) -1
-	    
-    for i in range(ofs):
-        null = alis.next()
-    
-    
-    infos = {}
-    start = fopen.tell()
-    while 1:
-        l = fopen.readline()            
-        if l[0] == '#':
-            ukey = str(l[5:7])
-            infos.update( [(ukey, infos.get(ukey,'') + l[8:])])
-            
-        else:
-            if l.strip() != '': break
-            
-    fopen.seek(start)
-
-    ali = alis.next()
-    rfname = infos['AC'].strip()
-    fname = cfg.dataPath('rfam/Rfam.seed_tree/{0}.seed_tree'.format(rfname))
-
-    tree = nio.parse(open(cfg.dataPath('rfam/Rfam.seed_tree/{0}.seed_tree'.format(rfname)))).next()
-    return ali, tree, info, rfname
-
-def infernal_alignment(alis, profile,rfid):
-    seqs = [Bio.SeqRecord.SeqRecord(Bio.Seq.Seq(''.join([let for let in str(ali.seq)  if let in 'AUTGC' ]),
-                                                Bio.Seq.Alphabet.RNAAlphabet),
-                                    'S{0:03}'.format(idx))
-            for idx, ali in enumerate(alis)]
-    infile = cfg.dataPath('infernal/temp/{0}_{1:03}_unaligned.fa'.format(rfid,idx))
-    outfile= cfg.dataPath('infernal/temp/{0}_{1:03}_aligned.stk'.format(rfid,idx))
-    Bio.SeqIO.write(seqs, infile, 'fasta')
-    
-    cstr = 'cmalign -o {0} {1} {2}'.format(outfile, profile, infile)
-    ispc = spc.Popen(cstr, shell = True,
-                            stdout = spc.PIPE)
-    out = ispc.communicate()[0]
-    alis, stk, struct = parse_stk_struct(outfile)
-    ali = ba.MultipleSeqAlignment(alis)
-
-    for a in ali:
-	    a.seq = a.seq.upper()
-    return ali, stk, struct
-    
-def infernal_profiles(ungapped_ref, exemplar_structs):
-    exemplar_stks = []
-    for i, s in enumerate(exemplar_structs):
-        stk = ['.'] * len(ungapped_ref)
-        for p in s: stk[p[0]] ,stk[p[1]] = '(',')'
-        stk = ''.join(stk)
-        exemplar_stks.append('''# STOCKHOLM 1.0
-
-{0:20} {2}
-{1:20} {3}
-//
-'''.format(ungapped_ref.id,'#=GC SS_cons', ungapped_ref.seq, stk))
-
-    profiles = []
-    for idx, stktext in enumerate(exemplar_stks):
-        stkfile = cfg.dataPath('infernal/temp/{0}_{1:03}.stk'.format(ungapped_ref.id, idx))
-        cmfile = cfg.dataPath('infernal/temp/{0}_{1:03}.cm'.format(ungapped_ref.id, idx))
-        fopen = open(stkfile,'w')
-        fopen.write(stktext)
-        fopen.close()
-        cstr = 'cmbuild -F --rsearch {0} {1} {2}'.format(cfg.dataPath('infernal/matrices/RIBOSUM85-60.mat'),cmfile,stkfile)
-        ispc = spc.Popen(cstr, shell = True, stdout = spc.PIPE)
-        out = ispc.communicate()[0]
-        profiles.append(cmfile)
-    
-    return profiles
-        
-
-
-def compute_embedding(spairs,
+def compute_embedding(affinities,
 		      aff_type = 'pairs',
 		      do_mve = False,
 		      ss_multiplier = None):
 
-	affinities, ss = affinity_matrix(spairs, aff_type = aff_type,
-					 ss_multiplier = ss_multiplier)
+
 	mve_dict = dict(k = 4,
 			similarities = affinities,
                         do_mve = False if aff_type == 'easy' else False)
@@ -212,7 +53,6 @@ def compute_embedding(spairs,
         pca_vecs = embedding['YPCA'].T
 
 	return pca_vecs, mve_vecs
-
 def affinity_matrix(pairs, aff_type = 'pairs', ss_multiplier = None):
 
 	#Artificial sequence length from the maximum paired element
@@ -248,12 +88,8 @@ def affinity_matrix(pairs, aff_type = 'pairs', ss_multiplier = None):
             ss = np.min(affinities) + da *ssm
 	return affinities, ss
 		       
-def setAffinities(tree = None, refseq_method = None, refseq = None,
-                      sp_method = 'sample',aff_type = 'pairs', ss_multiplier = None,
-                      **kwargs):
-
-
-        fa_str = refseq.format('fasta')
+def suboptimals(sequence, sp_method = 'enumerate'):
+        fa_str = sequence.format('fasta')
         if sp_method == 'enumerate':            
             rprc = spc.Popen('RNAsubopt --deltaEnergy=2.5 ', shell = True,
                              stdin = spc.PIPE, stdout = spc.PIPE)
@@ -263,89 +99,61 @@ def setAffinities(tree = None, refseq_method = None, refseq = None,
 
         out = rprc.communicate(input = fa_str)[0].splitlines()
         print 'print computing rna structures for method {0}'.format(sp_method)
-        spairs = [set(stk_pairs(p))
+        struct_pairs = [set(rutils.stk_pairs(p))
                   for p in out[3:]][::]
-
-	affinities, ss = affinity_matrix(spairs, aff_type = aff_type,
-					 ss_multiplier = ss_multiplier)
-        cluster_dict = dict(similarities=affinities,
-                           self_similarity = ss)
-        clusters =  bsm.runmat('ap_frompy', cluster_dict, 'subopt_clusters')
-        ex_inds = list(set(list(squeeze(clusters['inds'].T))))
-        exemplars = affinities[ex_inds][:,ex_inds]
-
-        mve_dict = dict(k = 4,
-                        similarities = affinities,
-                        do_mve = False if aff_type == 'easy' else False)
-        embedding=  bsm.runmat('mve_frompy', mve_dict, 'subopt_mve')
-        mve_vecs = embedding['Y'].T
-        pca_vecs = embedding['YPCA'].T
-
-
-        return spairs, squeeze(clusters['inds']), pca_vecs, mve_vecs
-
-
-def get_consensus(ofs = 0,     
-                  mweight = .5, 
-                  refseq_method = 'root',
-                  sp_method = 'sample',
-                  aff_type = 'pairs',
-                  reset = False,
-                  do_plot = False,
-		  run_id = 'CONS_TEST'):
-
-    #FETCH FAMILY DATA
-    ali, tree, infos, rfid = get_fam(ofs)
-
-    
-    #SPLIT THE FAMILY INTO SUBTREES
-    minterms = 10
-    csize = 15                        #appx clade size for alifold
-    tsize = len(tree.get_terminals()) #Tree size
-    tweight=tree.total_branch_length()
-    cweight=tweight*csize/tsize
-
-    cqueue = [tree.root]
-    clades = []
-    #SOMETHING IS BAD IN CQUEUE
-    while cqueue:
+        return struct_pairs
+def split_tree(tree):
+   '''
+Split a bipython tree in to similarly sized subtrees.
+'''
+   minterms = 10
+   csize = 15                        #appx clade size for alifold
+   tsize = len(tree.get_terminals()) #Tree size
+   tweight=tree.total_branch_length()
+   cweight=tweight*csize/tsize
+   cqueue = [tree.root]
+   clades = []
+   while cqueue:
         clade = cqueue.pop()
         if clade.total_branch_length() <= cweight\
                 or len(clade.get_terminals()) <= minterms:
             clades.append(clade)
         else: 
             [cqueue.append(c) for c in clade.clades]            
+   return clades
+
+       
+def get_consensus(rfid = 'RF00525', mweight = .5, 
+                  refseq_method = 'root', sp_method = 'sample',
+                  aff_type = 'pairs',  reset = True,
+                  do_plot = False,  run_id = 'CONS_TEST'):
+
+    ali, tree, infos = rfam.get_fam(rfid)
     ali_ids = [a.name for a in ali]
+    clades = split_tree(tree)
 
     for i, n in enumerate(tree.get_terminals()):
-        term_id = re.compile('_([^\.]*\.\d*)').search(n.name).group(1) 
+        term_id = re.compile('_([^_]*)_').search(n.name).group(1) 
         this_seq = ali[ali_ids.index(term_id)]
         n.m = {'seq':this_seq,
                'probs':[1 for j in range(len(this_seq))]}
 
-
     big_refnode, big_refseq = \
         subtree_refseq(tree, method = refseq_method)
-    ungapped_ref = Bio.SeqRecord.SeqRecord( Bio.Seq.Seq(''.join([let for let in str(big_refseq.seq) if let.upper() in 'AUCGT']),
-                                                        big_refseq.seq.alphabet)
-                                            ,rfid + '_ref', name = big_refnode.name)
+    ungapped_ref = rutils.ungapped_seq(big_refseq, rfid)
 
     title = 'RID_{3}_{0}_subopts_for_{1}_emb_{2}'.format(sp_method,rfid,aff_type,run_id)
-    spairs, inds, pca_vecs, mve_vecs = mem.getOrSet(setAffinities,**mem.rc({},reset = reset,
-									   tree = tree,
-									   aff_type = aff_type,
-									   sp_method = sp_method,
-									   refseq = ungapped_ref,
-									   on_fail = 'compute',
-									   hardcopy = True,
-									   register = title,
-									   ))
+    spairs = suboptimals(ungapped_ref, sp_method = sp_method)
+    affinities, ss = affinity_matrix(spairs, aff_type = aff_type)
 
-    if do_plot : plot_clusters(inds,{'pca embedding':pca_vecs},title = title,plot3d = True)
+    inds = compute_clusters(affinities, ss)
+    pca_vecs = mlab.PCA(affinities).project(affinities)
+    if do_plot : rplots.plot_clusters(inds,{'pca embedding':pca_vecs},title = title,plot3d = True)
+    
+    raise Exception()
+
     exemplar_structs = [spairs[e] for e in set(inds)]
-    struct_profiles = infernal_profiles(ungapped_ref,exemplar_structs)
-
-
+    struct_profiles = infernal.profiles(ungapped_ref,exemplar_structs, run_id)
 
     all_vecs = {'all_time':[ [ [] for i in range(len(struct_profiles))] 
 			     for j in range(len(clades)) ],
@@ -353,6 +161,7 @@ def get_consensus(ofs = 0,
 			     for j in range(len(clades)) ],
 		'fiftyfifty':[ [ [] for i in range(len(struct_profiles))] 
 			     for j in range(len(clades)) ]}
+
     aamuts, aatimes, aairr, aagaps = [], [], [], []
     for idx_clade, c in enumerate(clades):
         if len(c.get_terminals()) < 3:
@@ -361,29 +170,21 @@ def get_consensus(ofs = 0,
 	c_ids = [ n.m['seq'].name for n in c.get_terminals() ]
 	if len(nonzero(greater([len(list(g)) for k, g in it.groupby(sorted(c_ids))],1))[0])>0:
 		print 'SKIPPING CUZ THERE ARE TWO COPIES OF SOME FUCKING SEQUENCE IN TREE'
-		continue
-           
+		continue          
         all_muts, all_times , all_gaps, all_irr = [], [], [], []
 	print
 	print 'Clade: {0}'.format(idx_clade)
         for idx_struct, struct_info in enumerate( zip( struct_profiles, exemplar_structs)):
           struct_profile, ex_struct = struct_info
 	  ngaps = 0
-	  sys.stdout.write('')
-	  sys.stdout.flush()
 
-
-          #ALTHOUGH I AM CONSTRUCTING NEW ALIGNMENTS,
-          #I AM NOT RECONSTRUCTING THE TREE AFRESH.
-          #THIS IS A MISTAKE?
-          
           #OLD ALIGNMENTS
           calis = ba.MultipleSeqAlignment(\
               [ali[ali_ids.index(c_id)] for c_id in c_ids ])
           #NEW ALIGNMENTS AND REF STRUCTURE
-          c_new_ali , stk, struct = infernal_alignment(calis, struct_profile, rfid)
+          c_new_ali , stk, struct = infernal.alignment(calis, struct_profile, rfid)
           #REF STRUCTURE PAIRS
-          pairs = stk_pairs(struct)
+          pairs = rutils.stk_pairs(struct)
 	  if len(pairs) != len(ex_struct):
 		  raise Exception()
            
@@ -395,20 +196,18 @@ def get_consensus(ofs = 0,
               ct.m['str_seq'].id = lilid
 	      ct.m['probs'] = ones(len(c_new_ali[i2]))
           
-          #Create a tree from the current clade and run aligner.
-	  #DOES THIS ALL WORK FINE WITH 'STR_SEQ'
+          #BUILD A TREE
           tr = phy.BaseTree.Tree(c)
 
+          #RUN PAML
           paml_run_id = 'ali_anc_c{0:04}_s{0:03}'.format(idx_clade,idx_struct)
           rstfile= paml.run_paml(tr, c_new_ali, run_id = paml_run_id)
-          #Get ML ancestor sequences.
           anc_tree = paml.rst_parser(rstfile) 
 
           #Label extent and internal nodes with sequences.
           for term in anc_tree.get_terminals():
               #Terminals have old (rfam) alis and new (infernal) alis
               term.m = filter( lambda x: x.name == term.name, cterms)[0].m
-              #term.m = filter( lambda x: x.name == term.name, cterms)[0].m
           for node in anc_tree.get_nonterminals():
               #Internals only have new alis. m['seq'] = m['str_seq']
               node.m['str_seq'] = node.m['seq']
@@ -450,10 +249,8 @@ def get_consensus(ofs = 0,
 	    'run_id':run_id
 	    }
 	 
-    import pickle
     pickle.dump(outputs, open(cfg.dataPath('cs874/runs/{0}.pickle'.format(run_id)),'w'))
     return(outputs)
-
 def compute_signatures(all_vecs,idx_clade,all_muts, all_times, structs, reference):
         #Compute a muliplier for comp/wobble muts from their relative
         #frequencies over all suboptimal structures.
@@ -473,17 +270,6 @@ def compute_signatures(all_vecs,idx_clade,all_muts, all_times, structs, referenc
 		  all_vecs[k][idx_clade][i] = v
 
 
-def stk_pairs(struct):
-    #FETCH PAIRS IN STRUCT
-   pairs = []
-   pqueue = []
-   for i, cstr in enumerate(struct):
-       if cstr in '[<({':
-           pqueue.append(i)
-       elif cstr in ']>)}':
-           pairs.append((pqueue.pop(),i))    
-   assert not pqueue   
-   return pairs
 
 def subtree_refseq(subtree, method = 'root'):
     '''
@@ -510,10 +296,8 @@ outputs
     return node, seq
 
 
-def subtree_rate_struct_V0( pairs, refseq,
-                           muts, times,
-                           mweight = .5,
-                           comp_bonus = None):
+def subtree_rate_struct_V0( pairs, refseq, muts, times,
+                           mweight = .5, comp_bonus = None):
     '''
 Given the kinds of mutation that occur in a tree of sequences 
 with respect to an RNA structure, compute a vector of length
@@ -790,171 +574,28 @@ outputs:
                              m_bbad[idx] +=1
                else:   
                    irresolvables[i].append(terms)
-                   do_giveup(curterms,curints,terms,pp)
-
-       #CLOSES SEARCH LOOP FOR P
-   if len(muts.values()[0]) != len(pairs) :
-	   raise Exception()
-
-   restart_line()
-   sys.stdout.write('gap count: {0:03}'.format(gap_count))
-   sys.stdout.flush()
-   #CLOSES SEARCH LOOP FOR ALL PAIRS               
+                   do_giveup(curterms,curints,terms,pp)   
    return muts, times, gaps, irresolvables
 
 
-def show_output(outputs, 
-		show = 'conservation',
-		save = True):
-	mvecs = outputs['all_vecs']['all_time']
-	tvecs = outputs['all_vecs']['all_mut']
-	fvecs = outputs['all_vecs']['fiftyfifty']
-
-	run_id = outputs['run_id']
-	structs = outputs['exemplar_structs']
-	ref = outputs['reference_seq']
+def get_remote_runs(run_range):
+	outdir = cfg.dataPath('batch/outputs')
+	files = [os.path.join(outdir, f) for f in os.listdir(outdir) if 'ra2_' in f]
+	outs = [ pickle.load(open(f)) for f in files[0:20] ]
+	return outs
+def draw_remote_runs(show = 'conservation'):
+	outdir = cfg.dataPath('batch/outputs')
+	files = [os.path.join(outdir, f) for f in os.listdir(outdir) if 'ra2_' in f][1:]
+	for idx, f in enumerate(files):
+		print '{0} of {1} files'.format(idx,len(files))
+		print f[-100::]
+		fopen = open(f)
+		out = pickle.load(fopen) 
+		if transform:
+			'''Fix stuff'''
+			out_t = out
+		else: out_t = out
+		rplots.show_output(out_t)
+		fopen.close()
+	return outs	
 	
-	thermo_pairs = outputs['thermo_pairs']
-	thermo_inds  = outputs['thermo_ex_inds']
-
-	run_title = outputs['title']
-
-	fig = plt.gcf()
-	try: fig.clear()
-	except Exception, e: print 'wonky 3d bug'
-
-	exemplar_inds = sorted(list(set(thermo_inds)))
-	struct_colors = dict([(exemplar_inds[i], col) 
-			       for i, col in enumerate(mycolors.getct(len(exemplar_inds)))]
-                              )
-
-
-	if show == 'embeddings':
-
-	   
-	   exemplars = list(set(thermo_inds))
-	   pair_embedding =  compute_embedding(thermo_pairs,
-	   			       aff_type = 'pairs',
-	   			       do_mve = False,
-					       ss_multiplier = None)
-	   
-	   shape_embedding = compute_embedding(thermo_pairs,
-	   			       aff_type = 'easy',
-	   			       do_mve = False,
-	   			       ss_multiplier = None)
-	   show_3d = True
-	   #shape_embedding[0] is pca
-	   plot_clusters( thermo_inds, {'shape':shape_embedding[0],
-	   			     'pairs':pair_embedding[0]}, 
-			  plot3d = show_3d,
-			  title = 'projection ({0}) '.format(run_id),
-			  save = save,
-			  colors = struct_colors)
-
-	elif show == 'conservation':
-		ax0 = fig.add_subplot('311')
-		lstructs =  [project_lstruct(p, len(ref)) for p in structs]
-		seismic.seismic([ abs(l) for l in lstructs] , 
-				colors = struct_colors.values(),
-				ax = ax0)
-
-		myplots.maketitle(ax0, 'Predicted conservation patterns for {0}'.format(run_title))
-
-		shapes = array([shape(m) for m in mvecs])
-		igood = nonzero(greater(shapes[:,1],0))[0]
-		clade_colors = mycolors.getct(len(igood))
-		mvg, tvg, fvg = [ [vecs[i] for i in igood] for vecs in [mvecs,tvecs,fvecs]]
-		cons_types = array([ mvg, tvg, tvg])
-		
-		for c in cons_types:
-			nrm = sum(c.flatten())
-			if nrm == 0: nrm = 1
-			c /= sum(c.flatten())
-		
-		mtype_sums = np.sum(np.sum(cons_types,3),0)	
-		stype_sums = np.sum(np.sum(cons_types,3),0).T
-
-
-		ax1 = fig.add_subplot('312')		
-		seismic.seismic(stype_sums , 
-				colors = struct_colors.values(),
-				ax = ax1)
-
-		myplots.maketitle(ax1,'Observed conservation (struct v. clade) patterns for {0}'\
-					  .format(run_title),
-				  )
-
-		
-		ax2 = fig.add_subplot('313')
-		
-		seismic.seismic(mtype_sums , 
-				ax = ax2, colors = clade_colors, stacked = True,
-				label_y = False)
-
-		#myplots.maketitle(ax2, 'Observed conservation (clade v. struct) patterns for {0}'\
-		#			   .format(run_title)
-		#		   )
-		ax2.annotate('Observed conservation (clade v. struct) patterns for {0}'\
-				     .format(run_title),
-			     [.5,0],xycoords = 'axes fraction', ha = 'center', va = 'top',
-			     size = 'x-large')
-
-		if save: fig.savefig(cfg.dataPath('cs874/figs/cons_profiles/{0}.ps'.format(run_title)))
-	       				 	
-
-	
-
-	else: raise Exception('show type not implemented: {0}'.format(show))
-	
-def project_lstruct(pstruct, l):
-	out = zeros(l)
-	for p in pstruct:
-		out[p[0]] = -1.
-		out[p[1]] = 1.
-	return out
-	
-def showseq(tree, elts):
-    phy.draw_graphviz(tree, lambda x:''.join([ x.m['seq'].seq[e] for e in elts]))
-
-bps = ['GC','AU','GU','CG','UA','UG']
-
-
-import compbio.utils.bsub as bsub
-import compbio.utils.bsub_utils as bsu
-
-def runmany(run_id):
-	print 'TESTING WITH A LIMITED RANGE OF FAMILIES'
-	inp_dicts = [dict([('ofs',r)]) for r in range(0,1493)]
-	eyeball = bsub.eyeball(run_id, 
-			       os.path.abspath(inspect.stack()[0][1]),
-			       inp_dicts,
-			       func = 'run',
-			       name = 'ra2_runs_',
-			       mem = 3)
-	eyeball.launch()
-	return dict(cmds=eyeball.cmds)
-def run(run_id):
-	data = bsu.load_data(run_id, 'input')
-	ofs = data['ofs']
-	outputs = get_consensus(ofs, 
-			       run_id = run_id,
-			       reset = True)
-	return(outputs)
-
-def usage():
-  print '''
-usage: rna_ali2d function run_id
-
-Call function with run_id.
-'''
-  exit(1)
-
-if __name__ == '__main__':
-    run_id = sys.argv[2]
-    run_func = globals()[sys.argv[1]]
-    output_dict = run_func(run_id)
-    if output_dict == None:
-        output_dict = {'blank':'Nothing output in call to {0}'.\
-                           format(sys.argv[1])}
-    bsu.save_data( output_dict, run_id, 'output')
-    
