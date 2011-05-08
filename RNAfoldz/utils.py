@@ -1,4 +1,5 @@
-import subprocess as spc, sys, re, os,inspect
+import subprocess as spc, sys, re, os,inspect, itertools as it
+import matplotlib.mlab as mlab
 import Bio.AlignIO as aio
 import Bio
 import compbio.utils.colors as mycolors
@@ -6,10 +7,12 @@ import compbio.utils.seismic as seismic
 import compbio.utils.plots as myplots
 import compbio.config as cfg
 
+
 import rfam
 
 import matplotlib.pyplot as plt
 from numpy import *
+import numpy as np
 import myxml.parser as xparse
 import myxml.svg as svg
 
@@ -156,32 +159,43 @@ def struct_project_l3(pairs,l):
     return stk_mat(pairs_stk(pairs,l))
 
 def cluster_2(structs, polys, seq):
-    mats =[struct_project_l3(p, len(seq)) for p in structs]
-    vecs =[struct_project_l(p, len(seq)) for p in structs]
+    mats =array([struct_project_l3(p, len(seq)) for p in structs])
+    vecs =array([struct_project_l(p, len(seq)) for p in structs])
 
     polys = array(polys)
+    sortorder = argsort([sum(mats[0] * mats[i]) for i in range(len(polys))])[::-1]
 
-    f = plt.figure(3)
-    f.clear()
-
-    n = len(polys)
-
-    xdim = floor(sqrt(len(polys)))
-    ydim = ceil(len(polys)/xdim)
-
-    ax = f.add_subplot(111, 
-                       xlim = [-1,xdim],
-                       ylim = [-1,ydim])
-    sortorder = argsort([sum(mats[0] * mats[i]) for i in range(n)])
-    sortorder2 = argsort([sum(vecs[0] * vecs[i]) for i in range(n)])
-
-    for i, p in enumerate(polys[sortorder2][::-1]):
-        rplots.show_rna([mod(i,xdim), floor(i/xdim) ], p/3, ax = ax, 
-                        pkw = dict(color = 'black') )
-        
-    raise Exception()
+    affinities, ss = affinity_matrix(structs, aff_type = 'pairs')
+    #aff_shape, ss_shape = affinity_matrix(structs, aff_type = 'easy', ss_multiplier = .5)
     
-def suboptimals(sequence, sp_method = 'enumerate', n = 750):
+    pca_vecs = mlab.PCA(affinities).project(affinities)  
+    #pca_vecs_shape = mlab.PCA(aff_shape).project(aff_shape)  
+
+    sortorder2 = argsort(pca_vecs[:,0])
+    sortorder = sortorder2
+
+    import mlpy
+
+    HC = mlpy.HCluster(method='euclidean', link='median')
+
+    cvecs = pca_vecs[:,0:1]
+    
+    #plt.gcf().clear()
+    #plt.plot(cvecs[sortorder])
+    #return
+    
+    clusts = HC.compute(cvecs / sum(cvecs **2, 1)[:,newaxis])
+    cut = HC.cut(HC.heights[::-1][1])
+
+    ct = mycolors.getct(len(mats))
+    rplots.grid_rnas(polys[sortorder], 
+                     colors = [ct[i] for i in cut[sortorder]],
+                     size = (5,5))
+
+    return HC
+
+    
+def suboptimals(sequence, sp_method = 'enumerate', n = 400):
         fa_str = sequence.format('fasta')
         if sp_method == 'enumerate':            
             rprc = spc.Popen('RNAsubopt --deltaEnergy=2.5 ', shell = True,

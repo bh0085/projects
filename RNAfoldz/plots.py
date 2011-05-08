@@ -24,6 +24,42 @@ from mpl_toolkits.axes_grid.anchored_artists import AnchoredAuxTransformBox
 from mpl_toolkits.axes_grid.anchored_artists import AnchoredDrawingArea
 
 
+def fignum(num, size = (8,8)):
+    plt.close(num)
+    return plt.figure(num, size)
+
+    
+
+def grid_rnas(polys, colors = None, size = None ):
+    '''grid plot a bunch of RNAs according to the color scheme given.
+
+input:
+  polys:   vertices for each RNA such as those pulled from the 
+           svgs produced by RNAsubopt im compbio.utils.svg.
+
+  colors:  colors for each rna. Can be None or a vector of length
+           equal to n rnas or a vector of vectors (allowing coloring 
+           of individual vertices)
+
+
+'''
+    f = fignum(4, size if size else (10,10))
+
+    n = len(polys)
+
+    xdim = floor(sqrt(len(polys)))
+    ydim = ceil(len(polys)/xdim)
+
+    ax = f.add_axes([0,0,1,1], 
+                       xlim = [-1,xdim],
+                       ylim = [-1,ydim])
+
+    for i, p in enumerate(polys):
+        show_rna([mod(i,xdim), 
+                  floor(i/xdim) ], p/3, 
+                 ax = ax, 
+                 pkw = dict(color =  colors[i] if colors else 'black') )
+    return f   
 
 def show_rna( emb, vertices , ax = None,pkw= {}, **kwargs):
     if ax == None: ax = plt.gca()
