@@ -165,7 +165,7 @@ def cluster_2(structs, polys, seq):
     polys = array(polys)
     sortorder = argsort([sum(mats[0] * mats[i]) for i in range(len(polys))])[::-1]
 
-    affinities, ss = affinity_matrix(structs, aff_type = 'pairs')
+    affinities, ss = affinity_matrix(structs, aff_type = 'easy')
     #aff_shape, ss_shape = affinity_matrix(structs, aff_type = 'easy', ss_multiplier = .5)
     
     pca_vecs = mlab.PCA(affinities).project(affinities)  
@@ -176,16 +176,17 @@ def cluster_2(structs, polys, seq):
 
     import mlpy
 
-    HC = mlpy.HCluster(method='euclidean', link='median')
+    HC = mlpy.HCluster(method='euclidean', link='complete')
 
-    cvecs = pca_vecs[:,0:1]
+    #cvecs = vecs
+    cvecs = pca_vecs[:,0:5]
     
     #plt.gcf().clear()
     #plt.plot(cvecs[sortorder])
     #return
     
-    clusts = HC.compute(cvecs / sum(cvecs **2, 1)[:,newaxis])
-    cut = HC.cut(HC.heights[::-1][1])
+    clusts = HC.compute(cvecs )#/ sum(cvecs **2, 1)[:,newaxis])
+    cut = HC.cut(HC.heights[::-1][3])
 
     ct = mycolors.getct(len(mats))
     rplots.grid_rnas(polys[sortorder], 
