@@ -3,7 +3,7 @@ import utils as rutils
 import compbio.utils.bsub as bsub
 import compbio.utils.bsub_utils as bsu
 import os, inspect
-
+import sys
 def make_ribostructs():    
     for k,v in rutils.switch_dicts().iteritems():
         rfid = 'RF{0:05}'.format(v)
