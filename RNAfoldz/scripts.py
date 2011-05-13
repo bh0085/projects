@@ -38,8 +38,8 @@ input dict so there will be no problems running the
 script is the run_id does not conform to this format.
 '''
   inp_dict = bsub.load_data(run_id, 'input')
-  fam = inp_dict('family')
-  savename = inp_dict('savename')
+  fam = inp_dict['family']
+  savename = inp_dict['savename']
 
   structs, energies, seq = rutils.family_clustered_suboptimals(\
           rfid,
