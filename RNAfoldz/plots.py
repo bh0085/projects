@@ -67,6 +67,12 @@ input:
                   floor(i/xdim) ], p/3, 
                  ax = ax, dims = dims,
                  pkw = dict(color =  colors[i] if colors != None else 'black') )
+
+    print 'LIMITS:'
+    print ax.get_ylim()
+    print ax.get_xlim()
+    ax.set_autoscalex_on(False)
+    ax.set_autoscaley_on(False)
     return f   
 
 def show_rna( emb, vertices , ax = None,dims = [20,20], pkw= {}, **kwargs):
