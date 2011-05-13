@@ -37,7 +37,7 @@ In any event, the family name is stored in the
 input dict so there will be no problems running the
 script is the run_id does not conform to this format.
 '''
-  inp_dict = bbsu.load_data(run_id, 'input')
+  inp_dict = bsub.load_data(run_id, 'input')
   fam = inp_dict('family')
   savename = inp_dict('savename')
 
