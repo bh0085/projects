@@ -1,4 +1,13 @@
 #!/usr/bin/env python
+'''
+Remote usage examples:
+
+bsub -q compbio-week -o ${HOME}/bsub_rfam.log ${PROGRAMMING_PATH}/RNAfoldz/scripts.py 'bsub_all' 'bsub_all'
+bsub -q compbio-week -o ${HOME}/bsub_rfam.log ${PROGRAMMING_PATH}/RNAfoldz/scripts.py 'bsub_riboswitches' 'bsub_riboswitches'
+
+'''
+
+
 import utils as rutils
 import compbio.utils.bsub as bsub
 import compbio.utils.bsub_utils as bsu
