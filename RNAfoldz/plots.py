@@ -11,7 +11,7 @@ from matplotlib.collections  import LineCollection
 import utils as rutils
 from matplotlib.patches import Ellipse
 
-import mpl_toolkits.axisartist.floating_axes as floating_axes
+#import mpl_toolkits.axisartist.floating_axes as floating_axes
 
 import numpy as np
 import  mpl_toolkits.axisartist.angle_helper as angle_helper
