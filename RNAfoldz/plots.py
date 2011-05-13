@@ -49,10 +49,17 @@ input:
     xdim = floor(sqrt(len(polys)))
     ydim = ceil(len(polys)/xdim)
 
-    ax = f.add_axes([0,0,1,1], 
+    #ax = f.add_axes([0,0,1,1], 
+    ax = f.add_subplot(111,
                        xlim = [-1,xdim],
                        ylim = [-1,ydim])
 
+
+    print 'LIMITS:'
+    print ax.get_ylim
+    print ax.get_xlim
+    print
+    print
     for i, p in enumerate(polys):
         show_rna([mod(i,xdim), 
                   floor(i/xdim) ], p/3, 
@@ -65,8 +72,11 @@ def show_rna( emb, vertices , ax = None,dims = [20,20], pkw= {}, **kwargs):
     #v0 = ax.plot(*vertices.T*100, lw = 12, color ='white',
     #              transform = transforms.ScaledTranslation(emb[0],emb[1],ax.transData )
     #              )[0]
+    print emb
+
     v1 = ax.plot(*vertices.T*dims[0],
-                  transform = transforms.ScaledTranslation(emb[0],emb[1],ax.transData ),
+                  transform = transforms.ScaledTranslation(\
+            emb[0],emb[1],ax.transData ),
                   **pkw)[0]
 
     #f = ax.figure

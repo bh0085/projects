@@ -44,7 +44,7 @@ script is the run_id does not conform to this format.
   structs, energies, seq = rutils.family_clustered_suboptimals(\
           fam,
           savename = savename,
-          draw = True)
+          draw = False)
 
   output = {'family':fam,
             'structs':structs,
