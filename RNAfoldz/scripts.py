@@ -42,7 +42,7 @@ script is the run_id does not conform to this format.
   savename = inp_dict['savename']
 
   structs, energies, seq = rutils.family_clustered_suboptimals(\
-          rfid,
+          fam,
           savename = savename)
 
   output = {'family':fam,
