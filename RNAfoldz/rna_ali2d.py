@@ -54,20 +54,7 @@ def compute_embedding(affinities,
 
 	return pca_vecs, mve_vecs
 
-def suboptimals(sequence, sp_method = 'enumerate', n = 750):
-        fa_str = sequence.format('fasta')
-        if sp_method == 'enumerate':            
-            rprc = spc.Popen('RNAsubopt --deltaEnergy=2.5 ', shell = True,
-                             stdin = spc.PIPE, stdout = spc.PIPE)
-        elif sp_method == 'sample':
-            rprc = spc.Popen('RNAsubopt --stochBT={0}'.format(n), shell = True,
-                             stdin = spc.PIPE, stdout = spc.PIPE)
 
-        out = rprc.communicate(input = fa_str)[0].splitlines()
-        print 'print computing rna structures for method {0}'.format(sp_method)
-        struct_pairs = [set(rutils.stk_pairs(p))
-                  for p in out[3:]][::]
-        return struct_pairs
 def split_tree(tree):
    '''
 Split a bipython tree in to similarly sized subtrees.
@@ -291,30 +278,6 @@ def compute_signatures(all_vecs,idx_clade,all_muts, all_times, structs, referenc
 		  all_vecs[k][idx_clade][i] = v
 
 
-
-def subtree_refseq(subtree, method = 'root'):
-    '''
-Get a reference sequence for a subtree of aligned RNA sequences.
-
-inputs
-  subtree: a biopython Tree having seqs in node.m['seq']
-
-outputs
-  node:    a biopython Clade instance in subtree
-  seq:     a biopython SequenceRecord instance
-
-'''
-    
-    #FIND A REFERENCE SEQUENCE (CLOSEST TO THE TREE ROOT)
-    if method == 'root':
-        tset = set(subtree.get_terminals())
-        t_depths = [ (k,v) for k,v in subtree.depths().iteritems() if k in tset ]
-        node = t_depths[argmin([t[1] for t in t_depths])][0]
-        seq = node.m['seq']
-    elif method == 'median':
-        raise Exception('median method not yet implemented')
-
-    return node, seq
 
 
 def subtree_rate_struct_V0( pairs, refseq, muts, times,

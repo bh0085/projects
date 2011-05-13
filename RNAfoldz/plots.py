@@ -30,7 +30,7 @@ def fignum(num, size = (8,8)):
 
     
 
-def grid_rnas(polys, colors = None, size = None ):
+def grid_rnas(polys,dims = [20,20], colors = None, size = None ):
     '''grid plot a bunch of RNAs according to the color scheme given.
 
 input:
@@ -43,8 +43,7 @@ input:
 
 
 '''
-    f = fignum(4, size if size else (10,10))
-
+    f = plt.gcf()
     n = len(polys)
 
     xdim = floor(sqrt(len(polys)))
@@ -57,26 +56,26 @@ input:
     for i, p in enumerate(polys):
         show_rna([mod(i,xdim), 
                   floor(i/xdim) ], p/3, 
-                 ax = ax, 
-                 pkw = dict(color =  colors[i] if colors else 'black') )
+                 ax = ax, dims = dims,
+                 pkw = dict(color =  colors[i] if colors != None else 'black') )
     return f   
 
-def show_rna( emb, vertices , ax = None,pkw= {}, **kwargs):
+def show_rna( emb, vertices , ax = None,dims = [20,20], pkw= {}, **kwargs):
     if ax == None: ax = plt.gca()
     #v0 = ax.plot(*vertices.T*100, lw = 12, color ='white',
     #              transform = transforms.ScaledTranslation(emb[0],emb[1],ax.transData )
     #              )[0]
-    v1 = ax.plot(*vertices.T*100,
+    v1 = ax.plot(*vertices.T*dims[0],
                   transform = transforms.ScaledTranslation(emb[0],emb[1],ax.transData ),
                   **pkw)[0]
 
-    f = ax.figure
+    #f = ax.figure
 
-    da = DrawingArea(20, 20, 0, 0)
+    #da = DrawingArea(dims[0],dims[1], 0, 0)
     #p =  plt.plot(vertices[:,0]*50, vertices[:,1]*50)[0]
     #da.add_artist(p)
 
-    xy = emb[0:2]
+    #xy = emb[0:2]
     
     #bb = ax.bbox.translated(20,20)
     #box2 = AnchoredAuxTransformBox(ax.transData, loc=2)

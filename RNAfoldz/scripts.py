@@ -1,5 +1,17 @@
 #!/usr/bin/env python
+import utils as rutils
+def make_ribostructs():    
+    for k,v in rutils.switch_dicts().iteritems():
+        if v <=     1486:
+            continue
+        rfid = 'RF{0:05}'.format(v)
+        savename = 'Riboswitch_list_{1}_{0}'.format(rfid,k)
+        rutils.family_clustered_suboptimals(rfid =rfid,savename = savename, draw = True)
+
+
 def runswitches():
+
+
 	all_outs = []
 	for k,ofs in switch_dicts().iteritems():
 		print k
