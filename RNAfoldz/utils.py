@@ -506,7 +506,7 @@ outputs
     return node, seq
 
 
-def family_clustered_suboptimals(rfid, plots = True, num = 1000, min_count = 2,
+def family_clustered_suboptimals(rfid, plots = True, num = 5000, min_count = 2,
                                  n_countsorted = 10, n_esorted = 10, 
                                  draw = False, cluster_type = 'just_list',
                                  savename = None):
@@ -646,12 +646,10 @@ def select_exemplars_from_list(structs, struct_counts,seq, draw = False):
       final_structs, final_energies = zip(*[(structs[i],struct_energies[i]) for i in  final_exemplars])
       return final_structs, final_energies
 
-
 def struct_verts(structs, seq, name):
     verts = array([rna_draw(seq.seq , pairs_stk(sp,len(seq)), '{0}_{1}'.format(name,i) )
                    for i,sp in enumerate(structs)])
     return verts
-
 
 
 def struct_affinity_matrix(pairs,seq_len, aff_type = 'pairs', ss_multiplier = None):
