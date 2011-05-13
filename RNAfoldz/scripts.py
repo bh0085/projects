@@ -17,7 +17,7 @@ def bsub_riboswitches():
                 inp_dicts.append(dict(family = rfid,
                                       run_id = 'RS_{0}'.format(rfid),
                                       savename = savename))
-
+        run_id = 'bsub_riboswitches'
 	eyeball = bsub.eyeball(run_id, 
 			       os.path.abspath(inspect.stack()[0][1]),
 			       inp_dicts,
