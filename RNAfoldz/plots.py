@@ -1,6 +1,6 @@
 import compbio.utils.colors as mycolors
-from matplotlib.offsetbox import TextArea, DrawingArea, OffsetImage, \
-     AnnotationBbox
+#from matplotlib.offsetbox import TextArea, DrawingArea, OffsetImage, \
+#     AnnotationBbox
 import matplotlib.pyplot as plt
 from numpy import *
 import numpy as np
@@ -20,8 +20,8 @@ from mpl_toolkits.axisartist.grid_finder import FixedLocator, MaxNLocator, \
      DictFormatter
 
 
-from mpl_toolkits.axes_grid.anchored_artists import AnchoredAuxTransformBox
-from mpl_toolkits.axes_grid.anchored_artists import AnchoredDrawingArea
+#from mpl_toolkits.axes_grid.anchored_artists import AnchoredAuxTransformBox
+#from mpl_toolkits.axes_grid.anchored_artists import AnchoredDrawingArea
 
 
 def fignum(num, size = (8,8)):
