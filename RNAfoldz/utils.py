@@ -207,7 +207,6 @@ def show_subopts(structs, polys, energies):
     rplots.grid_rnas(polys[srted], 
                      colors =cols[srted],
                      size = (8,8), dims = [180,50])    
-    raise Exception()
 
 
 def cluster_2_show(clusters, polys): 
