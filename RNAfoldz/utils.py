@@ -505,7 +505,7 @@ outputs
     return node, seq
 
 
-def family_clustered_suboptimals(rfid, plots = True, num = 1000, min_count = 2,
+def family_clustered_suboptimals(rfid, plots = True, num = 5000, min_count = 2,
                                  n_countsorted = 10, n_esorted = 10, 
                                  draw = False, cluster_type = 'just_list',
                                  savename = None):
