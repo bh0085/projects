@@ -58,6 +58,8 @@ input:
     print 'LIMITS:'
     print ax.get_ylim()
     print ax.get_xlim()
+    ax.set_autoscalex_on(False)
+    ax.set_autoscaley_on(False)
     print
     print
     for i, p in enumerate(polys):
@@ -78,6 +80,10 @@ def show_rna( emb, vertices , ax = None,dims = [20,20], pkw= {}, **kwargs):
                   transform = transforms.ScaledTranslation(\
             emb[0],emb[1],ax.transData ),
                   **pkw)[0]
+
+        
+def random_old_crap():
+    pass
 
     #f = ax.figure
 
@@ -147,7 +153,6 @@ def show_rna( emb, vertices , ax = None,dims = [20,20], pkw= {}, **kwargs):
     ##ax.add_artist(p)
 
 
-        
     
 def show_output(outputs, 
 		show = 'conservation',
