@@ -505,7 +505,7 @@ outputs
     return node, seq
 
 
-def family_clustered_suboptimals(rfid, plots = True, num = 5000, min_count = 2,
+def family_clustered_suboptimals(rfid, plots = True, num = 1000, min_count = 2,
                                  n_countsorted = 10, n_esorted = 10, 
                                  draw = False,
                                  savename = None):
@@ -639,13 +639,6 @@ def select_exemplars_from_list(structs, struct_counts,seq, draw = False):
 
       final_structs, final_energies = zip(*[(structs[i],struct_energies[i]) for i in  final_exemplars])
       return final_structs, final_energies
-def make_riboswitches():    
-    for k,v in switch_dicts().iteritems():
-        if v <=     1486:
-            continue
-        rfid = 'RF{0:05}'.format(v)
-        savename = 'Riboswitch_list_{1}_{0}'.format(rfid,k)
-        family_clustered_suboptimals(rfid =rfid,savename = savename, draw = True)
 
 
 def struct_verts(structs, seq):
