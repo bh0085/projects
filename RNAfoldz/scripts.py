@@ -9,7 +9,7 @@ def make_ribostructs():
         savename = 'Riboswitch_list_{1}_{0}'.format(rfid,k)
         structs, rutils.family_clustered_suboptimals(rfid =rfid,savename = savename, draw = True)
 
-def bsub_riboswitches():
+def bsub_riboswitches(run_id):
         inp_dicts = []
         for k,v in rutils.switch_dicts().iteritems():
                 rfid = 'RF{0:05}'.format(v)
@@ -17,7 +17,6 @@ def bsub_riboswitches():
                 inp_dicts.append(dict(family = rfid,
                                       run_id = 'RS_{0}'.format(rfid),
                                       savename = savename))
-        run_id = 'bsub_riboswitches'
 	eyeball = bsub.eyeball(run_id, 
 			       os.path.abspath(inspect.stack()[0][1]),
 			       inp_dicts,
