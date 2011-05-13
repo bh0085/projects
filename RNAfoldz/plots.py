@@ -68,7 +68,7 @@ input:
    
     return f   
 
-def show_rna( emb, vertices , ax = None,dims = [20,20], pkw= {}, **kwargs):
+def show_rna( emb, vertices , ax = None,dims = [25,25], pkw= {}, **kwargs):
     if ax == None: ax = plt.gca()
     #v0 = ax.plot(*vertices.T*100, lw = 12, color ='white',
     #              transform = transforms.ScaledTranslation(emb[0],emb[1],ax.transData )
