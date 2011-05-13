@@ -50,7 +50,7 @@ input:
     ydim = ceil(len(polys)/xdim)
 
     #ax = f.add_axes([0,0,1,1], 
-    ax = f.add_subplot([0,0,1,1],
+    ax = f.add_axes([0,0,1,1],
                        xlim = [-1,xdim],
                        ylim = [-1,ydim])
 
