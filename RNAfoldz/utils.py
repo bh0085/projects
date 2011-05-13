@@ -65,7 +65,8 @@ def rna_draw(seq, struct, name, out_type = 'svg'):
     elif out_type== 'svg':
         outfile = cfg.dataPath('rnafold/{0}.svg'.format(name))
         
-        rprc = spc.Popen('RNAplot -o svg; mv rna.svg {0}'.format(outfile), shell = True,
+        tempdir = 'tmp_{0}'.format(name);
+        rprc = spc.Popen('mkdir {1}; cd {1}; RNAplot -o svg; mv rna.svg {0}; cd ..; rm -r {1};'.format(outfile, tempdir), shell = True,
                          stdin = spc.PIPE, stdout = spc.PIPE)
         
         out = rprc.communicate(input = lines)[0].splitlines()
@@ -505,7 +506,7 @@ outputs
     return node, seq
 
 
-def family_clustered_suboptimals(rfid, plots = True, num = 5000, min_count = 2,
+def family_clustered_suboptimals(rfid, plots = True, num = 1000, min_count = 2,
                                  n_countsorted = 10, n_esorted = 10, 
                                  draw = False, cluster_type = 'just_list',
                                  savename = None):
@@ -543,11 +544,15 @@ def family_clustered_suboptimals(rfid, plots = True, num = 5000, min_count = 2,
         final_structs, final_energies = select_exemplars_from_list(structs,struct_counts,seq, draw = draw)
 
     if draw:
-        print 'DRAWING final subopts' 
-        verts = struct_verts(final_structs, seq, rfid )
-        show_subopts(final_structs, verts, final_energies)
-        f = plt.gcf()
-        f.savefig(cfg.dataPath('figs/RNAfoldz/exemplars_{0}.ps'.format(savename)))
+        try:
+            print 'DRAWING final subopts' 
+            verts = struct_verts(final_structs, seq, rfid )
+            show_subopts(final_structs, verts, final_energies)
+            f = plt.gcf()
+            f.savefig(cfg.dataPath('figs/RNAfoldz/exemplars_{0}.ps'.format(savename)))
+        except Exception, e:
+            print "EXCEPTION!"
+            pass
     
     fopen = open(cfg.dataPath('RNAfoldz/subopts_{0}.pickle'.format(savename)),'w')
 
@@ -643,8 +648,8 @@ def select_exemplars_from_list(structs, struct_counts,seq, draw = False):
 
 
 def struct_verts(structs, seq, name):
-    verts = array([rna_draw(seq.seq , pairs_stk(sp,len(seq)), name )
-             for sp in structs])
+    verts = array([rna_draw(seq.seq , pairs_stk(sp,len(seq)), '{0}_{1}'.format(name,i) )
+                   for i,sp in enumerate(structs)])
     return verts
 
 
