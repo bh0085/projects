@@ -56,8 +56,8 @@ input:
 
 
     print 'LIMITS:'
-    print ax.get_ylim
-    print ax.get_xlim
+    print ax.get_ylim()
+    print ax.get_xlim()
     print
     print
     for i, p in enumerate(polys):
