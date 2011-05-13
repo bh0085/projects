@@ -73,7 +73,6 @@ def show_rna( emb, vertices , ax = None,dims = [20,20], pkw= {}, **kwargs):
     #              transform = transforms.ScaledTranslation(emb[0],emb[1],ax.transData )
     #              )[0]
     print emb
-    raise Exception()
 
     v1 = ax.plot(*vertices.T*dims[0],
                   transform = transforms.ScaledTranslation(\
