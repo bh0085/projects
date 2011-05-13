@@ -15,7 +15,6 @@ def bsub_riboswitches():
                                       run_id = 'RS_{0}'.format(rfid),
                                       savename = savename))
 
-        raise Exception()
 	eyeball = bsub.eyeball(run_id, 
 			       os.path.abspath(inspect.stack()[0][1]),
 			       inp_dicts,
