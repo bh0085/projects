@@ -507,7 +507,7 @@ outputs
 
 def family_clustered_suboptimals(rfid, plots = True, num = 1000, min_count = 2,
                                  n_countsorted = 10, n_esorted = 10, 
-                                 draw = False,
+                                 draw = False, cluster_type = 'just_list',
                                  savename = None):
     if savename == None:
         savename = rfid
@@ -537,7 +537,6 @@ def family_clustered_suboptimals(rfid, plots = True, num = 1000, min_count = 2,
     structs  = [structs[elt] for elt in stk_unq ]
  
    
-    cluster_type = 'just_list'
     if cluster_type == 'full_clustering':
         final_structs, final_energies = select_exemplars_from_clustering(structs,struct_counts,seq, draw = draw)
     elif cluster_type == 'just_list':
@@ -551,6 +550,8 @@ def family_clustered_suboptimals(rfid, plots = True, num = 1000, min_count = 2,
         f.savefig(cfg.dataPath('figs/RNAfoldz/exemplars_{0}.ps'.format(savename)))
     
     fopen = open(cfg.dataPath('RNAfoldz/subopts_{0}.pickle'.format(savename)),'w')
+
+    return final_structs,final_energies, seq
     pickle.dump({'structs':final_structs, 'energies':final_energies, 'seq':seq},
                 fopen)
     

@@ -2,16 +2,55 @@
 import utils as rutils
 def make_ribostructs():    
     for k,v in rutils.switch_dicts().iteritems():
-        if v <=     1486:
-            continue
         rfid = 'RF{0:05}'.format(v)
         savename = 'Riboswitch_list_{1}_{0}'.format(rfid,k)
-        rutils.family_clustered_suboptimals(rfid =rfid,savename = savename, draw = True)
+        structs, rutils.family_clustered_suboptimals(rfid =rfid,savename = savename, draw = True)
 
+def bsub_riboswitches():
+        inp_dicts = []
+        for k,v in rutils.switch_dicts().iteritems():
+                rfid = 'RF{0:05}'.format(v)
+                savename = 'Riboswitch_list_{1}_{0}'.format(rfid,k)
+                inp_dicts.append(dict(family = rfid,
+                                      run_id = 'RS_{0}'.format(rfid),
+                                      savename = savename))
+
+        raise Exception()
+	eyeball = bsub.eyeball(run_id, 
+			       os.path.abspath(inspect.stack()[0][1]),
+			       inp_dicts,
+			       func = 'run_structmaker',
+			       mem = 3)
+	eyeball.launch()
+	return dict(cmds=eyeball.cmds)
+
+def run_structmaker(run_id):
+  '''
+So that output files can be located by family, 
+run_ids should have a consistent format: 
+
+RS_{familyname}
+
+In any event, the family name is stored in the
+input dict so there will be no problems running the
+script is the run_id does not conform to this format.
+'''
+  inp_dict = bbsu.load_data(run_id, 'input')
+  fam = inp_dict('family')
+  savename = inp_dict('savename')
+
+  structs, energies, seq = rutils.family_clustered_suboptimals(\
+          rfid,
+          savename = savename)
+
+  output = {'family':fam,
+            'structs':structs,
+            'energies':energies,
+            'seq':seq}
+
+  return output
 
 def runswitches():
-
-
 	all_outs = []
 	for k,ofs in switch_dicts().iteritems():
 		print k
