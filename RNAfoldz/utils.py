@@ -544,7 +544,7 @@ def family_clustered_suboptimals(rfid, plots = True, num = 5000, min_count = 2,
 
     if draw:
         print 'DRAWING final subopts' 
-        verts = struct_verts(final_structs, seq)
+        verts = struct_verts(final_structs, seq, rfid )
         show_subopts(final_structs, verts, final_energies)
         f = plt.gcf()
         f.savefig(cfg.dataPath('figs/RNAfoldz/exemplars_{0}.ps'.format(savename)))
@@ -642,8 +642,8 @@ def select_exemplars_from_list(structs, struct_counts,seq, draw = False):
       return final_structs, final_energies
 
 
-def struct_verts(structs, seq):
-    verts = array([rna_draw(seq.seq , pairs_stk(sp,len(seq)), 'name' )
+def struct_verts(structs, seq, name):
+    verts = array([rna_draw(seq.seq , pairs_stk(sp,len(seq)), name )
              for sp in structs])
     return verts
 

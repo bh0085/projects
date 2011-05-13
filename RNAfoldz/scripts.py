@@ -2,8 +2,8 @@
 '''
 Remote usage examples:
 
-bsub -q compbio-week -o ${HOME}/bsub_rfam.log ${PROGRAMMING_PATH}/RNAfoldz/scripts.py 'bsub_all' 'bsub_all'
-bsub -q compbio-week -o ${HOME}/bsub_rfam.log ${PROGRAMMING_PATH}/RNAfoldz/scripts.py 'bsub_riboswitches' 'bsub_riboswitches'
+bsub -q compbio-week -o ${HOME}/bsub_rfam.log ${PROGRAMMING_PATH}/projects/RNAfoldz/scripts.py 'bsub_all' 'bsub_all'
+bsub -q compbio-week -o ${HOME}/bsub_ribos.log ${PROGRAMMING_PATH}/projects/RNAfoldz/scripts.py 'bsub_riboswitches' 'bsub_riboswitches'
 
 '''
 
