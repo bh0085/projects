@@ -14,10 +14,10 @@ from matplotlib.patches import Ellipse
 #import mpl_toolkits.axisartist.floating_axes as floating_axes
 
 import numpy as np
-import  mpl_toolkits.axisartist.angle_helper as angle_helper
-from matplotlib.projections import PolarAxes
-from mpl_toolkits.axisartist.grid_finder import FixedLocator, MaxNLocator, \
-     DictFormatter
+#import  mpl_toolkits.axisartist.angle_helper as angle_helper
+#from matplotlib.projections import PolarAxes
+#from mpl_toolkits.axisartist.grid_finder import FixedLocator, MaxNLocator, \
+#     DictFormatter
 
 
 #from mpl_toolkits.axes_grid.anchored_artists import AnchoredAuxTransformBox
