@@ -5,7 +5,7 @@ import Bio
 import utils as rutils
 
 
-def alignment(seqs, profile,run_id):
+def alignment(seqs_in, profile,run_id):
     '''Compute an alignment of multiple sequences to a given 
 covariance model profile such as constructed by cmbuild
 via infernal.profiles.
@@ -21,10 +21,23 @@ output:
   struct:  the profile reference structure aligned to ali
 
 '''
-    seqs = [Bio.SeqRecord.SeqRecord(Bio.Seq.Seq(''.join([let for let in str(ali.seq)  if let in 'AUTGC' ]),
-                                                Bio.Seq.Alphabet.RNAAlphabet),
-                                    'S{0:03}'.format(idx))
-            for idx, ali in enumerate(seqs)]
+    if type(seqs_in[0]) == str:
+        raise Exception('Sorry but string lists are not supported. We need ids!')
+        #seqs = [Bio.SeqRecord.SeqRecord(Bio.Seq.Seq(s,
+        #                                            Bio.Seq.Alphabet.RNAAlphabet),
+        #                                'S{0:03}'.format(idx))
+        #        for idx, s in enumerate(seqs)]
+    else:
+        seqs = [Bio.SeqRecord.SeqRecord(Bio.Seq.Seq(''.join([let 
+                                                             for let in str(ali.seq)  
+                                                             if let in 'AUTGC' ]),
+                                                    Bio.Seq.Alphabet.RNAAlphabet),
+                                        'S{0:03}'.format(idx))
+                for idx, ali in enumerate(seqs_in)]
+
+    name_maps = dict( [('S{0:03}'.format(idx), s.id) for idx, s in enumerate(seqs_in)])
+    
+
     infile = cfg.dataPath('infernal/temp/{0}_{1:03}_unaligned.fa'.format(run_id,idx))
     outfile= cfg.dataPath('infernal/temp/{0}_{1:03}_aligned.stk'.format(run_id,idx))
     Bio.SeqIO.write(seqs, infile, 'fasta')
@@ -37,9 +50,12 @@ output:
     seqs, ref, struct = rutils.stk_parse(fopen)
     fopen.close()
     ali = ba.MultipleSeqAlignment(seqs)
+    
 
     for a in ali:
 	    a.seq = a.seq.upper()
+            a.id = name_maps[a.id]
+
     return ali, ref, struct
     
 

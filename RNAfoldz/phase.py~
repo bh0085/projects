@@ -1,0 +1,5 @@
+def write_mcmc_ctl():
+    return
+
+def write_mcmc_rna():
+    return
