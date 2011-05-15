@@ -6,7 +6,10 @@ bsub -q compbio-week -o ${HOME}/bsub_tree_rfam.log ${PROGRAMMING_PATH}/projects/
 bsub -q compbio-week -o ${HOME}/bsub_tree_ribos.log ${PROGRAMMING_PATH}/projects/RNAfoldz/tree_scripts.py 'bsub_riboswitches' 'bsub_tree_riboswitches'
 
 '''
-
+import sys, os, inspect
+import compbio.utils.bsub as bsub
+import compbio.utils.bsub_utils as bsu
+import tree_utils as tutils
 
 def bsub_all(run_id):
         inp_dicts = []
