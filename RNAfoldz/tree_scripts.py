@@ -10,6 +10,7 @@ import sys, os, inspect
 import compbio.utils.bsub as bsub
 import compbio.utils.bsub_utils as bsu
 import tree_utils as tutils
+import utils as rutils
 
 def bsub_all(run_id):
         inp_dicts = []
