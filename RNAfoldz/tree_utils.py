@@ -327,6 +327,7 @@ def run(rfid,run_id, inp_run_id, reset = True,
     for s in sgs:
         if len(s) < 4:
             all_seq_group_datas.append(None)
+            continue
         all_seq_group_datas.append(eval_seq_group(s,rfid, run_id, inp_run_id, reset = reset,
                                                   draw_alis = draw_all_hard))
     return all_seq_group_datas
@@ -334,7 +335,7 @@ def run(rfid,run_id, inp_run_id, reset = True,
 def eval_seq_group(gap_seqs, rfid, run_id, inp_run_id, reset = True,
                    draw_alis = draw_all_hard,
                    clade_alignment_method = clade_alignment_method,
-                   max_structs = 1):
+                   max_structs = 100):
 
     rutils = utils
     data = butils.load_data(inp_run_id, 'output')
