@@ -59,7 +59,6 @@ output:
     return ali, ref, struct
     
 
-
 def profiles(seq, structs, run_id):
     '''Compute a sequence profile using cmbuild with --rsearch
 from a single sequence and fixed secondary structure. 

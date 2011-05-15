@@ -3,7 +3,7 @@ import compbio.utils.colors as mycolors
 import matplotlib.pyplot as plt
 import compbio.utils.plots as myplots
 
-import utils
+import utils, tree_conservation
 import compbio.utils.memo as mem
 import rfam, infernal, phase
 from numpy import *
@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.mlab as mlab
 
 import compbio.projects.seqtree.phyml as phyml
+import compbio.projects.seqtree.paml as paml
 import compbio.projects.seqtree.muscle as muscle
 import compbio.utils.seismic as seismic
 
@@ -21,8 +22,15 @@ import compbio.config as cfg
 import hcluster 
 import itertools as it
 
-draw_all= False
-
+draw_all_easy= False
+draw_all_hard =False
+easy_way = True
+if easy_way:
+    clade_tree_method = 'bionj'
+    clade_alignment_method = 'cm'
+    clade_ancestor_method = 'independent'
+else:
+    raise Exception('Sorry but the hard way is not done yet')
 def seq_dists(ali,run_id, tree = True):
     import Levenshtein
     n = len(ali)
@@ -60,9 +68,9 @@ def maxclust_dists(dists, k, method = 'complete'):
                    
 
 def get_seq_groups(rfid = 'RF00167', reset = True, tree = True,
-        draw_distances = draw_all,
-        draw_clusters = draw_all,
-        draw_single_cluster = draw_all):
+        draw_distances = draw_all_easy,
+        draw_clusters = draw_all_easy,
+        draw_single_cluster = draw_all_hard):
     '''
 Run the tree computation for each clsuter in the rfam family.
 (Or just one)
@@ -311,18 +319,24 @@ def draw_cm_muscle_congruencies(seqs, profiles, run_id, reset = True):
                 
 
 
-def run(rfid = 'RF00167', reset = True,
-        clade_alignment_type = 'profile',
-        draw_alis = draw_all,
-        max_structs = 10):
-    rutils = utils
+def run(rfid,run_id, reset = True,
+        draw_alis = draw_all_hard):
 
     sgs = get_seq_groups(rfid = rfid, **mem.sr({},reset = reset))
-    gap_seqs = sgs[argsort([len(g) for g in sgs])[-2]]
+    all_seq_group_datas = []
+    for s in sgs:
+        all_seq_group_datas.append(eval_seq_group(s,rfid, run_id, reset = reset,
+                                                  draw_alis = draw_all_hard))
+    return all_seq_group_datas()
     
+def eval_seq_group(gap_seqs, rfid, run_id, reset = True,
+                   draw_alis = draw_all_hard,
+                   clade_alignment_method = clade_alignment_method,
+                   max_structs = 10):
 
-    run_id = 'RS_'+ rfid
-    data = butils.load_data(run_id, 'output')
+    rutils = utils
+    inp_run_id = 'RS_'+rfid
+    data = butils.load_data(inp_run_id, 'output')
     structs = data['structs']
     energies = data['energies']
     esrt = argsort(energies)[::-1]
@@ -334,7 +348,7 @@ def run(rfid = 'RF00167', reset = True,
     nq = len(gap_seqs)
     ns = len(structs)
 
-    names = ['{0}_{1}'.format(rfid, idx) for idx in range(nq)]
+    names = ['N{1:04}'.format(rfid, idx) for idx in range(nq)]
     seqs = [rutils.ungapped_seq(gap_seqs[i], names[i]) for i in range(nq)]
     
 
@@ -349,45 +363,117 @@ def run(rfid = 'RF00167', reset = True,
     if draw_alis: 
         draw_cm_muscle_congruencies(seqs, profiles, 
                                     run_id, reset = reset)
-    alis, refs, pairs  =\
-        mem.getOrSet(setAlignments, 
-                     **mem.rc({},
-                              seqs = seqs, profiles = profiles, 
-                              run_id = rfid, ali_type = 'struct',
-                              reset = reset,
-                              on_fail = 'compute', 
-                              register = 'tuali_struct_{0}'.format(rfid)))
     
 
-
+    if clade_alignment_method == 'cm':
+        alis, refs, pairs  =\
+            mem.getOrSet(setAlignments, 
+                         **mem.rc({},
+                                  seqs = seqs, profiles = profiles, 
+                                  run_id = rfid, ali_type = 'struct',
+                                  reset = reset,
+                                  on_fail = 'compute', 
+                                  register = 'tuali_struct_{0}'.format(rfid)))
+    else:
+        raise Exception('No methods besides cm are yet implemented')
     
+
+    seq_group_data = []
+    seq_group_data['seqs'] = gap_seqs
     for i, struct in enumerate(structs):
+        struct_data = {}
         ali = alis[i]
         ref = refs[i]
         pairs = pairs[i]
         
+        struct_data.update(ref = ref[0], 
+                        pairs = pairs[0],
+                        ali = ali)
+                        
         rid = '{0}_{1}'.format(run_id, i)
-        phase.write_mcmc_rna(rid,
-                             structs[0], 
-                             [str(a.seq)  for a in ali], 
-                             [a.name for a in ali])
 
-        phase.write_mcmc_ctl(rid, ali[0].name)
+        if clade_tree_method ==  'bionj': 
+            tree = phyml.tree(ali, run_id = rid, bionj = True)
+        else: tree = get_phase_tree(ali, pairs, run_id)
+
+        for i, ct in enumerate(tree.get_terminals()):
+            seq = filter(lambda x: x.id == ct.name, ali)[0]
+            ct.m = {'seq':seq,
+                    'probs':array([1 for j in range(len(seq))])}
+
+        if clade_ancestor_method == 'independent':
+            ml_tree = get_ml_ancestor_tree(tree, ali, 
+                                           '{0}_paml{1}'.format(run_id, i))
+        else:
+            ml_tree = get_structure_ancestor_tree(\
+                tree, ali,'{0}_stree{1}'.format(run_id, i))
+        
+        temp_pairs = pairs[0]
+        muts, times, gaps, irresolvables = tree_conservation.count_struct(ml_tree, temp_pairs)
+
+        struct_data.update(muts = muts, times = times, 
+                        gaps = gaps, irresolvables = irresolvables)
+        seq_group_data.append(struct_data)
+        break
+    return seq_group_data
+
+def get_structure_ancestor_tree(tree, ali, run_id):
+    raise Exception('Get phase working!!! This does not do anything')
+
+def get_ml_ancestor_tree(tree, ali, run_id):
+    
+    print 'Running ancestor inference in PAML'
+    #RUN PAML
+    rstfile= paml.run_paml(tree, ali, run_id = run_id)
+    anc_tree = paml.rst_parser(rstfile) 
+          
+    #Label extent and internal nodes with sequences.
+    for term in anc_tree.get_terminals():
+        #COPY OLD TERMINAL NODES TO THE NEW TREE
+        term.m = filter( lambda x: x.name == term.name, 
+                         tree.get_terminals())[0].m
+
+    for node in anc_tree.get_nonterminals():
+        #REPLACE Ts WITH US IN THE TERMINALS OF THE NEW TREE
+        node.m['seq'].seq = node.m['seq'].seq.replace('T', 'U')
+
+    return anc_tree
+              
+
+def get_phase_tree(ali, struct, rid):
+    '''Once completed, this routine will
+return trees computed using a dependent
+mutation model from phase. 
+'''
+    phase.make_mcmc(rid,
+                    struct, 
+                    [str(a.seq)  for a in ali], 
+                    [a.name for a in ali])
 
         
-        raise Exception()
-    
-    
-    raise Exception()
+    phase.make_ml(rid,
+                  struct, 
+                  [str(a.seq)  for a in ali], 
+                  [a.name for a in ali])
+    raise Exception('No methods besides bionj are yet implemented')
+
 
 def setProfiles( seq = None, structs = None, run_id = None,
                  **kwargs ):
+    '''
+Make profiles for structs in a single sequence using 
+infernal.
+'''
     assert seq; assert structs; assert run_id
     profiles = infernal.profiles(seq, structs, run_id)
     return profiles
 
 def setAlignments( seqs = None, profiles = None, run_id = None, ali_type = 'struct',
                    **kwargs ):
+    '''
+Make N structural alignemnts for each of N profiles
+having the same M sequences apiece. 
+'''
     assert seqs; assert run_id; assert profiles
     
     ns = len(profiles)
@@ -404,6 +490,13 @@ def setAlignments( seqs = None, profiles = None, run_id = None, ali_type = 'stru
         alignment = muscle.align(seqs)
         alignments = [alignment] * ns     
         
+        raise Exception('MUSCLE ALIGNMENT NOT YET IMPLEMENTED... SORRY :(')
+        #ONCE IMPLEMENTED, WILL FIND HOMOLOGOUS STRUCTURES FOR EACH
+        #PROFILE IN THE GIVEN MULTIPLE SEQUENCE ALIGNMENT.
+
+        #IT REMAINS UNCLEAR HOW I WILL PUT THESE INTO A TREE AND TRACK THE
+        #STRUCTURAL ELEMENTS THROUGH IT!
+
         #all_refs = []
         #all_pairs = []
         #for i, profile  in enumerate(profiles):

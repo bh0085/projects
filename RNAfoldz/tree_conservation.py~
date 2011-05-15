@@ -1,0 +1,221 @@
+def count_struct(tree, pairs):
+   '''
+Given a tree of sequences and a fixed RNA structure specified
+as a list of paired bases, compute:
+  
+  1) muts:  the frequencies of various mutation types at
+            for each pair at each tree edge.
+  2) times: the total amount of time spent paired/unpaired
+            for each pair over all tree edges.
+
+
+inputs:
+  subtree: (object) biopython tree with nodes having attribute 'm',
+                    a dictionary with key 'seq'.
+  pairs:   []       pairs specified by struct in seq
+
+keywords:
+  [NONE]
+
+outputs:
+  muts:    Mutation counts for each pair.  
+  times:   Times paired/unpaired for each pair.
+
+'''
+    
+   #CREATE A PARENTS ATTRIBUTE TO USE FOR 
+   #SCANNING PAIRS.
+   for n in subtree.get_nonterminals():
+       if n == subtree.root: n.parent = None
+       else: n.parent = ([subtree.root] + subtree.root.get_path(n))[-2] 
+   for n in subtree.get_terminals():
+       pass
+       n.parent =([subtree.root] +  subtree.root.get_path(n))[-2]      
+   
+   #DATA MATRICES COUNTING SUB TYPES
+   m_wob, m_ucom, m_comp, m_reco, m_bbad = \
+       [zeros(len(pairs)) for i in range(5)] 
+   #DATA MATRICES COMPUTING PAIRING OVER TIME
+   t_up, t_p, t_tots = \
+       [zeros(len(pairs)) for  i in range(3)]
+   
+   gaps = zeros(len(pairs))
+   irresolvables = [[] for i in range(len(pairs))]
+   muts = dict(wob = m_wob, ucom = m_ucom, comp = m_comp, 
+               reco = m_reco, bbad = m_bbad)
+   times= dict(unpaired = t_up, paired = t_p,
+               total = t_tots, total_incl_unresolved = subtree.total_branch_length() -\
+		       subtree.root.branch_length)
+
+   gap_count = 0
+   for idx,p in enumerate(pairs):
+       #DEAL WITH GAPS (SKIP)
+       if '-' in list(it.chain(*[(t.m['str_seq'].seq[p[0]], \
+                                      t.m['str_seq'].seq[p[1]])
+                                 for t in subtree.get_terminals()])):
+	   gap_count += 1
+	   gaps[idx] = 1
+           continue
+       
+       curterms= set(subtree.get_terminals())
+       curints = set(subtree.get_nonterminals())
+       loops = 0
+       while 1:
+           loops += 1
+           ct_list = sorted(list(curterms), 
+                            key = lambda x: x.parent)
+           preterms =[(k,list(g))
+                      for k,g in it.groupby(ct_list,lambda x: x.parent)]
+           preterms =filter(lambda x: len(x[1]) == 2,preterms)
+           if not preterms:
+               break
+
+                     
+           for pp, terms in preterms:
+               tprobs = [(t.m['probs'][p[0]], t.m['probs'][p[1]]) 
+                          for t in terms]
+               tbases = [(t.m['str_seq'][p[0]], t.m['str_seq'][p[1]])
+                          for t in terms]
+
+               pprobs = pp.m['probs'][p[0]],pp.m['probs'][p[1]]
+               pbases= pp.m['str_seq'][p[0]],pp.m['str_seq'][p[1]]
+               
+               def do_contract(curterms, curints,terms,pp):
+                   curterms.difference_update(terms)
+                   curints.difference_update([pp])
+                   curterms.update([pp])
+                   return array([t.branch_length for t in terms])
+               def do_giveup(curterms,curints, termps, pp):
+                   curterms.difference_update(terms)
+                   curints.difference_update([pp])
+                   
+               #ALL ELTS PRESERVED
+               if tbases[0] == tbases[1] == pbases:
+                   lc = sum(do_contract(curterms,curints,terms,pp))
+                   t_tots[idx] += lc
+                   if ''.join(tbases[0]) in globals()['bps']:
+                       t_p[idx] += lc
+                   else:
+                       t_up[idx] += lc
+                       
+               #ELEMENTS CHANGED, GOOD MARGINAL RECO
+               elif sum([1.-prob for prob in pprobs]) < .30:
+                   
+                   #NEITHER CHILD MATCHES THE PARENT
+                   if not sum([tb == pbases for tb in tbases]):
+                       #PARENT HAS ONE BASE FROM EACH CHILD
+                       if pbases in [ (tbases[0][0],tbases[1][1]),
+                                      (tbases[1][0],tbases[0][1])]:
+                           m_wob[idx] += 2
+                           s=do_contract(curterms,curints,terms,pp)
+                           for i, tb in enumerate( tbases ):
+                              if tb in globals()['bps']:
+                                  t_p[idx] += s[i]
+                              else:
+                                  t_up[idx]+= s[i]
+                           t_tots[idx] += sum(s)
+
+                       #PARENT HAS <1 BASE PER CHILD
+                       else:
+                           #THIS SHOULD ACTUALLY TAKE OVER....
+                           #WHEN I HAVE THE TIME, ELIMINATE THE 
+                           #REST OF THIS COMPUTATION AND USE THIS
+                           pseq = ''.join(pbases)
+                           cseqs = [''.join(tb) for tb in tbases]
+                           s = do_contract(curterms, curints,terms, pp)
+                           for j, cseq in enumerate(cseqs):
+                               ppar = pseq in globals()['bps']
+                               cpar = cseq in globals()['bps']
+                               diffs= [2-len(set(z)) for z in zip(pseq,cseq)]
+                               if ppar:
+                                   if cpar:
+                                       if sum(diffs)==0:
+                                           pass #no mutation
+                                       elif sum(diffs)==1:
+                                           m_wob[idx] += 1
+                                       else:
+                                           m_comp[idx] +=1
+                                       t_p[idx] += s[j];
+                                   else:
+                                       if sum(diffs)==0:
+                                           pass #never reached
+                                       elif sum(diffs)==1:
+                                           m_ucom[idx] +=1
+                                       else:
+                                           m_ucom[idx] +=1 #SHOULD BE 2?
+                                       t_up[idx] += s[j]
+                               else:
+                                   if cpar:
+                                       if sum(diff)==0:
+                                           pass #never reached.
+                                       elif sum(diffs) ==1:
+                                           m_reco[idx] +=1
+                                       else:
+                                           m_reco[idx] +=1 #SHOULD BE 2?
+                                       t_p[idx] += s[j]
+                                   else:
+                                       if sum(diffs) == 0:
+                                           pass
+                                       elif sum(diffs) == 1:
+                                           m_bbad[idx] += 1
+                                       else:
+                                           m_bbad[idx] += 1 #SHOULD BE 2?
+
+                   
+                   #PARENT MATCHES ONE CHILD EXACTLY
+                   else:
+                     matched = tbases.index(pbases)
+                     um =[''.join(x) for x in [pbases, tbases[1-matched]]]
+                     
+                     #COMPENSATED MUTATION TRANSPOSING THE PARENTAL PAIR 
+                     if \
+                             'GC' in um and 'CG' in um \
+                             or 'UA' in um and 'AU' in um \
+                             or 'UG' in um and 'GU' in um:
+                         lc = sum(do_contract(curterms,curints,terms,pp))
+                         t_p += lc
+                         t_tots[idx] += lc
+                         m_comp[idx] += 1
+                         
+                     #MUTATION CHANGING AA IDENTITY OF PAIRED PARENT
+                     elif um[0] in globals()['bps']:
+                         
+                         #PAIRING RETAINED
+                         if um[1] in globals()['bps']:
+                             #WOBBLE SILENCED (1 CHANGE)
+                             if um[0][0]==um[1][0] or um[0][1] == um[1][1]:
+                                 m_wob[idx] += 1
+                             #COMP SILENCED   (2 CHANGES)
+                             else:
+                                 m_comp[idx] += 1
+                             lc = sum(do_contract(curterms,curints,terms,pp))
+                             t_tots[idx] += lc
+                             t_p[idx] += lc
+
+                         #PAIRING DESTROYED
+                         else:
+                             lens =do_contract(curterms,curints,terms,pp)
+                             t_up[idx] += lens[1-matched]
+                             t_p[idx] += lens[matched]
+                             t_tots[idx] += sum(lens)
+                             m_ucom[idx] += 1
+
+                     #PARENT DOES NOT PAIR
+                     else:
+                         if um[1] in globals()['bps']:
+                             #A RECOMPENSATING MUTANT
+                             lens = do_contract(curterms,curints,terms,pp)
+                             t_up[idx] += lens[matched]
+                             t_p[idx] += lens[1-matched]
+                             t_tots[idx] += sum(lens)
+                             m_reco[idx] +=1
+                         else:
+                             #NO PAIRING ANYWHERE
+                             lens = do_contract(curterms,curints,terms,pp)
+                             t_up[idx] += sum(lens)
+                             t_tots[idx] += sum(lens)
+                             m_bbad[idx] +=1
+               else:   
+                   irresolvables[i].append(terms)
+                   do_giveup(curterms,curints,terms,pp)   
+   return muts, times, gaps, irresolvables
