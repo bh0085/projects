@@ -319,23 +319,22 @@ def draw_cm_muscle_congruencies(seqs, profiles, run_id, reset = True):
                 
 
 
-def run(rfid,run_id, reset = True,
+def run(rfid,run_id, inp_run_id, reset = True,
         draw_alis = draw_all_hard):
 
     sgs = get_seq_groups(rfid = rfid, **mem.sr({},reset = reset))
     all_seq_group_datas = []
     for s in sgs:
-        all_seq_group_datas.append(eval_seq_group(s,rfid, run_id, reset = reset,
+        all_seq_group_datas.append(eval_seq_group(s,rfid, run_id, inp_run_id, reset = reset,
                                                   draw_alis = draw_all_hard))
-    return all_seq_group_datas()
+    return all_seq_group_datas
     
-def eval_seq_group(gap_seqs, rfid, run_id, reset = True,
+def eval_seq_group(gap_seqs, rfid, run_id, inp_run_id, reset = True,
                    draw_alis = draw_all_hard,
                    clade_alignment_method = clade_alignment_method,
                    max_structs = 10):
 
     rutils = utils
-    inp_run_id = 'RS_'+rfid
     data = butils.load_data(inp_run_id, 'output')
     structs = data['structs']
     energies = data['energies']
@@ -378,8 +377,9 @@ def eval_seq_group(gap_seqs, rfid, run_id, reset = True,
         raise Exception('No methods besides cm are yet implemented')
     
 
-    seq_group_data = []
+    seq_group_data = {}
     seq_group_data['seqs'] = gap_seqs
+    seq_group_data['structs'] = []
     for i, struct in enumerate(structs):
         struct_data = {}
         ali = alis[i]
@@ -413,8 +413,8 @@ def eval_seq_group(gap_seqs, rfid, run_id, reset = True,
 
         struct_data.update(muts = muts, times = times, 
                         gaps = gaps, irresolvables = irresolvables)
-        seq_group_data.append(struct_data)
-        break
+        seq_group_data['structs'].append(struct_data)
+
     return seq_group_data
 
 def get_structure_ancestor_tree(tree, ali, run_id):
