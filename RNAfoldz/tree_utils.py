@@ -365,7 +365,7 @@ def eval_seq_group(gap_seqs, rfid, run_id, inp_run_id, reset = True,
     
 
     if clade_alignment_method == 'cm':
-        alis, refs, pairs  =\
+        alis, refs, all_pairs  =\
             mem.getOrSet(setAlignments, 
                          **mem.rc({},
                                   seqs = seqs, profiles = profiles, 
@@ -384,17 +384,23 @@ def eval_seq_group(gap_seqs, rfid, run_id, inp_run_id, reset = True,
         struct_data = {}
         ali = alis[i]
         ref = refs[i]
-        pairs = pairs[i]
+        pairs = all_pairs[i]
         
+        #NOTE THAT DUE TO AN AWKWARD SYNTAX DECISION,
+        #I AM ALLOWING FOR THE POSSIBILITY THAT EACH
+        #ALI ELT HAS DIFFERENT PAIRS.
+        #
+        #ALL OF MY ROUTINES SO FAR ONLY USE A SINGLE 
+        #PAIR SET AND SO I USE PAIRS[0] EXCLUSIVELY
         struct_data.update(ref = ref[0], 
-                        pairs = pairs[0],
-                        ali = ali)
+                           pairs = pairs[0],
+                           ali = ali)
                         
         rid = '{0}_{1}'.format(run_id, i)
 
         if clade_tree_method ==  'bionj': 
             tree = phyml.tree(ali, run_id = rid, bionj = True)
-        else: tree = get_phase_tree(ali, pairs, run_id)
+        else: tree = get_phase_tree(ali, pairs[0], run_id)
 
         for i, ct in enumerate(tree.get_terminals()):
             seq = filter(lambda x: x.id == ct.name, ali)[0]
@@ -408,8 +414,7 @@ def eval_seq_group(gap_seqs, rfid, run_id, inp_run_id, reset = True,
             ml_tree = get_structure_ancestor_tree(\
                 tree, ali,'{0}_stree{1}'.format(run_id, i))
         
-        temp_pairs = pairs[0]
-        muts, times, gaps, irresolvables = tree_conservation.count_struct(ml_tree, temp_pairs)
+        muts, times, gaps, irresolvables = tree_conservation.count_struct(ml_tree, pairs[0])
 
         struct_data.update(muts = muts, times = times, 
                         gaps = gaps, irresolvables = irresolvables)
