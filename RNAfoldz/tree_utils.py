@@ -22,7 +22,7 @@ import compbio.config as cfg
 import hcluster 
 import itertools as it
 
-draw_all_easy= False
+draw_all_easy= True
 draw_all_hard =False
 easy_way = True
 if easy_way:
@@ -105,7 +105,7 @@ Run the tree computation for each clsuter in the rfam family.
         lin = linregress(dtf, dlf)
         rsquared = lin[2]**2
 
-        f = myplots.fignum(5, (8,8))
+        f = myplots.fignum(5, (7,7))
         ax = f.add_subplot(111)
         ax.annotate('Levenshtein distance vs. BioNJ branch lengths',
                     [0,1], xycoords = 'axes fraction', va = 'top',
@@ -118,7 +118,7 @@ Run the tree computation for each clsuter in the rfam family.
 
         ax.scatter(dtf, dlf, 100)
         
-        datafile = cfg.dataPath('figs/gpm2/pt2_lev_tree_dists.svg')
+        datafile = cfg.dataPath('figs/gpm2/pt2_lev_tree_dists.tiff')
         f.savefig(datafile)
         
     dists = mem.getOrSet(setDistances, ali = ali, tree = tree, run_id = rfid,
@@ -148,7 +148,7 @@ Run the tree computation for each clsuter in the rfam family.
 
         ax.scatter(pca_vecs[:,0],pca_vecs[:,1], 20, color = colors)
         
-        datafile = cfg.dataPath('figs/gpm2/pt2_all_seqs_clustered.svg')
+        datafile = cfg.dataPath('figs/gpm2/pt2_all_seqs_clustered.ps')
         f.savefig(datafile)        
 
     #now take the largest cluster and do the analysis.
@@ -164,7 +164,7 @@ Run the tree computation for each clsuter in the rfam family.
 
     
     
-    if draw_single_cluster:
+    if 0:
 
         ct = mycolors.getct(2)
         pca_vecs = mlab.PCA(dists).project(dists) 
@@ -185,7 +185,7 @@ Run the tree computation for each clsuter in the rfam family.
         for s in cluster_seqs:
             ax.scatter(pca_vecs[:,0],dists[s,:] ,200 *exp(-(dists[s,:] / .5) **2),  color = colors, alpha = .2)
         
-        datafile = cfg.dataPath('figs/gpm2/pt2_focused_cluster_dists.svg')
+        datafile = cfg.dataPath('figs/gpm2/pt2_focused_cluster_dists.ps')
         f.savefig(datafile)        
         
     clusters_final  = [ [ elt[0] for elt in cgrps.values()[i] ] for i in range(len(cgrps.values()))]
@@ -235,8 +235,8 @@ def tree_similarity(dist1, dist2, run_id,criterion = 'knn', k = 6):
         ax2.set_xlabel('Muscle aligned tree distances')
         ax2.set_ylabel('Struct algined tree distances')
         
-        datafile = cfg.dataPath('figs/gpm2/pt2_mus_cm_tree_dists_{0}_k={1}.svg'.format(run_id, k))
-        f.savefig(datafile, dpi = 200, format = 'svg', bbox_inches = 'tight')
+        datafile = cfg.dataPath('figs/gpm2/pt2_mus_cm_tree_dists_{0}_k{1}.tiff'.format(run_id, k))
+        f.savefig(datafile)
             
   
 def draw_cm_muscle_congruencies(seqs, profiles, run_id, reset = True):
@@ -314,28 +314,32 @@ def draw_cm_muscle_congruencies(seqs, profiles, run_id, reset = True):
         #                      node_color = [ct[maps.get(n.name, -1)] for n in G.nodes()] +\
         #                          [ct[0] for n in mtree.get_nonterminals()], axes = ax)
 
-        datafile = cfg.dataPath('figs/gpm2/pt2_mus_cm_tree_embeddings_{0}_struct_{1}.svg'.format(run_id, idx))
+        datafile = cfg.dataPath('figs/gpm2/pt2_mus_cm_tree_embeddings_{0}_struct_{1}.ps'.format(run_id, idx))
         f.savefig(datafile, dpi = 200, format = 'ps')
                 
 
 
 def run(rfid,run_id, inp_run_id, reset = True,
-        draw_alis = draw_all_hard):
+        draw_alis = draw_all_easy):
 
-    sgs = get_seq_groups(rfid = rfid, **mem.sr({},reset = reset))
+    sgs = get_seq_groups(rfid = rfid, **mem.sr({},reset = False))
     all_seq_group_datas = []
     for s in sgs:
         if len(s) < 4:
             all_seq_group_datas.append(None)
             continue
-        all_seq_group_datas.append(eval_seq_group(s,rfid, run_id, inp_run_id, reset = reset,
-                                                  draw_alis = draw_all_hard))
+        if len(s) > 40:
+            print 'skipping cuz it takes too long!'
+            continue
+        print 'Not Skipping'
+        all_seq_group_datas.append(eval_seq_group(s,rfid, '{0}_{1}'.format(run_id,len(s)), inp_run_id, reset = reset,
+                                                  draw_alis = draw_alis))
     return all_seq_group_datas
     
 def eval_seq_group(gap_seqs, rfid, run_id, inp_run_id, reset = True,
-                   draw_alis = draw_all_hard,
+                   draw_alis = draw_all_easy,
                    clade_alignment_method = clade_alignment_method,
-                   max_structs = 100):
+                   max_structs = 5):
 
     rutils = utils
     data = butils.load_data(inp_run_id, 'output')
@@ -498,7 +502,10 @@ having the same M sequences apiece.
         alignment = muscle.align(seqs)
         alignments = [alignment] * ns     
         
-        raise Exception('MUSCLE ALIGNMENT NOT YET IMPLEMENTED... SORRY :(')
+        refs = None
+        pairs = None
+        stks = None
+        #raise Exception('MUSCLE ALIGNMENT NOT YET IMPLEMENTED... SORRY :(')
         #ONCE IMPLEMENTED, WILL FIND HOMOLOGOUS STRUCTURES FOR EACH
         #PROFILE IN THE GIVEN MULTIPLE SEQUENCE ALIGNMENT.
 

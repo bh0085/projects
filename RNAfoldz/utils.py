@@ -19,6 +19,9 @@ import myxml.svg as svg
 import plots as rplots
 
 
+def ms2():
+    return 'CAAACUCCGGCAUCUACUAAUAGAUGCCGGCCAUUCAAACAUGAGGAUUACCCAUGUCG'
+
 def switch_dicts():
     switch_families = '''RF00050	FMN	Cis-reg; riboswitch
 RF00059	TPP	Cis-reg; riboswitch
@@ -182,18 +185,21 @@ def cluster_2(structs,counts, seq,
 
     
 
-    if len(seq) < 300:
-        vecs = project_structs(structs, l = len(seq) ,ptype = 'pairs_full')
-    else:
+    #if len(seq) < 200:
+        #vecs = project_structs(structs, l = len(seq) ,ptype = 'full_pairs')
+    #else:
        #COMPUTE PROJECTIONS NECESSARY FOR THE CLUSTERING.
-        affinities = struct_affinity_matrix(structs,len(seq), aff_type = 'pairs', ss_multiplier = None)
-        vecs = project_structs(structs, ptype = 'pca',
-                               affinities = affinities,
-                               n_comp = min([len(affinities),50]))
+    affinities = struct_affinity_matrix(structs,len(seq), aff_type = 'pairs', ss_multiplier = None)
+    vecs = project_structs(structs, ptype = 'pca',
+                           affinities = affinities,
+                           n_comp = min([len(affinities),50]))
     
 
+    xs = vecs[:,0]
+    ys = vecs
+    
     #CLUSTER STRUCT PROJECTIONS
-    clusters = cluster_structs(vecs, k =30)
+    clusters = cluster_structs(array(vecs), k =30)
     
     return clusters
 
@@ -456,7 +462,7 @@ def old_clusters():
         ax2.scatter([ks[mpt]]*2, [all_Bvars[mpt],all_Wvars[mpt]], 200, color = 'orange')
         
  
-def suboptimals(sequence, sp_method = 'enumerate', n = 10000, name = 'NONAME'):
+def suboptimals(sequence, sp_method = 'sample', n = 10000, name = 'NONAME'):
         fa_str = sequence.format('fasta')
         if sp_method == 'enumerate':            
             rprc = spc.Popen('RNAsubopt --deltaEnergy=2.5 ', shell = True,
@@ -540,6 +546,7 @@ def family_clustered_suboptimals(rfid, plots = True, num = 5000, min_count = 2,
    
     if cluster_type == 'full_clustering':
         final_structs, final_energies = select_exemplars_from_clustering(structs,struct_counts,seq, draw = draw)
+        return
     elif cluster_type == 'just_list':
         final_structs, final_energies = select_exemplars_from_list(structs,struct_counts,seq, draw = draw)
 
@@ -572,18 +579,18 @@ def select_exemplars_from_clustering(structs,struct_counts,seq, draw = False):
       structs = freq_structs
       
       struct_energies = [struct_energy(seq, s) for s in structs]
-      if len(structs) > 400:
-          high_e = argsort(struct_energies)[::-1][:400]
+      if len(structs) > 225:
+          high_e = argsort(struct_energies)[::-1][:225]
           structs =[ structs[i] for  i in high_e]
           struct_counts =[ struct_counts[i] for  i in high_e]
           struct_energies =[ struct_energies[i] for  i in high_e]
                      
-          
+      
       
       clusters = cluster_2(structs,  struct_counts, seq, ptype = 'full_pairs')
       if draw:
           print 'DRAWING Clusters'
-          verts = struct_verts(structs, seq)
+          verts = struct_verts(structs, seq, 'tempname')
           cluster_2_show(clusters, verts)
           f = plt.gcf()
           f.savefig(cfg.dataPath('figs/RNAfoldz/clusters_{0}.ps'.format(savename)))

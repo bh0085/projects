@@ -30,7 +30,7 @@ def fignum(num, size = (8,8)):
 
     
 
-def grid_rnas(polys,dims = [20,20], colors = None, size = None ):
+def grid_rnas(polys,dims = [40,20], colors = None, size = None ):
     '''grid plot a bunch of RNAs according to the color scheme given.
 
 input:
@@ -53,7 +53,6 @@ input:
     ax = f.add_axes([0,0,1,1],
                        xlim = [-1,xdim],
                        ylim = [-1,ydim])
-
 
 
     ax.set_autoscalex_on(False)

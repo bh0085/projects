@@ -1,0 +1,29 @@
+import utils as rutils
+import plots as rplots
+import compbio.utils.bsub_utils as bsu
+
+from numpy import *
+import numpy as np, itertools as it
+
+import matplotlib.pyplot as plt
+
+import compbio.utils.plots as myplots
+import compbio.utils.colors as mycolors
+import compbio.config as cfg
+
+import pickle
+
+figtype = 'png'
+figfile = cfg.dataPath('figs/gpm2/pt3_{{0}}.{0}'.format(figtype))
+
+
+flist = [50,311,140,143,495,637,1304]
+
+
+def save_muts_structs(out,out_trees):
+    ofile = config.dataPath('RNAfoldz/out.pickle')
+    otfile = config.dataPath('RNAfoldz/out_tree.pickle')
+    pick
+
+def show_conservation():
+    
