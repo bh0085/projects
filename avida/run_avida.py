@@ -184,7 +184,7 @@ def run_batch():
     mut = .002
     delta = .0005
     geometries = ['star','square']
-    dim =  50
+    dim =  35
     iters = 1000
     import compbio.config as cfg
     
@@ -201,7 +201,7 @@ def run_batch():
         os.chdir(os.path.join(root,e))
         p = get_params(psets['lots'])
         make_cfg(p,
-                 geo = e.split('_')[0],
+                 geo = e.split('_')[1],
                  mut = mut,
                  delta = delta,
                  dim = dim)
