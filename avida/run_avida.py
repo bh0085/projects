@@ -185,7 +185,7 @@ def run_batch():
     delta = .0005
     geometries = ['star','square']
     dim =  30
-    iters = 200
+    iters = 20
     import compbio.config as cfg
     
     root = cfg.dataPath('avida_runs')
