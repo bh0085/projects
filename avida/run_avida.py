@@ -184,7 +184,7 @@ def run_batch():
     mut = .002
     delta = .0005
     geometries = ['star','square']
-    dim =  20
+    dim =  22
     iters = 2
     import compbio.config as cfg
     
