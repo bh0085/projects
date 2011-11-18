@@ -173,6 +173,8 @@ def run_batch():
     import compbio.config as cfg
     
     root = cfg.dataPath('avida_runs')
+    if not os.path.isdir(root):
+        os.mkdir(root)
     os.chdir( root)
     exec_subdirs = ['{0}_{1}'.format(i,j) 
                     for i in geometries 
