@@ -30,7 +30,7 @@ import cb.config as cfg
 def make_cfg(plot_params,
              name =default_name,
              geo = 'square',
-             mut = .001,
+             mut = .002,
              delta = .0005,
              dim = 20):
 
@@ -206,8 +206,14 @@ def run_batch():
                  dim = dim)
         
         
-    
-    
+    for e in exec_subdirs:
+        d = os.path.join(root,e)
+        os.chdir(c)
+        prc = subprocess.Popen('bsub -o bsub_log -q compbio-week "avida -c proj0/autogen/avida.cfg.auto"',
+                         shell = True,
+                               stdout = subprocess.PIPE)
+        print prc.stdout.read()
+                         
     
 
 def match_names(cols, regex):

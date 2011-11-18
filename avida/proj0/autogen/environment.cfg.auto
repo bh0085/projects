@@ -34,15 +34,15 @@
 #  REACTION  EQU  equ   process:resource=resEQU:value=16.0:frac=0.0025
 
 
-RESOURCE resNOT:inflow=7.85:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=12:inflowy1=0:inflowy2=12:outflowx1=0:outflowx2=12:outflowy1=0:outflowy2=12
-RESOURCE resNAND:inflow=7.85:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=12:inflowy1=0:inflowy2=12:outflowx1=0:outflowx2=12:outflowy1=0:outflowy2=12
-RESOURCE resAND:inflow=7.85:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=12:inflowy1=0:inflowy2=12:outflowx1=0:outflowx2=12:outflowy1=0:outflowy2=12
-RESOURCE resORN:inflow=7.85:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=12:inflowy1=0:inflowy2=12:outflowx1=0:outflowx2=12:outflowy1=0:outflowy2=12
-RESOURCE resOR:inflow=7.85:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=12:inflowy1=0:inflowy2=12:outflowx1=0:outflowx2=12:outflowy1=0:outflowy2=12
-RESOURCE resANDN:inflow=7.85:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=12:inflowy1=0:inflowy2=12:outflowx1=0:outflowx2=12:outflowy1=0:outflowy2=12
-RESOURCE resNOR:inflow=7.85:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=12:inflowy1=0:inflowy2=12:outflowx1=0:outflowx2=12:outflowy1=0:outflowy2=12
-RESOURCE resXOR:inflow=7.85:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=12:inflowy1=0:inflowy2=12:outflowx1=0:outflowx2=12:outflowy1=0:outflowy2=12
-RESOURCE resEQU:inflow=7.85:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=12:inflowy1=0:inflowy2=12:outflowx1=0:outflowx2=12:outflowy1=0:outflowy2=12
+RESOURCE resNOT:inflow=21.05:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=20:inflowy1=0:inflowy2=20:outflowx1=0:outflowx2=20:outflowy1=0:outflowy2=20
+RESOURCE resNAND:inflow=21.05:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=20:inflowy1=0:inflowy2=20:outflowx1=0:outflowx2=20:outflowy1=0:outflowy2=20
+RESOURCE resAND:inflow=21.05:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=20:inflowy1=0:inflowy2=20:outflowx1=0:outflowx2=20:outflowy1=0:outflowy2=20
+RESOURCE resORN:inflow=21.05:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=20:inflowy1=0:inflowy2=20:outflowx1=0:outflowx2=20:outflowy1=0:outflowy2=20
+RESOURCE resOR:inflow=21.05:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=20:inflowy1=0:inflowy2=20:outflowx1=0:outflowx2=20:outflowy1=0:outflowy2=20
+RESOURCE resANDN:inflow=21.05:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=20:inflowy1=0:inflowy2=20:outflowx1=0:outflowx2=20:outflowy1=0:outflowy2=20
+RESOURCE resNOR:inflow=21.05:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=20:inflowy1=0:inflowy2=20:outflowx1=0:outflowx2=20:outflowy1=0:outflowy2=20
+RESOURCE resXOR:inflow=21.05:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=20:inflowy1=0:inflowy2=20:outflowx1=0:outflowx2=20:outflowy1=0:outflowy2=20
+RESOURCE resEQU:inflow=21.05:outflow=0.01:geometry=torus:inflowx1=0:inflowx2=20:inflowy1=0:inflowy2=20:outflowx1=0:outflowx2=20:outflowy1=0:outflowy2=20
 
 
 REACTION RESNOT not process:resource=resNOT:value=3.55555555556:frac=0.9:type=pow:conversion=3.0 requisite:min_count=0
