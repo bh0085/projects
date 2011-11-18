@@ -1,0 +1,156 @@
+#filetype genotype_data
+#format id parent_id parent_dist num_cpus total_cpus length merit gest_time fitness update_born update_dead depth sequence
+
+#  1: ID
+#  2: parent ID
+#  3: parent distance
+#  4: number of organisms currently alive
+#  5: total number of organisms that ever existed
+#  6: length of genome
+#  7: merit
+#  8: gestation time
+#  9: fitness
+# 10: update born
+# 11: update deactivated
+# 12: depth in phylogentic tree
+# 13: genome of organism
+
+72132 71966 -1 5 46 100 8.59814e+08 1252.24 687828 49651 -1 651 pfpciclwyjagchiapxrubaodatubiaqfqcldworknqctmdixrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72371 71841 -1 3 7 100 6.75833e+08 1247 541967 49975 -1 651 pfbceclwyjagchiapxrubaodatuoivqfqcldwsrknncymdimrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72163 72142 -1 2 6 100 1.01305e+09 1234.88 838134 49693 -1 650 pfpciclwyjagchiapxrubaodatubivqfqclwwtrksncymdixrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71149 70960 -1 2 97 100 6.96002e+08 1220.37 573265 48602 -1 640 afrcicpwyjagcviapxhuduodstubvqfqzlawtrkjnncymdixrrqlyvtdaokpwyfryyudsqqmxoyuiymkzpcepyosycydvfcaxgab 
+71880 71877 -1 2 11 100 5.95181e+08 1235.33 481928 49334 -1 644 afrcilpwyjagcviapxhqdeedstubvqfqzlawtrkjnncymdixrrqlxvtdaokewyfryyudsqqmxoyuiymkzpcepyosycydvfcaxgab 
+71408 71395 -1 2 64 100 9.90414e+08 1237.42 797828 48780 -1 648 pfpciclwyjagchiapxrubaodatubivqfqcldwtrknncymdixrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72106 71408 -1 2 11 100 1.0291e+09 1230.83 842642 49611 -1 649 pfpciclwyjagchiapxrubaodazubivqfqcldwtrknncymdixrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71837 71836 -1 2 38 100 5.95088e+08 1239.18 482070 49285 -1 652 pfpciclwyjagchiapxpubaodatuoivqfqcldwsrknncypdimrrqlyvtdaojxwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72221 72220 -1 2 15 100 7.34815e+07 1242.61 58882.4 49781 -1 650 pfpcicpwyjagcwiapxcbdaodatuoivqfqzldwtrknncymdixrrqlyvtdxokpjyfryyudsqqmioyuiymwzpcepyosycydvfcaxgab 
+72352 72132 -1 2 2 100 808491 1259 642.169 49954 -1 652 pfpciclwyjagchiapxrubaodatubiaqsqcldworknqctmdixrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71613 71606 -1 2 5 100 152797 1233 123.923 49017 -1 657 pfpcicpwyjagchbapxrodaodxeuoivqplzldwtrknneymdixrrqlmvtdaoapwybrqyudsqqmxoyuiyqvzpcepyosynydvfcaxgab 
+72101 71918 -1 2 11 101 8.78207e+08 1259 697543 49605 -1 652 pfpciplwyjagchiepxrubaodatuoivqfqcldwtrknncymdimrrqlyyvttaojpwyfrnyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72353 72328 -1 2 16 101 2.08182e+07 1328.83 15690.3 49955 -1 659 afrciczwyjagcvpapqhuduodstumvqzshaaftokjnncrmdiecrqlyvxdaospdyfryyudsjqmxoyuiymakzpcepyosyiydvfcaxgab 
+72358 72322 -1 2 15 102 1.79524e+07 1351.81 13288 49958 -1 658 afrcictwyjagcviapqhuduodsdumvqzsgaaftrkjnccrmdiecrqlyvxdmaospoyfryyudsjqmxoyuiymakzpcepyosyiydvfcaxgab 
+72013 72008 -1 1 3 100 130040 1233 105.466 49504 -1 648 afrcictwyjagcviapxhuduodstpbvqfsglaftrkjincymdierrqlyvxdaokpwyfryyudsqqmxoyuiymkzncepyosyiydvfcaxgab 
+71622 71612 -1 1 5 100 157673 1142 138.068 49026 -1 660 pfpcicpwyjagchnaqxrodaodxeuoivqplzlpwtrknncymdixrrqlmvtduoxpwybrqyudsqqmxoyuiymvzpzepyosynydvfcaxgab 
+72121 72118 -1 1 9 100 5.74754e+08 1236.22 461040 49639 -1 650 pfpciclwyjagchiapxrubaodatubivqfqcldwtrknncymdixrrqlyvtdaolpwyfrpyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71819 71817 -1 1 2 100 623.339 1235 0.504728 49261 -1 644 afrcklpwyjagcviapxhudeedstubvqfqzlawtrkjnncymdixrrqlyvtdaokewyfryyudsqqmxoyunymkzpcepyosycydvfcaxgab 
+71610 71608 -1 1 2 100 97 1237 0.0784155 49012 -1 659 pfpcicpwyjagchnaqxrodaodxeuoivqplzlpwtrknncymdixrrqlmvtdaoxpwyzrqyudsqqmxoyuiymvzpcepyosynydvfcaxgab 
+71295 71248 -1 1 2 99 96 1159 0.08283 48685 -1 642 pfrcicpwyjagcviapxrudaodatuivqfqzldwtrknncymdixrrqlyvtdaokpwyfsyyudsqqmxoyuiymwzpcepyosccydvfcaxgab 
+70637 70384 -1 1 11 100 6.24478e+07 365 171090 48355 -1 637 xbrciiowyjagcuiacxhpdaozhtumhqhqzhdwaykdncymrporrsbketdelokpwyxroyudsqqmxoyuiysscpcepyvsytyzvfcaxgab 
+70672 70312 -1 1 21 103 287196 382 751.821 48367 -1 624 czjuslnwtjagcplybzlzmhxmqdcdbehclnhuywwilpnvsbnfzitsaziyxxbpovywrfyujuswamewybuyjuefcfcdvkaqoyzvfcaxgab 
+70827 70527 -1 1 3 103 505305 384 1315.9 48437 -1 629 qzkosynwtjagccuuyzlotrcqpcdnbzxenhujcawmlanruenjzwtxajifxwdpovyjrfyujuswamewyuuyvuyqcfczvkmqdyzvfcaxgab 
+70817 70109 -1 1 3 99 2.16649e+06 1222 1772.9 48430 -1 638 afrcicpwyjagcviapxhudaodstubvqfqblawtrknncymdixrrqlyvtdaokpwyfryyudsqqmxoyuiymkzpcepyosycydvfcaxgab 
+70639 70572 -1 1 2 103 69 357 0.193277 48356 -1 636 qzkosynwtjagceuubzlotrcqpcwnbivenhujcawmlanruenjzwtxamifxwdpovyjrfyujusqameayuuyvuyqcfcaukaqddzvfcaxgab 
+70244 70106 -1 1 6 100 6.31387e+06 364 17345.8 48180 -1 635 rbrciiowyjagcuiacxhpdaozxtumrqhqzhdwaykdncjmrporrsbketdelokpwyxroyudsqqmxoyuiysscpcepyvsytyzvfcaxgab 
+69996 69431 -1 1 1 99 2.51524e+08 375 670732 48077 -1 619 abwciqowxaagcziakijpxarzdtuhrqcctsdeqnawnokeytpdrysikvtetckkkyxryudsqqmooyuiyusspcepysjccyzvfcaxgab 
+68208 68077 -1 1 8 99 400154 374 1069.93 47362 -1 616 abwciqowxjagcaiakijpxarzdtuhrqfctsdeqnawnokeytpdrysikvtetikkkyxryudsqqmooyuizusspcepysjccyzvfcaxgab 
+69796 69795 -1 1 36 99 7.54584e+07 1212.63 61861.5 47980 -1 636 afrcicpwyjagcviapxhudaodstubvqfqzldwtrknncymdixrrqlyvtdaokpwyfryyudsqqmxoyuiymkzpcepyosycydvfcaxgab 
+70148 70141 -1 1 68 103 673187 384 1753.09 48141 -1 623 qzkqslnwtjagcnuubzlotrcqpcdnbzxenhujcawmlanruenjzwtxajifxwdpovyjrfyujuswamewyuuyvuyqcfcavkaqdyzvfcaxgab 
+70441 69243 -1 1 1 99 959.107 360.571 2.65995 48258 -1 629 hfrcicpwyjagcuiapxhudaodstubrqfqzldwtrknncymdidrrmikvtdaokpwyxryyudsqlmxoyuiyskzpcepyosycyztfcaxgab 
+70649 70640 -1 1 1 103 701825 379 1851.78 48360 -1 637 qzkosynwtjagceuubzlotrcqpcwnbzvenzujcawmlanruenjzwtxamifxwdpovydrfyujusqameayuuyvuyqcfcaukaqddbvfcaxgab 
+70760 70436 -1 1 1 100 266.3 366 0.727594 48406 -1 635 rbrciiowyjagcuiacxhpeaozxtuxrqhqzldwarknncymrporrsbkntdelokpdydroyudsqqmxoyuiysszpcepjvsytyzvfcaxgab 
+70890 70888 -1 1 7 103 498021 383 1300.32 48464 -1 630 qzkosynwtjagccuuyzlotrcqpcdnbzxenhujcawmlawrzenjzwtxajifxwdpovyjrfyujuswamewyuuyvuyqcfczvkaqdyzvfcaxgab 
+70858 70109 -1 1 2 99 81 1221 0.0663391 48450 -1 638 aarcicpwyjagcviapxhudaodstubvqfqzlawtrknncymdixrrqlyvtdaokpwyfryyudsqqmxoyuiymkzpcepyosycydvfcaxgab 
+70941 70527 -1 1 2 103 354.677 384 0.923638 48488 -1 629 qzkosynwtjagccuuyzlotrcqpcdnbzxenhujxawmlanruenjzwtxajifxwdpovyjrfyujuswamewyuuyvuyqcfczvkaqdyzvfcaxgab 
+70952 70488 -1 1 2 103 96 385 0.249351 48496 -1 628 qzkosynwtjagccuuyzlotrcqpcdnbzxenhujcawmlanruenjzwtxajifxwdpovyjffyujuswamewyuuyvuyqcfcavkaqdyzvfcaxgab 
+70943 70726 -1 1 6 104 372024 386 963.792 48489 -1 633 hzkisynwtjagccuuyzlotrcqpcdnbzxenlujcawxmlanruenjzwtxdjifxwdpovyjrfyujuswamewyuuyvuyqcfcavvaqdyzvfcaxgab 
+69929 69902 -1 1 7 103 1152.27 383 3.00854 48044 -1 623 czzuslnwtjagcplybzlxmhcmqdcdbezslnhuycwmlpnxsbnfziisaziyxxbpovywrfyujuswamewybcyjueqcfcdvkaqoyzvfcaxgab 
+70969 70168 -1 1 23 103 702086 385 1823.6 48514 -1 626 qzkqslnwtjagcnnubzlotrcqpcdnbzxenhujcawmlanruenjzwtxajifxwdpovyjrfyujuswamewyuuyvuyqcfcbvktqdyzvfcaxgab 
+71052 71050 -1 1 5 103 567396 385 1473.76 48550 -1 628 rzkqslnwtjagcnnubzlotrcqpcdnbzxenhujcawmlanruenjzwtxajifywdpovyjrfyujuswamewyuuyvuyqcfcbvktqdyzvfcaxgab 
+71013 69445 -1 1 27 101 1.08307e+07 364 29754.6 48536 -1 633 zbocbrizwyjagcuiapvhpdgozxtukrqhqzlfwtrknncymrporrsizntdeaokpwyxroyudsqqmxoyuiysszpcepyvseiyzvfcaxgab 
+71114 71112 -1 1 1 100 1.86519e+07 368 50684.4 48583 -1 638 rbrciiowyjagcuiacxhpdaozxtumrqhqzldwayjnndyyrpojrsqketdelkupwyxroyudsqqmxoyuiysszpcepyvsytyzvfcaxgab 
+71125 70750 -1 1 1 100 4.38481e+07 365 120132 48585 -1 636 rbrciiowyjagcuiacxhpdaozxtumrqhqzldwayknndyyrporrsbketdeloupwyxroyudsqqmxoyuifsscpcepyvsytyzvfcaxgab 
+70527 70488 -1 1 69 103 695595 383 1816.18 48307 -1 628 qzkosynwtjagccuuyzlotrcqpcdnbzxenhujcawmlanruenjzwtxajifxwdpovyjrfyujuswamewyuuyvuyqcfczvkaqdyzvfcaxgab 
+71144 69905 -1 1 2 100 82 368 0.222826 48597 -1 631 rorciiowyjagcuiacxhpdaozxtuhrqhqzldwtrknneymrpoersikntdelokpwyxroyudsoqmxonuiysszpcepyvsytyzvfcaxgab 
+70644 69858 -1 1 7 100 7878.92 364 21.6454 48358 -1 634 rbrciiowyjagcuiacxhpdaozxtumrqhqzldwayknncymrporrsbketdeloupwyxroyudsqquxoyuiysscpcepyvsytyzvfcaxgab 
+67709 67707 -1 1 16 100 964.146 363.706 2.6509 47176 -1 629 rbrciiowyjagcuiapxhpdaocxouhrqhqzldwtrknncymrxorrsikntdeaokpwyxrocudsqqmxoyuiysezpcepnvsyiyzvfcaxgab 
+71287 71191 -1 1 2 100 975.904 368 2.65191 48683 -1 639 rbrciiowyjagcuiacxhpddozxtumrqhhzldwayknndyyrporrsfketdelkupwyxroyudsqkmxoyuiysszpcepyvsytyzvfcaxgab 
+71191 71117 -1 1 26 100 1.21212e+07 368 32938.2 48626 -1 638 rbrciiowyjagcuiacxhpddozxtumrqhhzldwayknndyyrporrsfketdelkupwyxroyudsqqmxoyuiysszpcepyvsytyzvfcaxgab 
+71270 71002 -1 1 10 102 810698 382 2122.25 48675 -1 628 qzkqslnwtjagcnnubzlotrcqpcdnbzxenhujcawmlnruenjwwtxajifxwdpovyjrfyujuswamewyuuyvuyqcfcbvktqdyzvfcaxgab 
+71334 71332 -1 1 1 103 1.04195e+06 385 2706.36 48702 -1 630 qzkqslnwtgagcnnubzlotrcqpcdnbzxenhujcawmlanruenjwwtxajifxwdpovyjrpyujuswamewyuuyvuyqwfcbvktqdyzvfcaxgab 
+71340 71086 -1 1 1 100 3115.87 363 8.58365 48706 -1 637 rbrciiowyjagcuiacxhpdaozxtuhrqhqzddbarkunytmrporrsbkntjelokpwyaroyudsqqmxoyuiysszpcepyvsdtyzvfcaxgab 
+71170 71152 -1 1 4 100 4.72832e+06 1301 3634.38 48616 -1 642 afrcicpwyjagcviapxhudeodstubvqgqzlawtrkjnncymdixrrqlyvtdaoqpwyfryyudsqqmxoyuiymkzycepyosyyydvfcaxgab 
+71377 71356 -1 1 9 100 3.50523e+08 1246 281319 48744 -1 647 pfpcicpwyjagchnapxrudaqdatuoivqfqzldwtrknncymdixrrqlyvtdaoapwyfrqyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71342 71259 -1 1 9 100 6.58684e+08 1238.3 527793 48708 -1 644 pfpcicpwyjagchiapxrudaodatuoivqfqzldwtrknncymdixrrqlyvtdkokpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71220 71164 -1 1 2 94 10506.8 335 31.3636 48645 -1 649 ywyjagcuiypvhpdaozituhrqhqzldwirknncymrtorvsiztudravhpdytroyudsqqmxoyxiysszsckfyvsyqyzvfcaxgab 
+71431 71387 -1 1 4 100 2.11215e+08 1248 169242 48807 -1 648 pfpcicpwyjagchiapxrubandacuoivqfqcldqtrknncymdixrrmlyvtdaokpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71409 71336 -1 1 6 99 6.27996e+06 361 17396 48780 -1 631 hfrcicpwyjagcuiapxhrdsonstubrqfqzldwlrknncymdidrrmikvtdaokpwyxryyudsqqmxoyuiyskzpcejuosycyzvfcaxgab 
+71507 71477 -1 1 1 100 1152.27 1344 0.857345 48896 -1 649 pfpcicpwyjagchnapxrudaodatuoivqfqzlzwtrfnncymdixrrqlyvtdaoapwyfrqyudsqqpxoyuiymwzpcepyosynydvfcaxgab 
+71485 71473 -1 1 2 100 1140.51 1247 0.914606 48874 -1 648 pfpcicpwyjagchnapxrudaodatuoivqfqzldwtrknncymdixrrqlyvtdaoapwyfrqoudsqqmxoyuiymwzpcepyosynydvfcaxgab 
+71502 71499 -1 1 3 100 6.91337e+06 1235 5597.87 48892 -1 652 pfpcicpwpjagchnaaxrudaodaeuoivqfqzlawtrknncymdixrrqlyvtdaoapwyfrqyudsqqmxoyuiymvzpcepyosynydvfcaxgab 
+71387 71386 -1 1 33 100 7.94997e+08 1240.14 643184 48755 -1 647 pfpcicpwyjagchiapxrubandacuoivqfqcldwtrknncymdixrrmlyvtdaokpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71567 70781 -1 1 2 104 96 387 0.248062 48958 -1 634 qznisynwtjagccuuyzlotrcqpcdnbzxenlujcawxmlanruenjzwaxdjifxwdpovyjcfyujuswamewyuuyvuyqcfcavkaqdyzvfcaxgab 
+71595 71520 -1 1 2 100 11336.3 1039 10.9108 48997 -1 644 afrcicpwyjagcviapxhuqeodstubaqfqzlawtrkjnncymdixrrqlyvtdaokewyfryyudsqqmxoluiymkzpcepyoaycydvfcaxgab 
+71639 71627 -1 1 1 100 1.51324e+07 1233 12272.8 49037 -1 658 pfpcicpwyjagchnapxxodaodaeuoivqbqzldwtrknncymdixurqlfvtdaoafwybrqyudsqqmxoyuiymvzpcepyosynydvfcaxgab 
+71605 71599 -1 1 2 100 82 1246 0.0658106 49008 -1 644 afrckcpwyjagcliapxhudeodstubvqfqzfawtrkjnncymdixrrqlyvtdaokswyfryyudsqqmxoyuiymkzpcepyosycydvfcaxgab 
+71461 71416 -1 1 21 100 5.16138e+08 1223.22 418521 48850 -1 641 afrcicpwyjagcviapxhudeodstubvqfqzfawtrkjnncymdixrrqlyvtdaokewyfryyudsqqmxoyuiymkzpcepyosycydvfcaxgab 
+71829 71826 -1 1 1 100 4.42607e+07 1248 35465.3 49274 -1 651 pfpciclwyjagchiapxrubaodatuoivqfqclswsrknncypdimrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71828 71822 -1 1 2 99 81 358 0.226257 49274 -1 636 afecinpwyjagcviapxhudaodstubrkfkzldwtrkincyqdidrrmikvtdaokpwqxryyudsqqmxoyuiyskzpcefyosycyzvfcaxgab 
+71848 71807 -1 1 2 100 1152.27 1248 0.923295 49297 -1 650 pfpciclwyjagchiapxrubaodatuoivqfqcldwsrknncymdimrrqlyvtdaojpwyfryyunsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71894 71893 -1 1 1 100 7.00546e+08 1219.87 576797 49352 -1 642 afrcicpwyjagcvixpxhuduodstubvqfqzcawtrkjnncymdixrrqlyvtdaokpwyfryyudsqqmxoyuiymkzpcepyosycydvfcaxgab 
+71886 71853 -1 1 2 103 97 380 0.255263 49344 -1 637 qzkbsynwtjagccuuyzlotrcqpcdnbzxenhuvcawmlawrrenjzwrxajifxwdpovyjwfyujuswamewybuyvuyqctczvklqdyzvfcaxgab 
+71322 70762 -1 1 3 94 11336.3 340 33.3421 48697 -1 646 owyjagcuiapvhpdaozithhrqhfzldwirknncymrpoxvsiztudravhpwyxroyudjqqmooyeiyssnpckfyvsyiyzvfcaxgab 
+71930 71918 -1 1 2 100 94 1246 0.0754414 49399 -1 652 pfpciplwyjagchiepxrubaodatuoivqfqcldwtrknncymdimrrqlyvttaojpwysrnyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71598 71461 -1 1 27 100 7.63846e+08 1220.3 632141 48999 -1 642 afrcicpwyjagcviapxhudeodstubvqfqzfawtrkjnncymdixrrqlyvtdaokswyfryyudsqqmxoyuiymkzpcepyosycydvfcaxgab 
+71935 71931 -1 1 2 99 9674.89 1233 7.84663 49404 -1 653 pfpciplwyjagchiexrubaodatuoivqfqcldwtrknncymdzmrrqlyvttaojpwyfrnyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71943 71931 -1 1 2 99 93 1232 0.075487 49416 -1 653 pfpciplwyjagchiexrubaodatuoivqfqcldwtrknncymdimrrqlyvttaojpwyarnyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+70960 70959 -1 1 68 100 7.79232e+08 1221.31 637598 48501 -1 639 afrcicpwyjagcviapxhudeodstubvqfqzlawtrkjnncymdixrrqlyvtdaokpwyfryyudsqqmxoyuiymkzpcepyosycydvfcaxgab 
+71917 71841 -1 1 4 100 2.87594e+07 1247 23062.9 49386 -1 651 pfbciclwyjagchiapxrubaodatuoivqfqcldwsrknncymdimrrqlyvtdaojpwffryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71961 71389 -1 1 4 100 1.60905e+08 1249 128827 49438 -1 647 pfpciclwyjagchiapxrubaodotuoivqfqcldwtrknncymdixrrqlyvtdaokpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71967 71787 -1 1 1 100 5.60693e+08 1138 492700 49444 -1 642 afrcicpwyjagcviapxhuduodstubvqfqzlawtrkjnncymyixrrqlyvtdaokpwyfryyudsqqmxoyuiymkzpcepyosyiydvfcaxgab 
+71389 71384 -1 1 17 100 5.36112e+08 1235.35 429754 48762 -1 646 pfpciclwyjagchiapxrubaodatuoivqfqcldwtrknncymdixrrqlyvtdaokpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71983 71586 -1 1 3 100 1.85866e+06 1187 1565.84 49467 -1 643 afrcicpwyjagcviapxhudeodstubvqfqzfawtrkjnncymdixrrqlyvtdaokdwyfryyudsqqmxoyuiymkzpcepyodycydvfcaxgab 
+71913 71815 -1 1 8 100 7.57416e+08 1234 613789 49377 -1 641 afrcicpwyjagcviapxhudeodstubvqfqzlawtrkjnncymcixrrqlyvtdaonpwyfryyudsqqmxoyuiymkzpcepyosycydvfcaxgab 
+71908 71837 -1 1 2 100 1152.27 1247 0.924035 49372 -1 653 pfpciclwyjagchiapxpubaodatuoivqfqcldwsrknncypdimrrqlyvtdaojxwyfryyuduqqmxoyuiymwzpcepyosycydvfcaxgab 
+72040 72032 -1 1 2 100 133291 1331 100.143 49537 -1 649 afrcictwyjagcviapxhuduodstumvqfsglaftrkjnncrmdierrqlyvxdaokpwyfryyudsqqmtoyuiymkzpcepyosyiydvfcaxgab 
+72064 72025 -1 1 2 100 11198.1 1234 9.0746 49567 -1 649 afrcictwyjagcviapxhuduodstubvqfsglaftrkjnncymdierbqlyvxdaokpwifryyudsqqmxoyuiumkzpcepyosyiydvfcaxgab 
+72073 72069 -1 1 1 100 1.74118e+07 1311.58 13300.6 49572 -1 650 afrcictwyjagcviapxhuduodstumvqfsglaftrkjnncrmdierrqlyvxdaokpwyfrnyudsqqoxoyuiymkzpcepyosyiydvfcaxgab 
+72081 72055 -1 1 1 100 80 1330 0.0601504 49588 -1 649 abrbictwyjagcviapxhududdstubvqfsglaftrkjnncymdierrqlyvxdaokpwyfryyudsqqmxoyuiymkzpcepyosyiydvfcaxgab 
+72083 72065 -1 1 1 100 82 1332 0.0615616 49592 -1 650 afrcictwyjagcviapxhuduodstumvqfsglaftrkjnncrmdierrqlyvxdaokpwyfpyyudsqqmxoyuiymkzpcepyosywydvfcaxgab 
+72062 72060 -1 1 2 101 11336.3 1346 8.42222 49562 -1 649 afrcidtwyjagcviapxhuduodstubvqfsglafttrkjnncymdierrqlyvxdaokpwyfryyudsqqmxoyuikmkzpcepyosyiydvfcaxgab 
+71421 71420 -1 1 19 100 9.08554e+08 1231.83 734596 48799 -1 649 pfpcicpwyjagchiapxrubandacwoivqfqcldwtrknncymdixrrmlyvtdaokpwyfryyudsqqmxoyuiymwzpceeyosycydvfcaxgab 
+72114 72113 -1 1 1 100 2.36361e+08 1149 205710 49622 -1 650 pfpciclwyjagchiapxrubaoddtubivqfqcldwtrknncymdixrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepaosycydvfcaxgab 
+72126 72124 -1 1 1 100 33 790 0.0417722 49646 -1 652 afrcictwyjagcviazxhuduodstumvqfsglaftrsjnncrmsierrqlyvxdaokpwyfryyudsqqmxoyuiymkzpcepyosywydvfcaxgab 
+72120 72065 -1 1 2 100 133291 1235 107.928 49635 -1 650 afrcictwyjagcviapxhuduodstumvqfsglaftrkjnncrmdierrqlyvxdaokpwyfryyudsqqmxoyuiymkzpcepyksywydvfcaxgab 
+71771 71763 -1 1 3 103 37219.8 387 96.1752 49197 -1 632 qzkqslnwtjagcnnubzlotrsqpcdnbzxenhujcawmianruenjwwtxajifywdpovyjrpqujuswamewyuuyvuyqwfcbvktqdyzvfcaxgab 
+72157 71841 -1 1 1 100 9.94233e+08 1237.91 806745 49688 -1 651 pfbciclwyjagchiapxrubaodatuoivqfqcldwsrknncymdimrrxlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72159 71802 -1 1 2 100 42640.1 1146 37.2077 49689 -1 650 pfpciclwyjagchiapxrubaodatuoiwqfqhldwtrknncymdimrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepywsycydvfcaxgab 
+71952 71868 -1 1 9 99 7.79547e+08 1071.22 740336 49424 -1 642 afrcicpwyjagcviapxhuduodstubvqfqzlawtjkjnncymdixrrqlyvtdaokpwyfryyudsqqmxoyuiymzpcepyosycyavfcaxgab 
+72192 72146 -1 1 1 100 97 1319 0.0735406 49744 -1 653 afrcictwyjagcvvapxhubuodstumvqfsxlaftrkjnncrmdierwqlyvxdaospwyfryyudsqqmxoyuiymkzpcepyosyiydvfcaxgab 
+71958 71931 -1 1 3 99 151171 1281 118.176 49431 -1 653 pfpciplwyjagchiexrubaodatuoivqfqcldwtrknncymdimrrqlyvttaojpwyfrnyudsqqmxoyuiymwzpeepyosycydvfcaxgab 
+71715 71697 -1 1 3 100 152797 1233 123.923 49132 -1 660 pfpcpcpwyjagchnapxrodaodaeuoivqpqzldwtrknncymdixurqlfvcdeoafwybrqyudstqmxoyuiymvzpcepyosynydvfcaxgab 
+71957 71787 -1 1 4 100 8.98655e+08 1138 789679 49430 -1 642 afrcicpwyjagcviapxhuduodstubvqfqzlawtrkjnncymyixrrqlyvtdaokptyfryyudsqqmxoyuiymkzpcepyosycydvfcaxgab 
+72231 71345 -1 1 1 100 9.57621e+08 1237.22 775832 49795 -1 646 pfpcicpwyjagchiapxrudaodatuoivqfqzldwtrknncymdixrrqlyvtdxokpwyfryyudsqqmxoyuiymwzpceoyosycydvfcaxgab 
+71994 71992 -1 1 3 100 156048 1031 151.356 49481 -1 661 pfpcicpwyjagchnapxrodaodaeuoivqpqzldwtrknntymdaxurqlfvcdaoafwybrqyudsvqmxoyuiymvzpcezyosynydvfcaxgab 
+72235 72229 -1 1 2 100 11336.3 1168 9.70574 49802 -1 655 afrcictwyjagcviapxhubuodstumvqfsxlaftrkjnncrmdperwqlyvxdaospwyfryyudnqqmxoyuiymkzpcepyosyicdvfcaxgab 
+72245 72196 -1 1 2 100 81 1246 0.065008 49813 -1 651 afrcictwljagcviipxhudfodstubvqfsglaftrkjnncrmdierrqlcwxdaokpwyfryyudsqqmxoyuiymkzicepyosyiydvfcaxgab 
+72257 72217 -1 1 2 100 1140.51 1170 0.974798 49829 -1 657 pfpciclwbjagchiapxrubaodatubiaqfqclbworknqwtmdixrrqlyztraojpwyfryyudmqqmxoyuiyuwzpcepyorycydvfcaxgab 
+72274 72250 -1 1 1 100 133291 1234 108.015 49852 -1 655 afrcictwyjagcviapxhubzodstumvqfsxlaftrkjnncrmdperwqlyvxdaospwyfryyudsqqmxoyuiymkzpcepyocyiydvfcaxgab 
+71549 71533 -1 1 5 100 154422 1232 125.343 48938 -1 654 pfpcicpwyjagchnapxrodaodaeuoivqpqzldwtrknncymdixrrqumvtdaoapwybrqyudsqqmxoyuiymvzucepyosynydvfcaxgab 
+72278 71408 -1 1 2 100 262146 1247 210.222 49858 -1 649 pfpciclwyjagchiapxrubaodatubivqfqcpdwtrknncymdixrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72281 72161 -1 1 1 100 1.25847e+09 1150 1.09432e+06 49862 -1 650 pfpsiclwyjagchiapxrubaodatubivqfqcldwtrknncymdixrrqtyvtyaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72286 71826 -1 1 3 100 1.95694e+07 1249 15668 49869 -1 651 pfpciclwyjagchiapxrubaodztuoivqfqcldwsrknncypdimrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72288 71956 -1 1 1 100 9.23237e+06 1138 8112.8 49871 -1 643 afrcicpwyjagcviapxhuduodstubvqfqzlawtrkjnncymyixrrqlyvtdaokpwyfryyudsqqmxoyuiymkzpcepyokycydvfqaxgab 
+72228 72221 -1 1 10 100 1.29e+08 1239.3 105011 49792 -1 651 pfpcicpwyjagcwiapxcbdabdatuoivqfqzldwtrknncymdixrrqlyvtdxokpjyfryyudsqdmioyuiymwzpcepyosycydvfcaxgab 
+71545 71494 -1 1 6 101 160924 1358 118.501 48928 -1 650 pfpcicpmwyjagchnapxrudaouatuoivqfqzlzwtrknncymdixrrqlyvtdaoapwyfrqyudsqqmxoyuiymwzpcepsosynydvfcaxgab 
+72058 72042 -1 1 5 100 1.52926e+09 1243.67 1.24766e+06 49558 -1 651 pfpchclwyjagchiapxrubaodatuoivqfqcldwsrknncymdimrrqlyztdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71801 71769 -1 1 5 100 159299 1247 127.746 49239 -1 649 pfpciclwyjagchiapxrubaodatuoivqfqcldwtrknncymdimrrqlyvtdaojpwyfryyudsqqmxoyuiymwzscepyosycydvfcaxgab 
+72295 72289 -1 1 2 101 134916 1245 108.367 49881 -1 657 afrcictwyjagcviapqhuduodstumvqzsgaaftrkjnncrmdiecrqlyvxdaospdyfryyudsjqmxoyuiymakzpcepyocyiydvfcaxgab 
+72129 72122 -1 1 7 100 9.19882e+08 1238.3 742581 49648 -1 651 pfpciclwzjagchiapxrubaodatufnvqfqcldwtrknncymdixrrqlyvtdaolpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72319 72318 -1 1 1 100 7.06557e+08 1234.14 574002 49910 -1 653 qlyvtdaolpwyfryyudsqqmxoyuiymwzpcexyosycydvfcaxgabpfpciclwzjagchiapxrubaodatufnvqfqcldwtrknncymdixrr 
+72285 72284 -1 1 2 100 1093.48 1231 0.888288 49865 -1 646 afrcillwyjagcvsapxhqdeedstubvqfqzlawtrkjnncymdixrrqlxvtdaokewyfryyudsqqmsoyuiymkzpcepyosycydvfcaxgab 
+72343 71931 -1 1 2 99 315345 1233 255.754 49939 -1 653 pfnciplwyjagchiexrubaodatuoivqfqcldwtrknncymdimrrqlyvttaojpwyfrnyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72346 72279 -1 1 1 100 1152.27 1203 0.957832 49944 -1 650 pfpciclwyjagchiapdrubaodatubivqfqcldwtrknncymdixrrqlyvtdaojpwyfryyudvqqmxoyuiymwzycepyosycydvfcaxgab 
+72362 71841 -1 1 2 100 13271.8 1150 11.5407 49963 -1 651 pfbciclwyjagchiapxrubaodatuoivqfqcldwsrknncymdimrrqlyvtdaojpwyfryyudyqqmxoyuiymwzpcepyosycydvfcaxgab 
+71863 71462 -1 1 14 100 4.66019e+06 1170 3983.07 49312 -1 642 afrcicpwyjagcviapxhuduodstubvqfqzlawtwkjnncymdixrrqlyvtdaokpwyfryyudsqqmxoyuiymkzpcepyosycmdvfcaxgab 
+72355 72345 -1 1 3 100 3.10862e+08 1247 249288 49955 -1 652 pfpciclwyjagchiapxrrbacdatubivqfqclwwtrknncymdoxrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72364 71841 -1 1 4 100 1.47748e+09 1248 1.18388e+06 49964 -1 651 pobciclwyjagchiapxrubaodatuoivqfqcldwsrknncymdimrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+71841 71807 -1 1 40 100 1.00886e+09 1236.46 819982 49287 -1 650 pfbciclwyjagchiapxrubaodatuoivqfqcldwsrknncymdimrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72380 71841 -1 1 1 100 156048 1149 135.812 49985 -1 651 pfbciclwyjagchiapxrubaodatuoivqfqcldwsrknncymdimrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepcosycydvfcaxgab 
+71979 71974 -1 1 8 100 1.23477e+09 1228.6 1.01033e+06 49462 -1 651 pfpciclwyjagchiapxruhaodatuoivqfqcldwsrknncymdimlrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72383 71979 -1 1 1 100 1.37195e+09 1226.44 1.12257e+06 49988 -1 652 pfpciclwyjagchiapxruhaodatuoivqfqcldwsrknncymdimtrqlyrtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72226 71938 -1 1 5 100 1.38537e+06 1231 1135.89 49789 -1 647 pfpcicpwyjagchiapxrudaodatuoivqfqzldwtrkzncymdixrrqlyotdxokpwyfryyucsqqmioyuiymwzpcepyosycydvfcaxgab 
+72389 72132 -1 1 1 100 8.66901e+08 1251.74 693820 49996 -1 652 pvpciclwyjagchiapxrubaodatubiaqfqcldworknqctmdixrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72365 72270 -1 1 3 103 1.22716e+06 378 3246.46 49965 -1 632 qzkosynwtjagccuuyzlotrcqpcdnbzxenhvjcvwmlbnruenjzwtxwjifxwdpovyjrfyujuswamewyuuyvuyqcfczvkaqdyzvfcaxgab 
+72390 72163 -1 1 1 100 1.62074e+09 1227.6 1.3409e+06 49998 -1 651 pfpciclwyjagchiapxrubaodatubivqfqclwwtrksncymdixrrqlyvtdaojpwyfryyudsqqmxoyuiymwzicepyosycydvfcaxgab 
+72392 72163 -1 1 1 100 1.15775e+09 1233.14 957844 49999 -1 651 pfpciclwyjagchiapxrubaudatubivqfqclwwtrksncymdixrrqlyvtdaojpwyfryyudsqqmxoyuiymwzpcepyosycydvfcaxgab 
+72237 72214 -1 1 7 100 1.87302e+06 1333 1405.11 49805 -1 655 afrciciwyjagcviapxzubuodstumvqfsxlaftrkjnncrmdirrwqlyvxdaospwyfryyudsqqmxoyusymkzpcepyosyiydvfcaxgab 

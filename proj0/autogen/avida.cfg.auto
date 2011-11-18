@@ -1,0 +1,19 @@
+#############################################################################
+# This file includes all the basic run-time defines for Avida.
+# For more information, see doc/config.html
+#############################################################################
+
+ANALYZE_FILE proj0/autogen/analyze.cfg.auto
+EVENT_FILE proj0/autogen/events.cfg.auto
+COPY_MUT_PROB 0.0
+INST_SET proj0/autogen/instset-heads.cfg.auto
+DIVIDE_INS_PROB 0.0
+STAR_K 3
+MUT_RATE_SOURCE 2
+ENVIRONMENT_FILE proj0/autogen/environment.cfg.auto
+DIVIDE_DEL_PROB 0.0
+WORLD_Y 13
+WORLD_GEOMETRY 9
+START_CREATURE proj0/autogen/default-heads.org.auto
+WORLD_X 13
+STAR_D 12
