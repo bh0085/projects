@@ -184,7 +184,7 @@ def run_batch():
     delta = .0005
     geometries = ['star','square']
     dim =  20
-    iters = 50
+    iters = 2
     import compbio.config as cfg
     
     root = cfg.dataPath('avida_runs')
@@ -208,7 +208,7 @@ def run_batch():
         
     for e in exec_subdirs:
         d = os.path.join(root,e)
-        os.chdir(c)
+        os.chdir(d)
         prc = subprocess.Popen('bsub -o bsub_log -q compbio-week "avida -c proj0/autogen/avida.cfg.auto"',
                          shell = True,
                                stdout = subprocess.PIPE)
