@@ -186,7 +186,8 @@ def run_batch():
             os.mkdir(os.path.join(root,e))
         os.chdir(os.path.join(root,e))
         p = get_params(psets['lots'])
-        make_cfg(geo = e.split('_')[0],
+        make_cfg(p,
+                 geo = e.split('_')[0],
                  mut = mut,
                  delta = delta,
                  dim = dim)
