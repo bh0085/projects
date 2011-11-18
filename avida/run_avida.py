@@ -22,6 +22,7 @@ import cfg_avida as ca
 import avida_plots as ap
 import avida_utils as au
 import avida_presets as presets
+import subprocess
 
 import cb.config as cfg
 
