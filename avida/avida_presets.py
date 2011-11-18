@@ -3,8 +3,7 @@ import avida_utils as au
 import re
 from numpy import *
 
-geo_dims = {'square':40,
-            'star':12}
+
 default_gens = 10000
 
 uni_inflow_multiplier = .05
@@ -60,6 +59,7 @@ def differential_mut(name,
                      geo_name = 'star',
                      mut = mu0,
                      delta = deltamu, 
+                     dim = 20,
                      **kwargs):
     #CONFIG PARAMETERS
     mut_rate_source = 2
@@ -74,10 +74,9 @@ def differential_mut(name,
     globals().update(env)
 
     #make GEOMETRY
-    geo_dim = geo_dims[geo_name]
     geometry = make_geometry(params_dict,
                              name = geo_name, 
-                             dim = geo_dim)
+                             dim = dim)
     ntot =geometry['n']
     nofs = ntot/2
     globals().update(geometry)

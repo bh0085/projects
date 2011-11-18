@@ -31,7 +31,8 @@ def make_cfg(plot_params,
              name =default_name,
              geo = 'square',
              mut = .001,
-             delta = .0005):
+             delta = .0005,
+             dim = 20):
 
     if not os.path.isdir(name):
         os.mkdir(name)
@@ -54,6 +55,7 @@ def make_cfg(plot_params,
                                         mut = mut,
                                         geo_name = geo, 
                                         delta = delta,
+                                        dim = dim,
                                         eve_fname = eve_fname,
                                         org_fname = org_fname,
                                         ana_fname = ana_fname,
@@ -180,7 +182,8 @@ def run_batch():
                     for i in geometries 
                     for j in range(iters)]
     for e in exec_subdirs:
-        os.mkdir(os.path.join(root,e))
+        if not os.isdir(os.path.join(root,e)):
+            os.mkdir(os.path.join(root,e))
         os.chdir(os.path.join(root,e))
         p = get_params(psets['lots'])
         make_cfg(geo = e.split('_')[0],
