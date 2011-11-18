@@ -184,15 +184,15 @@ def run_batch():
     mut = .002
     delta = .0005
     geometries = ['star','square']
-    dim =  30
-    iters = 20
+    dim =  50
+    iters = 1000
     import compbio.config as cfg
     
     root = cfg.dataPath('avida_runs')
     if not os.path.isdir(root):
         os.mkdir(root)
     os.chdir( root)
-    exec_subdirs = ['{0}_{1}'.format(i,j) 
+    exec_subdirs = ['huge_{0}_{1}'.format(i,j) 
                     for i in geometries 
                     for j in range(iters)]
     for e in exec_subdirs:
