@@ -182,7 +182,7 @@ def run_batch():
                     for i in geometries 
                     for j in range(iters)]
     for e in exec_subdirs:
-        if not os.isdir(os.path.join(root,e)):
+        if not os.path.isdir(os.path.join(root,e)):
             os.mkdir(os.path.join(root,e))
         os.chdir(os.path.join(root,e))
         p = get_params(psets['lots'])
