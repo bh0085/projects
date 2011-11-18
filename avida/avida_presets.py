@@ -58,6 +58,8 @@ ydiffuse_grav = .3
 def differential_mut(name, 
                      gen_name = None, 
                      geo_name = 'star',
+                     mut = mu0,
+                     delta = deltamu, 
                      **kwargs):
     #CONFIG PARAMETERS
     mut_rate_source = 2
@@ -86,7 +88,7 @@ def differential_mut(name,
     #BUILD LINEAGES AND INJECT
     linfun = diffmut_lin;
     linints= [0,nofs,ntot-1]
-    make_lineage_squares(linints, linfun)
+    make_lineage_squares(linints, linfun, mut, delta)
     
     #get a default set of resources, tasks, rxns and corresponding  params
     make_resources_and_tasks(params_dict,
@@ -133,16 +135,16 @@ def untouched(name,  eve_fname, org_fname, ana_fname,   env_fname, ins_fname,  g
 #NOTE THAT WORLD GEOMETRIES 9,10,11 now refer to star, funnel, metafunnel rsp
 
 
-def diffmut_lin(intervals):
+def diffmut_lin(intervals,mut, delta):
     #SET MUTATION PROBS
     rstrings = [' {0} {1} '.format(*intervals[0]),
                 ' {0} {1} '.format(*intervals[1])]
-    return [ 'i SetMutProb COPY_MUT '+str((mu0 - deltamu)*kmut) + rstrings[0],
-             'i SetMutProb DIVIDE_INS '+str((mu0 - deltamu)*kdiv) + rstrings[0],
-             'i SetMutProb DIVIDE_DEL '+str((mu0 - deltamu)*kdiv) + rstrings[0],
-             'i SetMutProb COPY_MUT '+str((mu0 + deltamu)*kmut) + rstrings[1],
-             'i SetMutProb DIVIDE_INS '+str((mu0 + deltamu)*kdiv) + rstrings[1],
-             'i SetMutProb DIVIDE_DEL '+str((mu0 + deltamu)*kdiv) + rstrings[1]
+    return [ 'i SetMutProb COPY_MUT '+str((mut - delta)*kmut) + rstrings[0],
+             'i SetMutProb DIVIDE_INS '+str((mut - delta)*kdiv) + rstrings[0],
+             'i SetMutProb DIVIDE_DEL '+str((mut - delta)*kdiv) + rstrings[0],
+             'i SetMutProb COPY_MUT '+str((mut + delta)*kmut) + rstrings[1],
+             'i SetMutProb DIVIDE_INS '+str((mut + delta)*kdiv) + rstrings[1],
+             'i SetMutProb DIVIDE_DEL '+str((mut + delta)*kdiv) + rstrings[1]
              ]
 def configure_paths(params, env):
     params.update({
@@ -254,14 +256,14 @@ def make_genomes(genesis):
     seqprime =seqprime.replace(repeats,repeats.replace('c','b'))
     org_fname2 = au.save_genome(genesis,  seqprime, org_fname + '.comp')
 
-def make_lineage_squares(endpts, linfun):
+def make_lineage_squares(endpts, linfun,mut,delta):
     #convert from pythonic endpoints (zero based, open ended)
     #to avida's endpoint style
     intervals = [(e[0], e[1] ) 
                  for e in  zip(endpts, roll(endpts ,-1))][:-1]
 
     #CALL LINFUN TO SET UP CONDITIONS FOR EACH LINEAGE
-    lineage_lines = linfun(intervals)
+    lineage_lines = linfun(intervals, mut,delta)
     for l in lineage_lines: ca.alter_eve(eve_fname, l)
 
     #INJECT EACH LINEAGE
