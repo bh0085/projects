@@ -162,6 +162,12 @@ def make_geometry(params,
     if name == 'square':
         geo = 2
         n = pow(dim,2)
+    if name == 'grid':
+        geo = 1
+        n = pow(dim,2)
+    if name == 'scale':
+        geo = 8
+        n = pow(dim,2)
 
     elif name == 'star':
         geo = 9
