@@ -225,7 +225,7 @@ def match_names(cols, regex):
     return cols_out
 
 #unused options include: lin2D, res, all,'tasks'
-psets = {'lots':['res','all','lin2D','tasks','tasks2D'],
+psets = {'lots':['all','tasks'],
          '2grids':['lin2D','tasks2D']}
 def get_params(names = psets['2grids']):    
     all_plot_params = []
