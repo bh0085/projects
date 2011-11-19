@@ -181,20 +181,23 @@ def spawn(name=None, silent = True):
 
 
 def run_batch():
-    mut = .002
-    delta = .0005
+    muts = [.0005,.001,.002,.003,.004]
+    delta_multiplier = .125
     geometries = ['star','square']
-    dim =  35
-    iters = 1000
+    dims =  [20,40,80]
+    iters = 400
     import compbio.config as cfg
     
     root = cfg.dataPath('avida_runs')
     if not os.path.isdir(root):
         os.mkdir(root)
     os.chdir( root)
-    exec_subdirs = ['huge_{0}_{1}'.format(i,j) 
+
+    exec_subdirs = ['big_{0}_{1}_{2}_{3}'.format(i,j,k,l) 
                     for i in geometries 
-                    for j in range(iters)]
+                    for j in muts
+                    for k in dims
+                    for l in range(iters)]
     for e in exec_subdirs:
         if not os.path.isdir(os.path.join(root,e)):
             os.mkdir(os.path.join(root,e))
@@ -202,15 +205,16 @@ def run_batch():
         p = get_params(psets['lots'])
         make_cfg(p,
                  geo = e.split('_')[1],
-                 mut = mut,
-                 delta = delta,
-                 dim = dim)
+                 mut = float(e.split('_')[2]),
+                 delta = delta_multiplier * float(e.split('_')[2]),
+                 dim = int(e.split('_')[3])
+                 )
         
         
     for e in exec_subdirs:
         d = os.path.join(root,e)
         os.chdir(d)
-        prc = subprocess.Popen('bsub -o bsub_log -q compbio-week "avida -c proj0/autogen/avida.cfg.auto"',
+        prc = subprocess.Popen('bsub -o bsub_log -q compbio-week "avida -v0 -c proj0/autogen/avida.cfg.auto"',
                          shell = True,
                                stdout = subprocess.PIPE)
         print prc.stdout.read()
