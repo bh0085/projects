@@ -229,7 +229,7 @@ def match_names(cols, regex):
 
 #unused options include: lin2D, res, all,'tasks'
 psets = {'lots':['all','tasks'],
-         '2grids':['lin2D','tasks2D']}
+         '2grids':['tasks','lin2D','tasks2D']}
 def get_params(names = psets['2grids']):    
     all_plot_params = []
     
@@ -263,7 +263,7 @@ def get_params(names = psets['2grids']):
         if name =='tasks2D':
             filename = 'tasks_grid.data'
             plot_params['command'] = 'DumpTaskGrid'
-            plot_params['update'] = 'g 0:'+str(default_task_grid_frequency)
+            plot_params['update'] = 'g 0:3' #str(default_task_grid_frequency)
                        
         if name == 'all':
             filename = 'custom_data.dat'

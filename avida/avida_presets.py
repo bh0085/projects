@@ -4,7 +4,7 @@ import re
 from numpy import *
 
 
-default_gens = 10000
+default_gens = 100000
 
 uni_inflow_multiplier = .05
 def get_inflow_rate(n):
@@ -162,10 +162,10 @@ def make_geometry(params,
     if name == 'square':
         geo = 2
         n = pow(dim,2)
-    if name == 'grid':
+    elif name == 'grid':
         geo = 1
         n = pow(dim,2)
-    if name == 'scale':
+    elif name == 'scale':
         geo = 8
         n = pow(dim,2)
 

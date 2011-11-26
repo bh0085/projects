@@ -36,14 +36,15 @@ u 50000:50000 SaveHistoricPopulation # Save ancestors of current population.
 u 100000 Exit                        # exit
 
 i KillRectangle 0 0 21 21
-i SetMutProb COPY_MUT 0.0025 0 210 
-i SetMutProb DIVIDE_INS 0.00375 0 210 
-i SetMutProb DIVIDE_DEL 0.00375 0 210 
-i SetMutProb COPY_MUT 0.0035 210 420 
-i SetMutProb DIVIDE_INS 0.00525 210 420 
-i SetMutProb DIVIDE_DEL 0.00525 210 420 
+i SetMutProb COPY_MUT 0.002 0 210 
+i SetMutProb DIVIDE_INS 0.003 0 210 
+i SetMutProb DIVIDE_DEL 0.003 0 210 
+i SetMutProb COPY_MUT 0.003 210 420 
+i SetMutProb DIVIDE_INS 0.0045 210 420 
+i SetMutProb DIVIDE_DEL 0.0045 210 420 
 i InjectRange proj0/autogen/default-heads.org.auto 0 210  -1 0
 i InjectRange proj0/autogen/default-heads.org.auto 210 420  -1 1
-g 10000 Exit
+g 100000 Exit
+g 0:1 PrintTasksData tasks.dat 
 g 0:1 DumpLineageGrid lineage_grid.data
-g 0:2 DumpTaskGrid tasks_grid.data
+g 0:1 DumpTaskGrid tasks_grid.data

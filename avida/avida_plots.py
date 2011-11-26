@@ -4,6 +4,7 @@ import os
 import cb.utils.colors as mycolors 
 import cb.utils.sigsmooth as ss
 import cb.utils.plots as up
+import cb.utils.plots as myplots
 
 import avida_presets as presets
 
@@ -14,7 +15,9 @@ resource_grid_figure = 5
 fold_grid = True
 fold_ts = True
 
+from exceptions import ValueError
 from matplotlib.patches import Circle
+from matplotlib.patches import ArrowStyle
 
 print "Setting avida to terminate after lineage domination"
 
@@ -39,9 +42,11 @@ def plotLinCounts(grid):
     print 'LINEAGE STATS: '
     print "{0} / {1}".format(n0,n1) 
 
-    #if n0 == 0 or n1 == 0:
+    #if n0 == 0 or n1 == 0:ils
     #    print 'TERMINATING BECAUSE ONE STRAIN IS GONE'
         #raise Exception('kill')
+
+
 
 
 
@@ -50,8 +55,32 @@ def plot_grid(fig, params, scatter_GEO = True):
               open(au.data_filepath(params['fname'])).readlines())
     
     print(au.data_filepath(params['fname']))
+    color_grid(grid, params)
+
+
+def plot_grids(params, name = 'tasks_followed.data'):
+    path =os.path.join('data',name)
+    fopen = open(path)
+    lines = [l.strip().split(' ') for l in fopen.readlines() if l.strip() != '']
+    f = plt.gcf()
+    f.clear()
+    ofs = 0
+    cols = len(lines[0])
+    last = None
+    while ofs + cols < len(lines):
+        sub = lines[ofs:ofs+cols]
+        ofs += cols * 100
+        if sub == last: 
+            continue
+        sxs = color_grid(sub,params)
+        if not sxs: continue
+        f.savefig(myplots.figpath(name + 'iter={0}.png'.format(ofs)),format = 'png')
+        f.clear()
+        last = sub
+        print ofs
     
-    grid_rs = zeros((len(grid),len(grid[0])),int) + 200
+def color_grid(grid, params):
+    fig = plt.gcf();
     if params['command'] == 'DumpLineageGrid':
         grid =array(grid, float)
         grid_colors = zeros(shape(grid),int)
@@ -60,7 +89,10 @@ def plot_grid(fig, params, scatter_GEO = True):
         plotLinCounts(grid)
 
     elif params['command'] == 'DumpTaskGrid':
-        grid_int = array(grid,int)
+        try :
+            grid_int = array(grid,int)
+        except ValueError, e:
+            return False
         grid_colors = zeros(shape(grid_int),int) -1
         while 1:
             nz =nonzero(greater(grid_int,0))
@@ -87,7 +119,7 @@ def plot_grid(fig, params, scatter_GEO = True):
 
     if x != y:
         print "Grid not square, skipping"
-        return
+        return False
 
 
     ct = mycolors.getct(len(cols))
@@ -109,7 +141,8 @@ def plot_grid(fig, params, scatter_GEO = True):
 
     up.color_legend(fig,ct,cols)
     plt.draw()
-    
+    return True
+
 def scatter_array(arr, params):
     geo = params['computed']['geometry']
     if geo['name'] == 'square': return False
@@ -119,24 +152,26 @@ def scatter_array(arr, params):
     if name == 'star':
         f = plt.gcf()
         ax = f.add_subplot(111)
-        k = geo['k']
+        star_k = geo['k']
         d = geo['dim']
         
         ofs = 0
         
         xs, ys, cs = [],[],[]
-        all_vals = reshape(arr, (shape(arr)[0]*shape(arr)[1], 3))
+        all_vals = reshape(transpose(arr,(1,0,2)), (shape(arr)[0]*shape(arr)[1], 3))
 
-        nl = k;
+        nl = star_k;
         nodes = {};
         
         
-        for l in range(k):
+        for l in range(star_k):
             layer_count = pow(d,l)
             layer_ofs = 0
             if l == 0:
                 nodes[(0,0)] = {'r':0.,
                                 't':0.,
+                                'x':0,
+                                'y':0,
                                 'c':all_vals[ofs]}
                 ofs += 1
             else:
@@ -144,25 +179,105 @@ def scatter_array(arr, params):
                 for key in parent_keys:
                     p = nodes[key]
                     pt = p['t']
-                    if l == 1:
-                        p_delta = pi * 2 / pow(d, l-1)
-                    else:
-                        p_delta = pi * 2 / pow(d, l-1)
-
-                    pstart = pt - p_delta/2
+                    pr = p['r']
+                    
                     for i in range(d):
-                        nodes[(l,layer_ofs)] ={'r':l*5,
-                                               't':(pstart + p_delta*float(i)/d)+ (layer_ofs /layer_count)*2*pi/2 ,
-                                               'c':all_vals[ofs]}
+                        
+                        rthis = 5/sqrt(l)
+
+                        open_angle = pi * 2 
+                        if l != 1 :
+                            open_angle = open_angle *.5
+                            x0 = cos(pt) * pr
+                            y0 = sin(pt) * pr
+                        else:
+                            if divmod(i,2)[1] == 2:
+                                rthis *= 2
+                            x0 = 0
+                            y0 = 0
+
+                        
+                        angle_0 = pt - open_angle /2
+                        theta = angle_0 + open_angle * (float(i) / d)
+
+                        x = x0 + cos(theta) * rthis
+                        y = y0 + sin(theta) * rthis
+                        t = angle(complex(x,y))
+                        r = absolute(complex(x,y))
+
+                        nodes[(l,layer_ofs)] ={'r':r,
+                                               't':t, 
+                                               'c':all_vals[ofs],
+                                               'x':x,
+                                               'y':y,
+                                               'ps':[key]}
                         layer_ofs += 1;
                         ofs+= 1;
-                                
+        
+        
+    
+        nodes[(0,0)]['ps'] = [k for k in nodes.keys() if k[0] == star_k-1]
 
-        xs = [v['r'] * cos(v['t']) for v in nodes.values()]
-        ys = [v['r'] * sin(v['t']) for v in nodes.values()]
-        cs = [v['c'] for v in nodes.values()]
+        cheap = False
+        if cheap:
+            xs,ys,cs = zip(*[[v['x'],v['y'],v['c']]
+                             for v in nodes.values()])
+            ax.scatter(xs, ys, 50,color = cs)
+                       
+        else:
+           import networkx as nx
+           import cb.utils.graphs.draw as gd
+           g = nx.DiGraph()
+           
+           edges = [(k, p) 
+                    for k,v in nodes.iteritems()
+                    for p in v['ps']];
+           g.add_edges_from(edges)
+           
+           pos = dict([(k, [v['x'] , 
+                            v['y']])
+                       for k,v in nodes.iteritems()])
+           
+           nl = g.nodes()
+           
+           ects = dict([(k,len(g[k]) )
+                        for k in nl])
+           
+           arrows = False
+           if arrows:
+               ckw = dict([(k,dict(facecolor = 'gray' if ects[k[0]] == 1
+                                       else 'gray',
+                                       alpha = 1,
+                                       linewidth = 3,
+                                       arrowstyle = '-|>',
+                                       edgecolor = 'black',
+                                       shrinkA = 30,
+                                       shrinkB = 30))
+                           for k in g.edges() if ects[k[0]] == 1])
+           else:
+               ckw = {}
 
-        ax.scatter(xs, ys, 50,color = cs)
+           gd.draw(g, pos, g.edges(),
+                   skw = {'s':500,
+                          'edgecolor':'black',
+                          'facecolor':[nodes[k]['c'] 
+                                       for k in nl],
+                          'alpha':.5
+                          },
+                   scatter_nodes = nl,
+
+                   ckw = ckw
+                   )
+           
+           plt.gca().set_xticks([])
+           plt.gca().set_yticks([])
+           
+           #raise Exception()
+           #
+           #xs = [v['r'] * cos(v['t']) for v in nodes.values()]
+           #ys = [v['r'] * sin(v['t']) for v in nodes.values()]
+           #cs = [v['c'] for v in nodes.values()]
+           #
 
 
     
