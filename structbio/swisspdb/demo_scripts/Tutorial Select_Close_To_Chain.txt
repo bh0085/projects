@@ -1,0 +1,50 @@
+please do
+
+# The following script is a demonstration of how to
+# manipulate selections to do a command
+# functionnally equivalent to "Select Groups Close to
+# another chain" of the Select menu.
+# It is slower, but more flexible because you
+# can choose the two chains concerned, and its main purpose
+# is to demonstrate how to manipulate selections.
+
+
+open pdb from download "1BBB.pdb"; 
+
+$SELall = select in "1BBB" all;
+$SELA = select in "1BBB" chain "A";
+$SELB = select in "1BBB" chain "B";
+$SELallButAB = $SELall - $SELA - $SELB;
+
+center on visible;
+
+$CUTOFFSTRING = readln from user "please, enter the distance cutoff in Angstroms";
+$CUTOFF = (float)$CUTOFFSTRING;
+
+$SEL1 = select within $CUTOFF of $SELA;
+$SEL2 = select within $CUTOFF of $SELB;
+
+# as there is no "AND" (union) function we need
+# to do this trick to remove any residue of self (chain A)
+# so as to leave just residues nearby but from an other chain.
+# However, as we  ultimately only want the interface between  A  and B
+# we also need to remove any residue not  coming from A or B.
+
+$SELA = $SEL1 - $SELA - $SELallButAB;
+
+#  repeat the same process  for chain B
+
+$SELB = $SEL2 - $SELB - $SELallButAB;
+
+# finally, select the interface of interest and show it
+
+$SEL = $SELA + $SELB;
+select $SEL;
+show res,side,label of $SEL;
+color res of $SELA in red;
+color res of $SELB in blue;
+center on visible;
+
+thank you
+
+

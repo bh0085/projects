@@ -1,0 +1,2 @@
+def list_elements(svg_struct):
+    elements = []

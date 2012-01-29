@@ -1,0 +1,42 @@
+please do
+
+# The following script is a demonstration of how to
+# superpose every layer onto a reference layer.
+# The reference is taken as  the currently active layer.
+
+
+
+# ---- Check that there is at least two layers to work on -------------------
+
+$cnt = layercount;
+if ($cnt < 2)
+{
+	print "Please Load at  least two PDB file first";
+	silent stop;
+}
+
+# ---- Now find out what is the currently active layer ---------------------
+
+$referencelayer = get active_layer;
+
+# ---- Loop through each layer and superpose onto  reference ---------------
+
+$X = 0;
+do
+{
+	if ($X != $referencelayer)
+	{
+		superpose $X onto $referencelayer using "CA";
+	}
+
+} while (++$X < $cnt);
+
+# ---- Update the alignment -----------------------------------------------
+
+generate  structural alignment;
+
+# ---- Update Graphic Window ----------------------------------------------
+
+redraw;
+
+thank you

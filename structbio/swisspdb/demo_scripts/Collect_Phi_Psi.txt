@@ -1,0 +1,54 @@
+please do
+
+# The following script is a demonstration of how to
+# loop through some groups of a file to get some properties
+# This uses selction by group positions (think it as
+# each line of the control panel, but remember that
+# position start at zero.
+# Results for phi and psi are written in a file
+# this shows how to do string concatenation, and conversion
+# from floating point values to string.
+# Then it will open the resulting file so that you see what has been done.
+
+
+# ---- Check that there is at least one layer to work on -------------------
+
+$cnt = layercount;
+if ($cnt < 1)
+{
+	print "Please Load a PDB file first";
+	silent stop;
+}
+
+# ---- Now find out what is the currently active layer ---------------------
+
+$layer = get active_layer;
+
+
+# ---- Open  a file to store the results -----------------------------------
+
+$MYFILENAME = "results.txt";
+$MYFILE = open file $MYFILENAME in usrstuff for writing;
+
+# ---- Loop over each residue. Remember that the first residue
+#      of each layer starts at 0.
+
+$NBGROUPS = groupcount of $layer;
+$X = 0;
+do
+{
+	$SEL = select in $layer pos $X;
+	$PHI = phi($SEL);
+	$PSI = psi($SEL);
+	print on $MYFILE "phi = " + (string)$PHI + " psi = " + (string)$PSI;
+} while (++$X < $NBGROUPS);
+
+# ---- Clean up ------------------------------------------------------------
+
+close file $MYFILE;
+
+# ---- Show Results --------------------------------------------------------
+
+open text $MYFILENAME in usrstuff;
+thank you
+

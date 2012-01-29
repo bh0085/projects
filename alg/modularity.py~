@@ -1,0 +1,9 @@
+import nx_addons.community
+import networkx as nx
+import matplotlib.pyplot as plt
+
+
+
+#first compute the best partition
+partition = community.best_partition(G)
+

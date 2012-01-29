@@ -1,0 +1,90 @@
+please do
+#
+# this example computes an identity table
+# for a set of aligned sequences
+# it demonstraters the use of 2D arrays,
+# formatted output and similarity computation.
+# Note that the maximum  line length is limited to 255  characters
+# So think about that when you format results...
+# - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+$cnt = layercount;
+if ($cnt < 2)
+{
+	print "Please Load and align at least two sequences first";
+	silent stop;
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+$MYFILENAME = "pctid.txt";
+$F = open file $MYFILENAME in usrstuff for writing; 
+
+$ID  = (float)[$cnt][$cnt];
+$SIM = (float)[$cnt][$cnt];
+
+# --- compute all id and sim ---
+# this is not symmetrical, as it is compared
+# to the actual seq length. To compute
+# the id and sim for only the aligned segment
+# excluding gaps and trailing ends, use
+# aligned_percent_id($i,$j) and 
+# aligned_percent_sim($i,$j,1) respectively.
+#
+
+$i = 0;
+while($i < $cnt)
+{
+	$j = 0;
+	while($j < $cnt)
+	{
+		$ID[$i][$j] = global_percent_id($i,$j);
+		$SIM[$i][$j] = global_percent_sim($i,$j,1);
+		$j++;
+	}
+	$i++;
+}
+
+# -- print the sequences names
+$maxhorizseqs = 4; # to limit the printed line length...
+$max = min($cnt,$maxhorizseqs);
+
+print on $F "";
+$s =   "   %ID / %SIM        ";
+$bar = "                    |";
+$i = 0;
+while($i < $max)
+{
+	$s = $s + (fstring "%20s")layername of $i;	
+	$bar = $bar + "-------------------|";
+	$i++;
+}
+print on $F $s;
+print on $F $bar;
+
+# -- print the identity results
+
+$i = 0;
+while($i < $cnt)
+{
+	$s = (fstring "%20s")layername of $i + "|";
+	$j = 0;
+	while($j < $max)
+	{
+		$s = $s + (fstring "%8.1f")$ID[$i][$j];
+		$s = $s + " /";
+		$s = $s + (fstring "%6.1f")$SIM[$i][$j];
+		$s = $s + "   |";
+		$j++;
+	}
+	print on $F $s;
+	print on $F $bar;
+	$i++;
+}
+print on $F "";
+close file $F;
+
+# -- show results
+
+open text $MYFILENAME in usrstuff;
+thank you

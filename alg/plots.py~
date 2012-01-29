@@ -1,0 +1,16 @@
+import cb.utils.plots as myplots
+from numpy import *
+def plot_mers(mer_cts):
+    f = myplots.fignum(3, (8,8))
+    
+    
+    ax = f.add_subplot(111)
+    hist,bin_edges = histogram(mer_cts.values(), 30)
+    ax.plot(bin_edges[:-1], log(hist))
+    ax.set_xlabel('mer occurence rate')
+    ax.set_ylabel('$log(n)$')
+    ax.set_title('instances of each mer occurence rate in random walks')
+
+    f.savefig(myplots.figpath('mer_ct_hist'))
+    
+

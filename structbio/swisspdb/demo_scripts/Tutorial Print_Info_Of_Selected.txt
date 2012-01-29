@@ -1,0 +1,49 @@
+please do
+
+# The following script is a demonstration of
+# how to collect information about selected
+# residues. 
+
+open pdb from download "1ATP.pdb"; 
+
+# --- select residues that are close to the ATP
+#     show them and center view on it.
+
+$SEL1 = select in "1ATP" name "ATP1";
+$SEL2 = select within 3.0 of $SEL1;
+show res,side of $SEL2;
+center on visible;
+
+# ---- Open  a file to store the results -----------------------------------
+
+$MYFILENAME = "results1ATP.txt";
+$MYFILE = open file $MYFILENAME in usrstuff for writing;
+
+# --- Now start to collect  information
+
+$NBGROUPS = groupcount of "1ATP";
+$X = 0;
+do
+{
+	if (is_selected("1ATP",$X) == true)
+	{
+		print on $MYFILE  "chain: "      + chain("1atp",$X) + " "
+			    	+ "name: "       + name("1atp",$X) + " "
+			    	+ "one letter: " + res("1atp",$X) + " "
+			    	+ "num: "        + (string)num("1atp",$X) + " "
+			    	+ "sec struct: " + ss("1atp",$X) + " "
+			    	+ "%access: "    + (string)access("1atp",$X); 
+	}
+} while (++$X < $NBGROUPS);
+
+# ---- Clean up ------------------------------------------------------------
+
+close file $MYFILE;
+
+# ---- Show Results --------------------------------------------------------
+
+open text $MYFILENAME in usrstuff;
+
+
+thank you
+

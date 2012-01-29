@@ -1,0 +1,3 @@
+def make_dbs(g, ngs, fgs):
+    for i, fg in enumerate(fgs):
+        for j in range(nruns)

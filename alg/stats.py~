@@ -1,0 +1,3 @@
+def compute_occurences(strings, 
+                       nl = 20, np = 100,
+                       mer = 5):
